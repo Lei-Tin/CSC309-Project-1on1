@@ -9,7 +9,7 @@
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0,0,0,.1);
     transition: all .3s ease-in-out;
-    margin: 10px;
+    margin: 15px;
 }
 
 .meeting-details {
@@ -36,12 +36,6 @@
     align-items: center;
 }
 
-.heading-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .profiles-container{
     position: relative;
     display: flex;
@@ -51,9 +45,16 @@
     margin: 1rem;
 }
 
-
 .invite-button{
     max-width: 12rem;
+}
+
+.setting-button {
+    position:  absolute;
+    top: 0;
+    right: 0;
+    margin: 0.5rem;
+    padding: 0.2rem;
 }
 
 p {
@@ -64,10 +65,29 @@ h2 {
     word-wrap: break-word;
 }
 
+.setting-panel {
+    position: absolute;
+    left: 100%;
+    top: -10px;
+    background-color: aqua;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    margin: 10px;
+}
+
+.setting-panel > a {
+    padding: 5px 10px;
+    border-radius: 10%;
+}
+
 .profile {
     width: 75%;
     height: 20vh;
     display: flex;
+    position: relative;
     flex-direction: row;
     align-items: center;
     box-sizing: border-box;
@@ -111,4 +131,57 @@ h2 {
     justify-content: center;
     box-sizing: border-box;
     padding: 10px;
+}
+
+#overlay {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+
+    background-color: rgba(0,0,0,.75);
+    z-index: 200;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#invite-window {
+    position: absolute;
+    background-color: #fff;
+    width: 60vw;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#invite-window > .heading{
+    position: absolute;
+    top: 0;
+    margin-top: 2rem;
+    border-bottom: 1px solid black;
+}
+
+#invitation-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+#invitation-form button{
+    margin: 1rem;
+}
+
+.close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0.5rem;
+    padding: 0.2rem;
 }
