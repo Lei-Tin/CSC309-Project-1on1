@@ -1,3 +1,10 @@
+/* .navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+} */
+
 .calendar-brief {
     width: 75%;
     height: 100%;
@@ -42,6 +49,24 @@
     justify-content: center;
 }
 
+.icon-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 20px; /* Spacing between icon container and mini profile container */
+}
+
+
+.mini-profile-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 10px;
+    background-color: lightgray;
+    border-radius: 10px;
+    padding: 5px 10px;
+}
+
 .profiles-container{
     position: relative;
     display: flex;
@@ -76,6 +101,38 @@ h2 {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,.1);
     margin: 10px;
+}
+
+.icon-container a {
+    color: #000;
+    margin-right: 20px; /* Spacing between icons */
+    text-decoration: none;
+}
+
+.icon-container a:last-child {
+    margin-right: 0; /* Removes margin from the last icon */
+}
+
+.icon-container i {
+    font-size: 30px; /* Adjust icon size */
+}
+
+.mini-profile {
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+    /* transition: all .2s ease-in-out; */
+    /* object-fit: cover; */
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: 10px;
+}
+
+.mini-profile > img {
+    width: 100%;
+    height: auto;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    box-sizing: border-box;
 }
 
 .profile-picture {
