@@ -25,12 +25,15 @@
                 <h1>Invite "Contact" to Meeting</h1>
             </div>
             <form id="invitation-form" action="https://postman-echo.com/post" method="post">
-                <label for="event-selection">Select event:</label>
-                <select class="form-select form-select-lg mb-3" id="event-selection">
-                    <option selected>Open this select menu</option>
-                    <option value="1">CSC494 Meeting</option>
-                    <option value="2">CSC495 Meeting</option>
-                </select>
+                <div class="drop-down">
+                    <label for="event-selection">Select current event:</label>
+                    <select class="form-select form-select-lg mb-3" id="event-selection">
+                        <option selected>Open this select menu</option>
+                        <option value="1">CSC494 Meeting</option>
+                        <option value="2">CSC495 Meeting</option>
+                        <option value="Create">Create a new event</option>
+                    </select>
+                </div>
                 <div id="time-selection-container">
                     <label for="deadline">Choose the deadline of the response time:</label>
                     <div class="input-group">

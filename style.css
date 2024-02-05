@@ -156,12 +156,24 @@ h2 {
     align-items: center;
 }
 
-
-#invite-window > .heading{
+.heading{
     position: absolute;
     top: 0;
     margin-top: 2rem;
     border-bottom: 1px solid black;
+}
+
+.drop-down {
+    position: relative;
+    width: 300px;
+    margin: 10px;
+    text-align: left;
+    margin-top: 4rem;
+}
+
+.drop-down select{
+    width: 100%;
+    border-radius: 5px;
 }
 
 #invitation-form {
@@ -184,4 +196,18 @@ h2 {
     padding: 0;
     margin: 0.5rem;
     padding: 0.2rem;
+}
+
+#create-window {
+    position: absolute;
+    background-color: #fff;
+    width: 85vw;
+    height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form input {
+    width: 100%;
 }
