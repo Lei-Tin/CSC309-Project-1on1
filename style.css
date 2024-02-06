@@ -1,7 +1,122 @@
 /* Color schemes https://colorhunt.co/palettes/popular */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&family=Poppins:wght@400;500;600&display=swap');
 
 * {
     box-sizing: border-box;
+}
+
+.form-container {
+    padding: 1.5rem;
+    margin: 0 auto;
+    width: 50%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.05);
+}
+
+.authentication-form {
+    padding: 0 40px;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.authentication-form .txt_field {
+    position: relative;
+    border-bottom: 2px solid #adadad;
+    margin: 30px 0;
+}
+
+.form-check label{
+    margin-right: auto;
+}
+
+
+.txt_field input {
+    width: 100%;
+    padding: 0 5px;
+    height: 40px;
+    font-size: 16px;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+.txt_field label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    color: #adadad;
+    transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.txt_field span::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: #2691d9;
+    transition: .5s;
+}
+
+.txt_field input:focus~label,
+.txt_field input:valid~label {
+    top: -5px;
+    color: #2691d9;
+}
+
+.txt_field input:focus~span::before,
+.txt_field input:valid~span::before {
+    width: 100%;
+}
+
+.pass {
+    margin: -5px 0 20px 5px;
+    color: #a6a6a6;
+    cursor: pointer;
+}
+
+.pass:hover {
+    text-decoration: underline;
+}
+
+input[type="submit"] {
+    width: 100%;
+    height: 50px;
+    border: 1px solid;
+    background: #2691d9;
+    border-radius: 25px;
+    font-size: 18px;
+    color: #e9f4fb;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+}
+
+input[type="submit"]:hover {
+    border-color: #2691d9;
+    transition: .5s;
+}
+
+.signup_link {
+    margin: 30px 0;
+    text-align: center;
+    font-size: 16px;
+    color: #666666;
+}
+
+.signup_link a {
+    color: #2691d9;
+    text-decoration: none;
+}
+
+.signup_link a:hover {
+    text-decoration: underline;
 }
 
 .calendar-brief {
@@ -13,7 +128,7 @@
     box-sizing: border-box;
     background-color: #fff;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     transition: all .3s ease-in-out;
     margin: 15px;
 }
@@ -63,7 +178,8 @@
     display: flex;
     align-items: center;
     margin-left: auto;
-    margin-right: 20px; /* Spacing between icon container and mini profile container */
+    margin-right: 20px;
+    /* Spacing between icon container and mini profile container */
 }
 
 
@@ -77,7 +193,8 @@
     padding: 5px 10px;
 }
 
-.profiles-container, .calendar-container {
+.profiles-container,
+.calendar-container {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -86,19 +203,20 @@
     margin: 1rem;
 }
 
-.invite-button{
+.invite-button {
     max-width: 12rem;
 }
 
 .setting-button {
-    position:  absolute;
+    position: absolute;
     top: 0;
     right: 0;
     margin: 0.5rem;
     padding: 0.2rem;
 }
 
-p, h2 {
+p,
+h2 {
     word-wrap: break-word;
 }
 
@@ -115,11 +233,11 @@ p, h2 {
     box-sizing: border-box;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     margin: 10px;
 }
 
-.setting-panel > a {
+.setting-panel>a {
     padding: 5px 10px;
     border-radius: 10%;
 }
@@ -134,18 +252,20 @@ p, h2 {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     margin: 10px;
 }
 
 .icon-container a {
     color: #000;
-    margin-right: 20px; /* Spacing between icons */
+    margin-right: 20px;
+    /* Spacing between icons */
     text-decoration: none;
 }
 
 .icon-container a:last-child {
-    margin-right: 0; /* Removes margin from the last icon */
+    margin-right: 0;
+    /* Removes margin from the last icon */
 }
 
 .dropdown-item {
@@ -155,24 +275,30 @@ p, h2 {
 }
 
 .dropdown-item p {
-    margin-bottom: 0; /* Removes the default bottom margin from <p> */
+    margin-bottom: 0;
+    /* Removes the default bottom margin from <p> */
 }
 
 .actions a {
-    margin: 0 5px; /* Adds some spacing between the icons */
-    color: #000; /* Adjusts the icon color */
+    margin: 0 5px;
+    /* Adds some spacing between the icons */
+    color: #000;
+    /* Adjusts the icon color */
 }
 
 .actions a.accept {
-    color: green; /* Color for the accept action */
+    color: green;
+    /* Color for the accept action */
 }
 
 .actions a.decline {
-    color: red; /* Color for the decline action */
+    color: red;
+    /* Color for the decline action */
 }
 
 .icon-container i {
-    font-size: 30px; /* Adjust icon size */
+    font-size: 30px;
+    /* Adjust icon size */
 }
 
 .mini-profile {
@@ -186,10 +312,10 @@ p, h2 {
     margin-left: 10px;
 }
 
-.mini-profile > img {
+.mini-profile>img {
     width: 100%;
     height: auto;
-    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     box-sizing: border-box;
 }
 
@@ -208,12 +334,12 @@ p, h2 {
     transform: scale(1.1);
 }
 
-.profile-picture > img {
+.profile-picture>img {
     max-height: 100%;
     max-width: 100%;
     object-fit: cover;
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     box-sizing: border-box;
 }
 
@@ -236,7 +362,8 @@ p, h2 {
     margin: 10px;
 }
 
-th, td {
+th,
+td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
@@ -265,7 +392,7 @@ th, td {
     width: 100vw;
     height: 100vh;
 
-    background-color: rgba(0,0,0,.6);
+    background-color: rgba(0, 0, 0, .6);
     z-index: 200;
 
     display: flex;
@@ -300,12 +427,14 @@ th, td {
     cursor: pointer;
 }
 
-.drop-down > label {
+.drop-down>label {
     margin: 0.25rem 0rem;
     margin-right: auto;
 }
 
-.drop-down > select, .drop-down > input, .drop-down > textarea{
+.drop-down>select,
+.drop-down>input,
+.drop-down>textarea {
     width: 100%;
     /* border-radius: 5px; */
     padding: 0.5rem;
@@ -313,7 +442,9 @@ th, td {
     /* border: 1px solid black; */
 }
 
-#invitation-form, #search-form, #create-form {
+#invitation-form,
+#search-form,
+#create-form {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -359,7 +490,7 @@ th, td {
     margin-right: auto;
 }
 
-#invitation-form > form {
+#invitation-form>form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -412,7 +543,7 @@ form input {
     font-size: 25px;
     color: #818181;
     display: block;
-    transition: 0.3s; 
+    transition: 0.3s;
 }
 
 .sidenav a:hover {
@@ -449,9 +580,11 @@ form input {
     appearance: none;
     background-color: #fff;
     cursor: pointer;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* SVG arrow */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    /* SVG arrow */
     background-repeat: no-repeat;
-    background-position: right 10px center; /* Positions the arrow to the far right */
+    background-position: right 10px center;
+    /* Positions the arrow to the far right */
     background-size: 24px;
 }
 
