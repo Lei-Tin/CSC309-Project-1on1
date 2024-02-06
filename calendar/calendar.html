@@ -5,25 +5,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1on1 - My Calendar</title>
-    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <!-- Calendar specific stylesheet -->
+    <link rel="stylesheet" href="./calendar.css">
     <script src="https://kit.fontawesome.com/1831208eff.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="./index.html">1on1</a>
+            <a class="navbar-brand" href="../index.html">1on1</a>
             <div class="icon-container">
-                <a href="calendar.html" title="Calendar"><i class="fa-regular fa-calendar"></i></a>
-                <a href="contacts.html" title="Contacts"><i class="fa-solid fa-address-book"></i></a>
-                <a href="#" title="Alerts"><i class="fa-regular fa-bell"></i></a>
+                <a href="../calendar/calendar.html" title="Calendar"><i class="fa-solid fa-calendar"></i></a>
+                <a href="../contacts/contacts.html" title="Contacts"><i class="fa-regular fa-address-book"></i></a>
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" title="Alerts" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa-regular fa-bell"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-item">
+                            <p>User X has added you to the contacts</p>
+                            <div class="actions">
+                                <a href="#" class="accept"><i class="fas fa-check"></i></a>
+                                <a href="#" class="decline"><i class="fas fa-times"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="dropdown">
                 <div class="mini-profile-container dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="username">Username</span>
                     <div class="mini-profile">
-                        <img src="profile-picture.png" alt="User Name">
+                        <img src="../profile-picture.png" alt="User Name">
                     </div>
                 </div>
                 <div class="dropdown-menu dropdown-menu-right">
@@ -42,9 +58,9 @@
             </div>
             <a class="btn btn-primary btn-lg" href="./calendar_create.html">Create a new calendar</a>
 
-            <div class="calendar-container">
+            <div class="main-content-container">
                 <div class="calendar-brief rounded">
-                    <div class="meeting-details">
+                    <div class="calendar-meeting-details">
                         <h4>CSC494 Meeting (Owner)</h4>
                         <h6>Participants</h6>
                         <ul>
@@ -58,20 +74,20 @@
                         <a href="./meeting-calendar.html" class="btn btn-success">Enter Calendar</a>
                     </div>
                 </div>
-            </div>
 
-            <div class="calendar-brief rounded">
-                <div class="meeting-details">
-                    <h4>CSC495 Meeting</h4>
-                    <h6>Participants</h6>
-                    <ul>
-                        <li>David</li>
-                        <li>Esper</li>
-                        <li>Francis</li>
-                    </ul>
-                </div>
-                <div class="calendar-btn">
-                    <a href="./meeting-calendar.html" class="btn btn-success">Enter Calendar</a>
+                <div class="calendar-brief rounded">
+                    <div class="calendar-meeting-details">
+                        <h4>CSC495 Meeting</h4>
+                        <h6>Participants</h6>
+                        <ul>
+                            <li>David</li>
+                            <li>Esper</li>
+                            <li>Francis</li>
+                        </ul>
+                    </div>
+                    <div class="calendar-btn">
+                        <a href="./meeting-calendar.html" class="btn btn-success">Enter Calendar</a>
+                    </div>
                 </div>
             </div>
         </div>

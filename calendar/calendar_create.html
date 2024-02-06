@@ -5,9 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1on1 - My Calendar</title>
-    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <!-- Calendar specific stylesheet -->
+    <link rel="stylesheet" href="./calendar.css">
+
+    <script src="https://kit.fontawesome.com/1831208eff.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -23,14 +28,14 @@
                 </svg>
             </a>
 
-            <div id="create-form">
+            <div class="popup-modal">
                 <div class="heading">
                     <h2>Create a new calendar</h2>
                 </div>
     
-                <div class="form-create">
-                    <form id="calendar-create-form" action="./calendar.html">
-                        <div class="drop-down">
+                <div class="form-content">
+                    <form id="calendar-create-form" action="../calendar/calendar.html">
+                        <div class="form-drop-down">
                             <label for="name-event-input">Name your event</label>
                             <input type="text" id="name-event-input" class="form-control">
                             <label for="description-event-input">Describe your event</label>
@@ -82,7 +87,7 @@
                                 </div>
                             </div>
 
-                            <button id="submit-button" class="btn btn-primary" type="submit">Create</button>
+                            <button class="btn btn-primary form-submit-button" type="submit">Create</button>
                         </div>
                     </form>
                 </div>
@@ -92,20 +97,37 @@
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="./index.html">1on1</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="./contacts.html">Contacts</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Calendar</a>
-                    </li>
-                </ul>
+            <a class="navbar-brand" href="../index.html">1on1</a>
+            <div class="icon-container">
+                <a href="../calendar/calendar.html" title="Calendar"><i class="fa-solid fa-calendar"></i></a>
+                <a href="../contacts/contacts.html" title="Contacts"><i class="fa-regular fa-address-book"></i></a>
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" title="Alerts" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa-regular fa-bell"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-item">
+                            <p>User X has added you to the contacts</p>
+                            <div class="actions">
+                                <a href="#" class="accept"><i class="fas fa-check"></i></a>
+                                <a href="#" class="decline"><i class="fas fa-times"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdown">
+                <div class="mini-profile-container dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="username">Username</span>
+                    <div class="mini-profile">
+                        <img src="../profile-picture.png" alt="User Name">
+                    </div>
+                </div>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#">Profile</a>
+                    <a class="dropdown-item" href="#">Settings</a>
+                    <a class="dropdown-item" href="index.html">Logout</a>
+                </div>
             </div>
         </nav>
     </header>
@@ -115,34 +137,38 @@
             <div class="display-4">
                 My Calendars
             </div>
-            <button class="btn btn-primary btn-lg">Create a new calendar</button>
-            <div class="calendar-brief rounded">
-                <div class="meeting-details">
-                    <h4>CSC494 Meeting (Owner)</h4>
-                    <h6>Participants</h6>
-                    <ul>
-                        <li>Alice</li>
-                        <li>Bob</li>
-                        <li>Charles</li>
-                    </ul>
-                </div>
-                <div class="calendar-btn">
-                    <button class="btn btn-success">Enter Calendar</button>
-                </div>
-            </div>
+            <a class="btn btn-primary btn-lg" href="./calendar_create.html">Create a new calendar</a>
 
-            <div class="calendar-brief rounded">
-                <div class="meeting-details">
-                    <h4>CSC495 Meeting (Participant)</h4>
-                    <h6>Participants</h6>
-                    <ul>
-                        <li>David</li>
-                        <li>Esper</li>
-                        <li>Francis</li>
-                    </ul>
+            <div class="main-content-container">
+                <div class="calendar-brief rounded">
+                    <div class="calendar-meeting-details">
+                        <h4>CSC494 Meeting (Owner)</h4>
+                        <h6>Participants</h6>
+                        <ul>
+                            <li>Alice</li>
+                            <li>Bob</li>
+                            <li>Charles</li>
+                        </ul>
+                    </div>
+
+                    <div class="calendar-btn">
+                        <a href="./meeting-calendar.html" class="btn btn-success">Enter Calendar</a>
+                    </div>
                 </div>
-                <div class="calendar-btn">
-                    <button class="btn btn-success">Enter Calendar</button>
+
+                <div class="calendar-brief rounded">
+                    <div class="calendar-meeting-details">
+                        <h4>CSC495 Meeting</h4>
+                        <h6>Participants</h6>
+                        <ul>
+                            <li>David</li>
+                            <li>Esper</li>
+                            <li>Francis</li>
+                        </ul>
+                    </div>
+                    <div class="calendar-btn">
+                        <a href="./meeting-calendar.html" class="btn btn-success">Enter Calendar</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -151,6 +177,10 @@
     <footer class="text-center py-4">
         <p>&copy; 2024 1on1. All rights reserved.</p>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
