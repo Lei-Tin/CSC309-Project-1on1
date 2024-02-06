@@ -27,8 +27,9 @@
     margin: 30px 0;
 }
 
-.form-check label{
-    margin-right: auto;
+.form-group label {
+    width: 100%;
+    text-align: left;
 }
 
 
