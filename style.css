@@ -148,6 +148,29 @@ p, h2 {
     margin-right: 0; /* Removes margin from the last icon */
 }
 
+.dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-item p {
+    margin-bottom: 0; /* Removes the default bottom margin from <p> */
+}
+
+.actions a {
+    margin: 0 5px; /* Adds some spacing between the icons */
+    color: #000; /* Adjusts the icon color */
+}
+
+.actions a.accept {
+    color: green; /* Color for the accept action */
+}
+
+.actions a.decline {
+    color: red; /* Color for the decline action */
+}
+
 .icon-container i {
     font-size: 30px; /* Adjust icon size */
 }
