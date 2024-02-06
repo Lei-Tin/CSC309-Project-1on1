@@ -1,0 +1,108 @@
+/* Generics */
+
+.calendar-icon {
+    border-radius: 5px 0px 0px 5px;
+}
+
+/* For calendar view */
+
+.calendar-brief {
+    width: 75%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    transition: all .3s ease-in-out;
+    margin: 15px;
+}
+
+.calendar-meeting-details {
+    width: 75%;
+    padding: 10px;
+}
+
+.calendar-btn {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendar-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* For calendar table (meeting-calendar.html and meeting-calendar2.html) */
+
+.calendar-table-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.calendar-table {
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    table-layout: fixed;
+    width: 90%;
+    margin: 10px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    width: 14.28%;
+}
+
+.calendar-day-not-available {
+    background-color: #f2f2f2;
+}
+
+.calendar-high-preference {
+    background-color: #d0f0c0;
+}
+
+.calendar-medium-preference {
+    background-color: #ffebcd;
+}
+
+.calendar-low-preference {
+    background-color: #ffcccb;
+    margin-right: auto;
+}
+
+.calendar-form-drop-down {
+    position: relative;
+    width: 300px;
+    margin: 10px;
+}
+
+.calendar-form-drop-down label {
+    display: block;
+    margin-bottom: 5px;
+    margin-left: 10px;
+}
+
+.calendar-form-drop-down select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    cursor: pointer;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* SVG arrow */
+    background-repeat: no-repeat;
+    background-position: right 10px center; /* Positions the arrow to the far right */
+    background-size: 24px;
+}

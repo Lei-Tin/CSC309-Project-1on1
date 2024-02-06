@@ -5,9 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1on1 - My Calendar</title>
-    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <!-- Calendar specific stylesheet -->
+    <link rel="stylesheet" href="./calendar.css">
 </head>
 
 <body>
@@ -23,14 +26,14 @@
                 </svg>
             </a>
 
-            <div id="create-form">
+            <div class="popup-modal">
                 <div class="heading">
                     <h2>Create a new calendar</h2>
                 </div>
     
-                <div class="form-create">
-                    <form id="calendar-create-form" action="./calendar.html">
-                        <div class="drop-down">
+                <div class="form-content">
+                    <form id="calendar-create-form" action="../calendar/calendar.html">
+                        <div class="form-drop-down">
                             <label for="name-event-input">Name your event</label>
                             <input type="text" id="name-event-input" class="form-control">
                             <label for="description-event-input">Describe your event</label>
@@ -82,7 +85,7 @@
                                 </div>
                             </div>
 
-                            <button id="submit-button" class="btn btn-primary" type="submit">Create</button>
+                            <button class="btn btn-primary form-submit-button" type="submit">Create</button>
                         </div>
                     </form>
                 </div>
@@ -117,7 +120,7 @@
             </div>
             <button class="btn btn-primary btn-lg">Create a new calendar</button>
             <div class="calendar-brief rounded">
-                <div class="meeting-details">
+                <div class="calendar-meeting-details">
                     <h4>CSC494 Meeting (Owner)</h4>
                     <h6>Participants</h6>
                     <ul>
@@ -132,7 +135,7 @@
             </div>
 
             <div class="calendar-brief rounded">
-                <div class="meeting-details">
+                <div class="calendar-meeting-details">
                     <h4>CSC495 Meeting (Participant)</h4>
                     <h6>Participants</h6>
                     <ul>

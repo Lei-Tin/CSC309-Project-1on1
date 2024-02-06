@@ -1,58 +1,21 @@
 /* Color schemes https://colorhunt.co/palettes/popular */
 
+/* Generics */
+
 * {
     box-sizing: border-box;
 }
 
-.calendar-brief {
-    width: 75%;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
-    box-sizing: border-box;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,.1);
-    transition: all .3s ease-in-out;
-    margin: 15px;
+p, h1, h2, h3, h4, h5, h6 {
+    word-wrap: break-word;
 }
 
-.meeting-details {
-    width: 75%;
-    padding: 10px;
+/* Display-4 is large font by bootstrap */
+.display-4 {
+    margin: 1rem;
 }
 
-.calendar-btn {
-    width: 25%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.calendar-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.contacts-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.table-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.heading-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+/* Definition of containers */
 
 .time-selection-container {
     width: 100%;
@@ -77,17 +40,13 @@
     padding: 5px 10px;
 }
 
-.profiles-container, .calendar-container {
+.main-content-container {
     position: relative;
     display: flex;
     flex-direction: column;
     width: 100%;
     align-items: center;
     margin: 1rem;
-}
-
-.invite-button{
-    max-width: 12rem;
 }
 
 .setting-button {
@@ -98,19 +57,10 @@
     padding: 0.2rem;
 }
 
-p, h2 {
-    word-wrap: break-word;
-}
-
-.display-4 {
-    margin: 1rem;
-}
-
 .setting-panel {
     position: absolute;
     left: 100%;
     top: -10px;
-    background-color: aqua;
     padding: 10px;
     box-sizing: border-box;
     background-color: #fff;
@@ -124,19 +74,7 @@ p, h2 {
     border-radius: 10%;
 }
 
-.profile {
-    width: 60%;
-    display: flex;
-    position: relative;
-    flex-direction: row;
-    align-items: center;
-    box-sizing: border-box;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,.1);
-    margin: 10px;
-}
+/* Header bar */
 
 .icon-container a {
     color: #000;
@@ -152,10 +90,6 @@ p, h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.dropdown-item p {
-    margin-bottom: 0; /* Removes the default bottom margin from <p> */
 }
 
 .actions a {
@@ -193,72 +127,15 @@ p, h2 {
     box-sizing: border-box;
 }
 
-.profile-picture {
-    width: 25%;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all .2s ease-in-out;
-    object-fit: cover;
-    margin: 10px;
+.dropdown-item p {
+    margin-bottom: 0; /* Removes the default bottom margin from <p> */
 }
 
-.profile-picture:hover {
-    transform: scale(1.1);
+.dropdown:hover {
+    cursor: pointer;
 }
 
-.profile-picture > img {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(0,0,0,.1);
-    box-sizing: border-box;
-}
-
-.profile-description {
-    width: 60%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    box-sizing: border-box;
-    padding: 10px;
-}
-
-.calendar-table {
-    border-collapse: collapse;
-    border: 1px solid #ddd;
-    background-color: #fff;
-    table-layout: fixed;
-    width: 90%;
-    margin: 10px;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-    width: 14.28%;
-}
-
-.day-not-available {
-    background-color: #f2f2f2;
-}
-
-.high-preference {
-    background-color: #d0f0c0;
-}
-
-.medium-preference {
-    background-color: #ffebcd;
-}
-
-.low-preference {
-    background-color: #ffcccb;
-    margin-right: auto;
-}
+/* Overlays (with gray transparent background) */
 
 #overlay {
     position: fixed;
@@ -273,6 +150,15 @@ th, td {
     align-items: center;
 }
 
+.close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0.5rem;
+    padding: 0.2rem;
+}
+
 .popup-window {
     position: absolute;
     background-color: #fff;
@@ -283,6 +169,15 @@ th, td {
     border-radius: 15px;
     padding: 2rem;
     flex-direction: column;
+}
+
+.popup-modal {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
 .heading {
@@ -296,53 +191,36 @@ th, td {
     align-items: center;
 }
 
-.dropdown:hover {
-    cursor: pointer;
-}
-
-.drop-down {
+.form-drop-down {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.drop-down > label {
+.form-drop-down > label {
     margin: 0.25rem 0rem;
     margin-right: auto;
 }
 
-.drop-down > select, .drop-down > input, .drop-down > textarea{
+.form-drop-down > select, .form-drop-down > input, .form-drop-down > textarea{
     width: 100%;
-    /* border-radius: 5px; */
     padding: 0.5rem;
     resize: none;
-    /* border: 1px solid black; */
 }
 
-#invitation-form, #search-form, #create-form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+.form-content {
+    width: 75%;
 }
+
+/* Search related */
 
 .search-input-bar {
     width: 100%;
 }
 
-.calendar-icon {
-    border-radius: 5px 0px 0px 5px;
-}
-
 .search-results {
     width: 100%;
     margin: 1rem;
-}
-
-.form-create {
-    width: 75%;
 }
 
 .search-result-profile-pic {
@@ -365,104 +243,6 @@ th, td {
     margin-right: auto;
 }
 
-#invitation-form > form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-#submit-button {
+.form-submit-button {
     margin: 1rem;
-}
-
-.close-button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 0;
-    margin: 0.5rem;
-    padding: 0.2rem;
-}
-
-#create-window {
-    position: absolute;
-    background-color: #fff;
-    width: 85vw;
-    height: 85vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-form input {
-    width: 100%;
-}
-
-.sidenav {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    right: 0;
-    background-color: #111;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-}
-
-.sidenav a {
-    padding: 10px 15px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-    transition: 0.3s; 
-}
-
-.sidenav a:hover {
-    color: #f1f1f1;
-}
-
-.sidenav .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-}
-
-.drop-down-calendar {
-    position: relative;
-    width: 300px;
-    margin: 10px;
-}
-
-.drop-down-calendar label {
-    display: block;
-    margin-bottom: 5px;
-    margin-left: 10px;
-}
-
-.drop-down-calendar select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-color: #fff;
-    cursor: pointer;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* SVG arrow */
-    background-repeat: no-repeat;
-    background-position: right 10px center; /* Positions the arrow to the far right */
-    background-size: 24px;
-}
-
-.button-by-side {
-    display: flex;
-    align-items: center;
-    margin: 10px;
 }
