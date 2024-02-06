@@ -29,6 +29,13 @@ p, h1, h2, h3, h4, h5, h6 {
     margin-right: 20px; /* Spacing between icon container and mini profile container */
 }
 
+.dropdown-menu {
+    width: 500px;
+}
+
+.user-dropdown-menu {
+    width: 100px;
+}
 
 .mini-profile-container {
     display: flex;
@@ -87,26 +94,68 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 .dropdown-item {
+    width: 100%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
+    align-items: start;
+}
+
+.dropdown-item-content {
+    width: 80%; /* content takes 80% of the width */
+    overflow-wrap: break-word; /* newer word wrap */
+    word-wrap: break-word; /* wasted 30 minutes just to realize this is deprecated  */
+    white-space: normal; 
+}
+
+.dropdown-item-actions {
+    width: 20%; /* This prevents the actions from growing and bases its size on 20% of the container's size */
+    display: flex;
+    flex-direction: row;
     align-items: center;
+    justify-content: end;
 }
 
-.actions a {
+.dropdown-item-actions a {
     margin: 0 5px; /* Adds some spacing between the icons */
-    color: #000; /* Adjusts the icon color */
 }
 
-.actions a.accept {
+.dropdown-item-actions a.accept {
     color: green; /* Color for the accept action */
 }
 
-.actions a.decline {
+.dropdown-item-actions a.decline {
     color: red; /* Color for the decline action */
 }
 
+.dropdown-item-actions a.accept, a.decline {
+    display: inline-flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center the icon horizontally */
+    align-items: center; /* Center the icon vertically */
+    width: 30px; /* Set the width of the circle */
+    height: 30px; /* Set the height of the circle */
+    border-radius: 50%; /* Make it round */
+    border: 2px solid #ccc; 
+    padding: 5px; /* Adjust padding to scale the circle size */
+    text-decoration: none; /* Remove underline from link */
+}
+
+/* Additional styling for the icons themselves, if needed */
+.dropdown-item-actions a.accept i, a.decline i {
+    font-size: x-small;
+}
+
+
+.dropdown-item-actions a.dismiss {
+    color: lightgray; /* Color for the decline action */
+}
+
+.dropdown-item-actions a.dismiss i {
+    font-size: x-small !important;
+}
+
 .icon-container i {
-    font-size: 30px; /* Adjust icon size */
+    font-size: 25px; /* Adjust icon size */
 }
 
 .mini-profile {
@@ -126,6 +175,7 @@ p, h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 0 10px rgba(0,0,0,.1);
     box-sizing: border-box;
 }
+
 
 .dropdown-item p {
     margin-bottom: 0; /* Removes the default bottom margin from <p> */

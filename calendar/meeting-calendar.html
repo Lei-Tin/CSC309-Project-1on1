@@ -23,12 +23,22 @@
                         <a class="dropdown-toggle" href="#" title="Alerts" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa-regular fa-bell"></i>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                             <div class="dropdown-item">
-                                <p>User X has added you to the contacts</p>
-                                <div class="actions">
+                                <div class="dropdown-item-content">
+                                    <p>Yung Shou-Hi has added you to their contacts</p>
+                                </div>
+                                <div class="dropdown-item-actions">
                                     <a href="#" class="accept"><i class="fas fa-check"></i></a>
                                     <a href="#" class="decline"><i class="fas fa-times"></i></a>
+                                </div>
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="dropdown-item-content">
+                                    <p>You have a scheduled meeting in 2 days with Ziling Xiao and QQY</p>
+                                </div>
+                                <div class="dropdown-item-actions">
+                                    <a href="#" class="dismiss"><i id="dismiss" class="fas fa-times"></i></a>                                </div>
                                 </div>
                             </div>
                         </div>
@@ -41,10 +51,10 @@
                             <img src="../profile-picture.png" alt="User Name">
                         </div>
                     </div>
-                    <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu dropdown-menu-right user-dropdown-menu">
                         <a class="dropdown-item" href="#">Profile</a>
                         <a class="dropdown-item" href="#">Settings</a>
-                        <a class="dropdown-item" href="index.html">Logout</a>
+                        <a class="dropdown-item" href="../index.html">Logout</a>
                     </div>
                 </div>
             </nav>
