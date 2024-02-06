@@ -12,7 +12,8 @@
 
 <body>
     <div id="overlay">
-        <div id="create-window">
+        <div class="popup-window">
+            <!-- Close button -->
             <a type="button" class="btn close-button" href="./calendar.html">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x"
                     viewBox="0 0 16 16">
@@ -21,61 +22,71 @@
                     </path>
                 </svg>
             </a>
-            <div class="heading">
-                <h1>Create a new calendar</h1>
-            </div>
 
-            <form id="calendar-create-form" action="https://postman-echo.com/post" method="post">
-                <div class="drop-down">
-                    <label for="name-event-input">Name your event:</label>
-                    <input type="text" id="name-event-input">
-                    <label for="description-event-input">Describe your event:</label>
-                    <textarea id="description-event-input" rows="4"></textarea>
-                    <label for="member-selection">Select group members:</label>
-                    <select class="form-select form-select-lg mb-3" id="member-selection">
-                        <option selected>Open this select menu</option>
-                        <option value="1">Alice</option>
-                        <option value="2">Bob</option>
-                        <option value="3">Charles</option>
-                        <option value="4">This is a very long name</option>
-                    </select>
-                    <div id="time-selection-container">
-                        <label for="deadline">Choose the Start date of the event:</label>
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-calendar-date-fill" viewBox="0 0 16 16">
-                                    <path
-                                        d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zm5.402 9.746c.625 0 1.184-.484 1.184-1.18 0-.832-.527-1.23-1.16-1.23-.586 0-1.168.387-1.168 1.21 0 .817.543 1.2 1.144 1.2">
-                                    </path>
-                                    <path
-                                        d="M16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-6.664-1.21c-1.11 0-1.656-.767-1.703-1.407h.683c.043.37.387.82 1.051.82.844 0 1.301-.848 1.305-2.164h-.027c-.153.414-.637.79-1.383.79-.852 0-1.676-.61-1.676-1.77 0-1.137.871-1.809 1.797-1.809 1.172 0 1.953.734 1.953 2.668 0 1.805-.742 2.871-2 2.871zm-2.89-5.435v5.332H5.77V8.079h-.012c-.29.156-.883.52-1.258.777V8.16a13 13 0 0 1 1.313-.805h.632z">
-                                    </path>
-                                </svg>
-                            </span>
-                            <input type="text" class="form-control" placeholder="Select the deadline date"
-                                aria-label="Input group example" aria-describedby="basic-addon1">
-                        </div>
-                        <label for="deadline">Choose the deadline of the event time:</label>
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-calendar-date-fill" viewBox="0 0 16 16">
-                                    <path
-                                        d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zm5.402 9.746c.625 0 1.184-.484 1.184-1.18 0-.832-.527-1.23-1.16-1.23-.586 0-1.168.387-1.168 1.21 0 .817.543 1.2 1.144 1.2">
-                                    </path>
-                                    <path
-                                        d="M16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-6.664-1.21c-1.11 0-1.656-.767-1.703-1.407h.683c.043.37.387.82 1.051.82.844 0 1.301-.848 1.305-2.164h-.027c-.153.414-.637.79-1.383.79-.852 0-1.676-.61-1.676-1.77 0-1.137.871-1.809 1.797-1.809 1.172 0 1.953.734 1.953 2.668 0 1.805-.742 2.871-2 2.871zm-2.89-5.435v5.332H5.77V8.079h-.012c-.29.156-.883.52-1.258.777V8.16a13 13 0 0 1 1.313-.805h.632z">
-                                    </path>
-                                </svg>
-                            </span>
-                            <input type="text" class="form-control" placeholder="Select the deadline date"
-                                aria-label="Input group example" aria-describedby="basic-addon1">
-                        </div>
-                    </div>
-                    <button id="submit-button" type="submit">Send</button>
+            <div id="create-form">
+                <div class="heading">
+                    <h2>Create a new calendar</h2>
                 </div>
-            </form>
+    
+                <div class="form-create">
+                    <form id="calendar-create-form" action="./calendar.html">
+                        <div class="drop-down">
+                            <label for="name-event-input">Name your event</label>
+                            <input type="text" id="name-event-input" class="form-control">
+                            <label for="description-event-input">Describe your event</label>
+                            <textarea id="description-event-input" rows="4" class="form-control"></textarea>
+                            <label for="member-selection">Select group members</label>
+                            <select class="form-control" id="member-selection">
+                                <option selected disabled>Open this select menu</option>
+                                <option value="1">Alice</option>
+                                <option value="2">Bob</option>
+                                <option value="3">Charles</option>
+                                <option value="4">This is a very long name</option>
+                            </select>
+
+                            <div class="time-selection-container">
+                                <label for="deadline">Choose the Start date of the event</label>
+                                <div class="input-group">
+                                    <span class="input-group-text calendar-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                            class="bi bi-calendar-date-fill" viewBox="0 0 16 16">
+                                            <path
+                                                d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zm5.402 9.746c.625 0 1.184-.484 1.184-1.18 0-.832-.527-1.23-1.16-1.23-.586 0-1.168.387-1.168 1.21 0 .817.543 1.2 1.144 1.2">
+                                            </path>
+                                            <path
+                                                d="M16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-6.664-1.21c-1.11 0-1.656-.767-1.703-1.407h.683c.043.37.387.82 1.051.82.844 0 1.301-.848 1.305-2.164h-.027c-.153.414-.637.79-1.383.79-.852 0-1.676-.61-1.676-1.77 0-1.137.871-1.809 1.797-1.809 1.172 0 1.953.734 1.953 2.668 0 1.805-.742 2.871-2 2.871zm-2.89-5.435v5.332H5.77V8.079h-.012c-.29.156-.883.52-1.258.777V8.16a13 13 0 0 1 1.313-.805h.632z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    <input type="text" class="form-control" placeholder="Select the deadline date"
+                                        aria-label="Input group example" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+
+                            <div class="time-selection-container">
+                                <label for="deadline">Choose the deadline of the event time</label>
+                                <div class="input-group">
+                                    <span class="input-group-text calendar-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                            class="bi bi-calendar-date-fill" viewBox="0 0 16 16">
+                                            <path
+                                                d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zm5.402 9.746c.625 0 1.184-.484 1.184-1.18 0-.832-.527-1.23-1.16-1.23-.586 0-1.168.387-1.168 1.21 0 .817.543 1.2 1.144 1.2">
+                                            </path>
+                                            <path
+                                                d="M16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-6.664-1.21c-1.11 0-1.656-.767-1.703-1.407h.683c.043.37.387.82 1.051.82.844 0 1.301-.848 1.305-2.164h-.027c-.153.414-.637.79-1.383.79-.852 0-1.676-.61-1.676-1.77 0-1.137.871-1.809 1.797-1.809 1.172 0 1.953.734 1.953 2.668 0 1.805-.742 2.871-2 2.871zm-2.89-5.435v5.332H5.77V8.079h-.012c-.29.156-.883.52-1.258.777V8.16a13 13 0 0 1 1.313-.805h.632z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    <input type="text" class="form-control" placeholder="Select the deadline date"
+                                        aria-label="Input group example" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+
+                            <button id="submit-button" class="btn btn-primary" type="submit">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 

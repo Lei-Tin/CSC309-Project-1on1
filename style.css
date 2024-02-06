@@ -36,11 +36,16 @@
     align-items: center;
 }
 
+.time-selection-container {
+    width: 100%;
+    margin: 0.25rem;
+}
+
 .profiles-container, .calendar-container {
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 75%;
+    width: 100%;
     align-items: center;
     margin: 1rem;
 }
@@ -84,7 +89,7 @@ p, h2 {
 }
 
 .profile {
-    width: 75%;
+    width: 60%;
     display: flex;
     position: relative;
     flex-direction: row;
@@ -157,41 +162,58 @@ p, h2 {
     flex-direction: column;
 }
 
-#invite-window > .heading{
-    position: absolute;
-    top: 0;
-    margin-top: 2rem;
-    border-bottom: 1px solid black;
+.heading {
+    position: relative;
+    margin-bottom: 1rem;
+    width: 75%;
+    text-align: center;
+    border-bottom: 1px solid #cfd4d9;
 }
 
 .drop-down {
     position: relative;
-    width: 300px;
-    margin: 10px;
-    text-align: left;
-    margin-top: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.drop-down select{
+.drop-down > label {
+    margin: 0.25rem 0rem;
+    margin-right: auto;
+}
+
+.drop-down > select, .drop-down > input, .drop-down > textarea{
     width: 100%;
-    border-radius: 5px;
+    /* border-radius: 5px; */
+    padding: 0.5rem;
+    resize: none;
+    /* border: 1px solid black; */
 }
 
-#invitation-form, #search-form {
+#invitation-form, #search-form, #create-form {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 .search-input-bar {
     width: 100%;
 }
 
+.calendar-icon {
+    border-radius: 5px 0px 0px 5px;
+}
+
 .search-results {
     width: 100%;
     margin: 1rem;
+}
+
+.form-create {
+    width: 75%;
 }
 
 .search-result-profile-pic {
@@ -221,7 +243,7 @@ p, h2 {
     justify-content: center;
 }
 
-#invitation-form button{
+#submit-button {
     margin: 1rem;
 }
 
