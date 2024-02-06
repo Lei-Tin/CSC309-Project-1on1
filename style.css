@@ -42,7 +42,6 @@
     align-items: center;
 }
 
-<<<<<<< HEAD
 .table-list {
     display: flex;
     flex-direction: column;
@@ -53,11 +52,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-=======
+}
+
 .time-selection-container {
     width: 100%;
     margin: 0.25rem;
->>>>>>> c8b42c238974ece418a7b245600f71de41e0093f
 }
 
 .icon-container {
@@ -203,7 +202,6 @@ p, h2 {
     justify-content: center;
     box-sizing: border-box;
     padding: 10px;
-<<<<<<< HEAD
 }
 
 .calendar-table {
@@ -236,7 +234,6 @@ th, td {
 
 .low-preference {
     background-color: #ffcccb;
-=======
     margin-right: auto;
 }
 
@@ -271,45 +268,6 @@ th, td {
     width: 75%;
     text-align: center;
     border-bottom: 1px solid #cfd4d9;
->>>>>>> c8b42c238974ece418a7b245600f71de41e0093f
-}
-
-.drop-down {
-    position: relative;
-<<<<<<< HEAD
-    width: 300px;
-    margin: 10px;
-}
-
-.drop-down label {
-    display: block;
-    margin-bottom: 5px;
-    margin-left: 10px;
-}
-
-.drop-down select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-color: #fff;
-    cursor: pointer;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* SVG arrow */
-    background-repeat: no-repeat;
-    background-position: right 10px center; /* Positions the arrow to the far right */
-    background-size: 24px;
-}
-
-.button-by-side {
-    display: flex;
-    align-items: center;
-    margin: 10px;
-}
-
-=======
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -445,4 +403,37 @@ form input {
     font-size: 36px;
     margin-left: 50px;
 }
->>>>>>> c8b42c238974ece418a7b245600f71de41e0093f
+
+.drop-down-calendar {
+    position: relative;
+    width: 300px;
+    margin: 10px;
+}
+
+.drop-down-calendar label {
+    display: block;
+    margin-bottom: 5px;
+    margin-left: 10px;
+}
+
+.drop-down-calendar select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    cursor: pointer;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* SVG arrow */
+    background-repeat: no-repeat;
+    background-position: right 10px center; /* Positions the arrow to the far right */
+    background-size: 24px;
+}
+
+.button-by-side {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
