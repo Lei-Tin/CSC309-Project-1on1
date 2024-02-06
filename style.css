@@ -427,7 +427,13 @@ td {
     cursor: pointer;
 }
 
-.drop-down>label {
+.drop-down {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.drop-down > label {
     margin: 0.25rem 0rem;
     margin-right: auto;
 }
