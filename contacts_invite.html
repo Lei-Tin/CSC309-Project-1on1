@@ -8,29 +8,78 @@
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="./style.css">
-    <script src="https://kit.fontawesome.com/1831208eff.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
+    <div id="overlay">
+        <div class="popup-window">
+            <a type="button" class="btn close-button" href="./contacts.html">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708">
+                    </path>
+                </svg>
+            </a>
+
+            <div id="invitation-form">
+                <div class="heading">
+                    <h2>Invite <span class="font-weight-bold">Alice</span> to a Meeting</h2>
+                </div>
+
+                <div class="form-create">
+                    <form action="./contacts.html">
+                        <div class="drop-down">
+                            <label for="event-selection">Select event</label>
+                            <select class="form-control" id="event-selection">
+                                <option selected disabled>Select a meeting</option>
+                                <option value="1">CSC494 Meeting</option>
+                                <option value="2">CSC495 Meeting</option>
+                            </select>
+                            
+                            <div class="time-selection-container">
+                                <label for="deadline">Select the response deadline</label>
+                                <div class="input-group">
+                                    <span class="input-group-text calendar-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                            class="bi bi-calendar-date-fill" viewBox="0 0 16 16">
+                                            <path
+                                                d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zm5.402 9.746c.625 0 1.184-.484 1.184-1.18 0-.832-.527-1.23-1.16-1.23-.586 0-1.168.387-1.168 1.21 0 .817.543 1.2 1.144 1.2">
+                                            </path>
+                                            <path
+                                                d="M16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-6.664-1.21c-1.11 0-1.656-.767-1.703-1.407h.683c.043.37.387.82 1.051.82.844 0 1.301-.848 1.305-2.164h-.027c-.153.414-.637.79-1.383.79-.852 0-1.676-.61-1.676-1.77 0-1.137.871-1.809 1.797-1.809 1.172 0 1.953.734 1.953 2.668 0 1.805-.742 2.871-2 2.871zm-2.89-5.435v5.332H5.77V8.079h-.012c-.29.156-.883.52-1.258.777V8.16a13 13 0 0 1 1.313-.805h.632z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    <input type="text" class="form-control" placeholder="Select the deadline date"
+                                        aria-label="Input group example" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <button id="submit-button" class="btn btn-primary" type="submit">Send</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="./index.html">1on1</a>
-            <div class="icon-container">
-                <a href="calendar.html" title="Calendar"><i class="fa-regular fa-calendar"></i></a>
-                <a href="contacts.html" title="Contacts"><i class="fa-solid fa-address-book"></i></a>
-            </div>
-            <div class="dropdown">
-                <div class="mini-profile-container dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="username">Username</span>
-                    <div class="mini-profile">
-                        <img src="profile-picture.png" alt="User Name">
-                    </div>
-                </div>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="#">Profile</a>
-                    <a class="dropdown-item" href="#">Settings</a>
-                    <a class="dropdown-item" href="#">Logout</a>
-                </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Contacts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./calendar.html">Calendar</a>
+                    </li>
+                </ul>
             </div>
         </nav>
     </header>
@@ -38,10 +87,8 @@
     <main>
         <!-- Find a better way to do this -->
         <div class="jumbotron contacts-list">
-            <div class="display-4">
-                My Contacts
-            </div>
-            <a class="btn btn-primary btn-lg" href="./contacts_add.html">Add new contact</a>
+            <h1 class="display-4">My Contacts</h1>
+            <button class="btn btn-primary btn-lg">Add new contact</button>
             <div class="profiles-container">
                 <div class="profile">
                     <div class="profile-picture">
@@ -142,9 +189,6 @@
     <footer class="text-center py-4">
         <p>&copy; 2024 1on1. All rights reserved.</p>
     </footer>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.9/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
