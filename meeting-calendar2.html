@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>1on1 - My Calendar</title>
+        <link rel="icon" type="image/x-icon" href="./favicon.ico">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./style.css">
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="./index.html">1on1</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="./contacts.html">Contacts</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Calendar</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <div class="jumbotron table-list"> 
+                <div class="display-4">
+                    CSC494 Meeting
+                </div>
+
+                <form>
+                    <div class="drop-down">
+                        <label for="date">Select date:</label>
+                        <select id="date" name="date" onchange="if (this.value) window.location.href=this.value">
+                            <option value="">Select a week...</option>
+                            <option value="meeting-calendar.html">Feb 5 - Feb 11</option>
+                            <option value="meeting-calendar2.html">Feb 12 - Feb 18</option>
+                        </select>
+                    </div>
+                </form>
+                
+                <!--
+                <div class="drop-down">
+                    <label for="date">Select date:</label>
+                    <select id="date" name="date">
+                        <option>Feb 5 - Feb 11</option>
+                        <option>Feb 12 - Feb 18</option>
+                    </select>
+                </div>
+                -->
+
+                <div class="drop-down">
+                    <label for="preference">Select preference level:</label>
+                    <select id="preference" name="preference">
+                        <option>High</option>
+                        <option>Medium</option>
+                        <option>Low</option>
+                    </select>
+                </div>
+
+                <table class="calendar-table ">
+                    <tr>
+                        <th></th>
+                        <th>Feb 12</th>
+                        <th>Feb 13</th>
+                        <th>Feb 14</th>
+                        <th>Feb 15</th>
+                        <th>Feb 16</th>
+                        <th>Feb 17</th>
+                        <th>Feb 18</th>
+                    </tr>
+                </table>
+
+                <table class="calendar-table">
+                    <tr>
+                        <th></th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                        <th class="day-not-available">Sunday</th>
+                    </tr>
+                    <tr>
+                        <td>9:00 AM</td>
+                        <td></td>
+                        <td></td>
+                        <td class="high-preference"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>10:00 AM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>11:00 AM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>12:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="low-preference"></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>1:00 PM</td>
+                        <td></td>
+                        <td class="medium-preference"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>2:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td class="low-preference"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>3:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>4:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>5:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>6:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>7:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>8:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>9:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                </table>
+
+                <a class="btn btn-primary">Confirm</a>
+            </div>
+        </main>
+
+        <footer class="text-center py-4">
+            <p>&copy; 2024 1on1. All rights reserved.</p>
+        </footer>
+</html>

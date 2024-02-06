@@ -36,6 +36,12 @@
     align-items: center;
 }
 
+.table-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .heading-container {
     display: flex;
     align-items: center;
@@ -50,7 +56,6 @@
     align-items: center;
     margin: 1rem;
 }
-
 
 .invite-button{
     max-width: 12rem;
@@ -112,3 +117,70 @@ h2 {
     box-sizing: border-box;
     padding: 10px;
 }
+
+.calendar-table {
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    table-layout: fixed;
+    width: 90%;
+    margin: 10px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    width: 14.28%;
+}
+
+.day-not-available {
+    background-color: #f2f2f2;
+}
+
+.high-preference {
+    background-color: #d0f0c0;
+}
+
+.medium-preference {
+    background-color: #ffebcd;
+}
+
+.low-preference {
+    background-color: #ffcccb;
+}
+
+.drop-down {
+    position: relative;
+    width: 300px;
+    margin: 10px;
+}
+
+.drop-down label {
+    display: block;
+    margin-bottom: 5px;
+    margin-left: 10px;
+}
+
+.drop-down select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    cursor: pointer;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* SVG arrow */
+    background-repeat: no-repeat;
+    background-position: right 10px center; /* Positions the arrow to the far right */
+    background-size: 24px;
+}
+
+.button-by-side {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
+
