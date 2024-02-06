@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>1on1 - My Calendar</title>
+        <link rel="icon" type="image/x-icon" href="./favicon.ico">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./style.css">
+        <script src="https://kit.fontawesome.com/1831208eff.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="./index.html">1on1</a>
+                <div class="icon-container">
+                    <a href="calendar.html" title="Calendar"><i class="fa-regular fa-calendar"></i></a>
+                    <a href="contacts.html" title="Contacts"><i class="fa-regular fa-address-book"></i></a>
+                </div>
+                <div class="dropdown">
+                    <div class="mini-profile-container dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="username">Username</span>
+                        <div class="mini-profile">
+                            <img src="profile-picture.png" alt="User Name">
+                        </div>
+                    </div>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#">Profile</a>
+                        <a class="dropdown-item" href="#">Settings</a>
+                        <a class="dropdown-item" href="#">Logout</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <div class="jumbotron table-list"> 
+                <div class="display-4">
+                    CSC494 Meeting
+                </div>
+
+                <form>
+                    <div class="drop-down-calendar">
+                        <label for="date">Select date:</label>
+                        <select id="date" name="date" onchange="if (this.value) window.location.href=this.value">
+                            <option value="">Select a week...</option>
+                            <option value="meeting-calendar.html">Feb 5 - Feb 11</option>
+                            <option value="meeting-calendar2.html">Feb 12 - Feb 18</option>
+                        </select>
+                    </div>
+                </form>
+                
+                <!--
+                <div class="drop-down">
+                    <label for="date">Select date:</label>
+                    <select id="date" name="date">
+                        <option>Feb 5 - Feb 11</option>
+                        <option>Feb 12 - Feb 18</option>
+                    </select>
+                </div>
+                -->
+
+                <div class="drop-down-calendar">
+                    <label for="preference">Select preference level:</label>
+                    <select id="preference" name="preference">
+                        <option>High</option>
+                        <option>Medium</option>
+                        <option>Low</option>
+                    </select>
+                </div>
+
+                <table class="calendar-table ">
+                    <tr>
+                        <th></th>
+                        <th>Feb 12</th>
+                        <th>Feb 13</th>
+                        <th>Feb 14</th>
+                        <th>Feb 15</th>
+                        <th>Feb 16</th>
+                        <th>Feb 17</th>
+                        <th>Feb 18</th>
+                    </tr>
+                </table>
+
+                <table class="calendar-table">
+                    <tr>
+                        <th></th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                        <th class="day-not-available">Sunday</th>
+                    </tr>
+                    <tr>
+                        <td>9:00 AM</td>
+                        <td></td>
+                        <td></td>
+                        <td class="high-preference"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>10:00 AM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>11:00 AM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>12:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="low-preference"></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>1:00 PM</td>
+                        <td></td>
+                        <td class="medium-preference"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>2:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td class="low-preference"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>3:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>4:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>5:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>6:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>7:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>8:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                    <tr>
+                        <td>9:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="day-not-available"></td>
+                    </tr>
+                </table>
+
+                <a class="btn btn-primary">Confirm</a>
+            </div>
+        </main>
+
+        <footer class="text-center py-4">
+            <p>&copy; 2024 1on1. All rights reserved.</p>
+        </footer>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.9/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</html>
