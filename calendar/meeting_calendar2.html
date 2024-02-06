@@ -38,7 +38,7 @@
                                     <p>You have a scheduled meeting in 2 days with Ziling Xiao and QQY</p>
                                 </div>
                                 <div class="dropdown-item-actions">
-                                    <a href="#" class="dismiss"><i id="dismiss" class="fas fa-times"></i></a>                                </div>
+                                    <a href="#" class="dismiss"><i id="dismiss" class="fas fa-times"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -71,14 +71,13 @@
                         <label for="date">Select date:</label>
                         <select id="date" name="date" onchange="if (this.value) window.location.href=this.value">
                             <option disabled>Select a week...</option>
-                            <option selected value="meeting-calendar.html">Feb 5 - Feb 11</option>
-                            <option value="meeting-calendar2.html">Feb 12 - Feb 18</option>
+                            <option value="meeting-calendar.html">Feb 5 - Feb 11</option>
+                            <option selected value="meeting-calendar2.html">Feb 12 - Feb 18</option>
                         </select>
                     </div>
                 </form>
                 
-
-                <!-- Use this after we incorporate the backend
+                <!--
                 <div class="form-drop-down">
                     <label for="date">Select date:</label>
                     <select id="date" name="date">
@@ -100,13 +99,13 @@
                 <table class="calendar-table ">
                     <tr>
                         <th></th>
-                        <th>Feb 5</th>
-                        <th>Feb 6</th>
-                        <th>Feb 7</th>
-                        <th>Feb 8</th>
-                        <th>Feb 9</th>
-                        <th>Feb 10</th>
-                        <th>Feb 11</th>
+                        <th>Feb 12</th>
+                        <th>Feb 13</th>
+                        <th>Feb 14</th>
+                        <th>Feb 15</th>
+                        <th>Feb 16</th>
+                        <th>Feb 17</th>
+                        <th>Feb 18</th>
                     </tr>
                 </table>
 
@@ -119,17 +118,17 @@
                         <th>Thursday</th>
                         <th>Friday</th>
                         <th>Saturday</th>
-                        <th>Sunday</th>
+                        <th class="calendar-day-not-available">Sunday</th>
                     </tr>
                     <tr>
                         <td>9:00 AM</td>
                         <td></td>
                         <td></td>
+                        <td class="calendar-high-preference"></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="calendar-day-not-available"></td>
                     </tr>
                     <tr>
                         <td>10:00 AM</td>
@@ -139,57 +138,57 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td class="calendar-day-not-available"></td>
                     </tr>
                     <tr>
                         <td>11:00 AM</td>
                         <td></td>
-                        <td rowspan="4" class="calendar-high-preference"></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td class="calendar-day-not-available"></td>
                     </tr>
                     <tr>
                         <td>12:00 PM</td>
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td class="calendar-low-preference"></td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="calendar-day-not-available"></td>
                     </tr>
                     <tr>
                         <td>1:00 PM</td>
                         <td></td>
+                        <td class="calendar-medium-preference"></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="calendar-day-not-available"></td>
                     </tr>
                     <tr>
                         <td>2:00 PM</td>
                         <td></td>
                         <td></td>
+                        <td class="calendar-low-preference"></td>
                         <td></td>
                         <td></td>
-                        <td rowspan="2" class="calendar-medium-preference"></td>
                         <td></td>
-                        <td></td>
+                        <td class="calendar-day-not-available"></td>
                     </tr>
                     <tr>
                         <td>3:00 PM</td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td rowspan="2" class="calendar-high-preference"></td>
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td class="calendar-day-not-available"></td>
                     </tr>
                     <tr>
                         <td>4:00 PM</td>
@@ -198,8 +197,8 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td rowspan="2" class="calendar-high-preference"></td>
                         <td></td>
+                        <td class="calendar-day-not-available"></td>
                     </tr>
                     <tr>
                         <td>5:00 PM</td>
@@ -207,19 +206,19 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="calendar-low-preference"></td>
                         <td></td>
                         <td></td>
+                        <td class="calendar-day-not-available"></td>
                     </tr>
                     <tr>
                         <td>6:00 PM</td>
                         <td></td>
                         <td></td>
-                        <td rowspan="2" class="calendar-medium-preference"></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td class="calendar-day-not-available"></td>
                     </tr>
                     <tr>
                         <td>7:00 PM</td>
@@ -229,7 +228,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td class="calendar-day-not-available"></td>
                     </tr>
                     <tr>
                         <td>8:00 PM</td>
@@ -239,7 +238,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td class="calendar-day-not-available"></td>
                     </tr>
                     <tr>
                         <td>9:00 PM</td>
@@ -249,7 +248,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td class="calendar-day-not-available"></td>
                     </tr>
                 </table>
 

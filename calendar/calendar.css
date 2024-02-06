@@ -38,7 +38,7 @@
     align-items: center;
 }
 
-/* For calendar table (meeting-calendar.html and meeting-calendar2.html) */
+/* For calendar table (meeting_calendar.html and meeting_calendar2.html) */
 
 .calendar-table-list {
     display: flex;
