@@ -1,3 +1,9 @@
+/* Color schemes https://colorhunt.co/palettes/popular */
+
+* {
+    box-sizing: border-box;
+}
+
 .calendar-brief {
     width: 75%;
     height: 100%;
@@ -9,7 +15,7 @@
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0,0,0,.1);
     transition: all .3s ease-in-out;
-    margin: 10px;
+    margin: 15px;
 }
 
 .meeting-details {
@@ -36,6 +42,7 @@
     align-items: center;
 }
 
+<<<<<<< HEAD
 .table-list {
     display: flex;
     flex-direction: column;
@@ -46,13 +53,36 @@
     display: flex;
     align-items: center;
     justify-content: center;
+=======
+.time-selection-container {
+    width: 100%;
+    margin: 0.25rem;
+>>>>>>> c8b42c238974ece418a7b245600f71de41e0093f
 }
 
-.profiles-container{
+.icon-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 20px; /* Spacing between icon container and mini profile container */
+}
+
+
+.mini-profile-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 10px;
+    background-color: #e6e6e6;
+    border-radius: 10px;
+    padding: 5px 10px;
+}
+
+.profiles-container, .calendar-container {
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 75%;
+    width: 100%;
     align-items: center;
     margin: 1rem;
 }
@@ -61,18 +91,44 @@
     max-width: 12rem;
 }
 
-p {
+.setting-button {
+    position:  absolute;
+    top: 0;
+    right: 0;
+    margin: 0.5rem;
+    padding: 0.2rem;
+}
+
+p, h2 {
     word-wrap: break-word;
 }
 
-h2 {
-    word-wrap: break-word;
+.display-4 {
+    margin: 1rem;
+}
+
+.setting-panel {
+    position: absolute;
+    left: 100%;
+    top: -10px;
+    background-color: aqua;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    margin: 10px;
+}
+
+.setting-panel > a {
+    padding: 5px 10px;
+    border-radius: 10%;
 }
 
 .profile {
-    width: 75%;
-    height: 20vh;
+    width: 60%;
     display: flex;
+    position: relative;
     flex-direction: row;
     align-items: center;
     box-sizing: border-box;
@@ -83,9 +139,40 @@ h2 {
     margin: 10px;
 }
 
+.icon-container a {
+    color: #000;
+    margin-right: 20px; /* Spacing between icons */
+    text-decoration: none;
+}
+
+.icon-container a:last-child {
+    margin-right: 0; /* Removes margin from the last icon */
+}
+
+.icon-container i {
+    font-size: 30px; /* Adjust icon size */
+}
+
+.mini-profile {
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+    /* transition: all .2s ease-in-out; */
+    /* object-fit: cover; */
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: 10px;
+}
+
+.mini-profile > img {
+    width: 100%;
+    height: auto;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    box-sizing: border-box;
+}
+
 .profile-picture {
-    width: 40%;
-    height: 100%;
+    width: 25%;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
@@ -116,6 +203,7 @@ h2 {
     justify-content: center;
     box-sizing: border-box;
     padding: 10px;
+<<<<<<< HEAD
 }
 
 .calendar-table {
@@ -148,10 +236,47 @@ th, td {
 
 .low-preference {
     background-color: #ffcccb;
+=======
+    margin-right: auto;
+}
+
+#overlay {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+
+    background-color: rgba(0,0,0,.6);
+    z-index: 200;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-window {
+    position: absolute;
+    background-color: #fff;
+    width: 60vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    padding: 2rem;
+    flex-direction: column;
+}
+
+.heading {
+    position: relative;
+    margin-bottom: 1rem;
+    width: 75%;
+    text-align: center;
+    border-bottom: 1px solid #cfd4d9;
+>>>>>>> c8b42c238974ece418a7b245600f71de41e0093f
 }
 
 .drop-down {
     position: relative;
+<<<<<<< HEAD
     width: 300px;
     margin: 10px;
 }
@@ -184,3 +309,140 @@ th, td {
     margin: 10px;
 }
 
+=======
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dropdown:hover {
+    cursor: pointer;
+}
+
+.drop-down > label {
+    margin: 0.25rem 0rem;
+    margin-right: auto;
+}
+
+.drop-down > select, .drop-down > input, .drop-down > textarea{
+    width: 100%;
+    /* border-radius: 5px; */
+    padding: 0.5rem;
+    resize: none;
+    /* border: 1px solid black; */
+}
+
+#invitation-form, #search-form, #create-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.search-input-bar {
+    width: 100%;
+}
+
+.calendar-icon {
+    border-radius: 5px 0px 0px 5px;
+}
+
+.search-results {
+    width: 100%;
+    margin: 1rem;
+}
+
+.form-create {
+    width: 75%;
+}
+
+.search-result-profile-pic {
+    max-width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-result-profile {
+    display: flex;
+    flex-direction: row;
+    height: 10vh;
+    align-items: center;
+    padding: 1rem;
+}
+
+.search-result-name {
+    margin: 1rem;
+    margin-right: auto;
+}
+
+#invitation-form > form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#submit-button {
+    margin: 1rem;
+}
+
+.close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0.5rem;
+    padding: 0.2rem;
+}
+
+#create-window {
+    position: absolute;
+    background-color: #fff;
+    width: 85vw;
+    height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form input {
+    width: 100%;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s; 
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+>>>>>>> c8b42c238974ece418a7b245600f71de41e0093f
