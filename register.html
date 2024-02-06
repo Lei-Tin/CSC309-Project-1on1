@@ -19,35 +19,35 @@
 
     <main>
         <section class="jumbotron text-center">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <h2 class="text-center">Register</h2>
-                        <form action="./contacts.html">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="confirmPassword">Confirm Password</label>
-                                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
-                            </div>
-                            <div class="form-group form-check">
-                                <input type="checkbox" class="form-check-input" id="consent">
-                                <label class="form-check-label" for="consent">I agree to the terms and conditions</label>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block">Register</button>
-                        </form>
+            <div class="form-container">
+                <h1 class="display-4">Register</h1>
+                <form class="authentication-form" id="register-form" action="./contacts.html">
+                    <div class="txt_field">
+                        <input type="name" required>
+                        <span></span>
+                        <label for="name">Name</label>
                     </div>
-                </div>
+                    <div class="txt_field">
+                        <input type="email" required>
+                        <span></span>
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="txt_field">
+                        <input type="password" required>
+                        <span></span>
+                        <label for="password">Password</label>
+                    </div>
+                    <div class="txt_field">
+                        <input type="password" id="confirmPassword" required>
+                        <span></span>
+                        <label for="confirmPassword">Confirm Password</label>
+                    </div>
+                    <div class="form-check">
+                        <label for="consent">I agree to the terms and conditions</label>
+                        <input type="checkbox" id="consent">
+                    </div>
+                    <input type="submit" value="Register">
+                </form>
             </div>
         </section>
     </main>
