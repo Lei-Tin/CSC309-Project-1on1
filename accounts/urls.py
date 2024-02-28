@@ -16,18 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls.static import static
-from django.conf import settings
 
-from .views import indexView
-
-# Import include
-from django.urls import include
+from accounts.views import registerView, loginView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('index/', indexView.as_view(), name='index'),
-    path('accounts/', include('accounts.urls'), name='accounts'),
+    path('register/', registerView.as_view(), name='register'),
+    path('login/', loginView.as_view(), name='login'),
 ]
-
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
