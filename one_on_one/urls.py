@@ -31,6 +31,7 @@ urlpatterns = [
     path('index/', indexView.as_view(), name='index'),
     path('accounts/', include('accounts.urls'), name='accounts'),
     path('calendars/', include('calendars.urls'), name='calendars'),
+    path('contacts/', include('contacts.urls'), name='contacts'),
     path('', lambda request: redirect('index/', permanent=False)),  # Redirect to root when no path is given
 ]
 

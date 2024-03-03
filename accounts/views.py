@@ -20,3 +20,11 @@ class loginView(TemplateView):
     def post(self, request):
         # TODO: Add logic to this
         return HttpResponse('POST request')
+    
+class profileView(TemplateView):
+    def get(self, request):
+        # TDOO: Add logic to this
+        return render(request, 'account/profile.html')
+    
+    def post(self, request):
+        return HttpResponse('POST request')

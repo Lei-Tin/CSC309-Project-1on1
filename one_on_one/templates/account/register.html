@@ -8,7 +8,8 @@
         <section class="jumbotron text-center">
             <div class="form-container">
                 <h1 class="display-4">Register</h1>
-                <form class="authentication-form" id="register-form" action="../calendar/calendar.html">
+                {% comment %} Replace these content with the POST request to the register view {% endcomment %}
+                <form class="authentication-form" id="register-form" action="{% url 'calendar-list' %}">
                     <div class="txt_field">
                         <input type="name" required>
                         <span></span>
