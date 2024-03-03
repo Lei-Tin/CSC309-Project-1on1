@@ -16,22 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls.static import static
-from django.conf import settings
 
-from .views import indexView
-
-# Import include
-from django.urls import include
-
-from django.shortcuts import redirect
+from calendars.views import calendarListView, createCalendarView, calendarView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('index/', indexView.as_view(), name='index'),
-    path('accounts/', include('accounts.urls'), name='accounts'),
-    path('calendars/', include('calendars.urls'), name='calendars'),
-    path('', lambda request: redirect('index/', permanent=False)),  # Redirect to root when no path is given
+    path('list/', calendarListView.as_view(), name='calendar-list'),
+    path('create/', createCalendarView.as_view(), name='calendar-create'),
+    path('<int:calendar_id>/', calendarView.as_view(), name='calendar-view'),
 ]
-
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
