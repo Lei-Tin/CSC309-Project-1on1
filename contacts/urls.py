@@ -19,6 +19,8 @@ from django.urls import path
 
 from contacts.views import contactListView, addContactView, inviteContactView
 
+app_name = 'contacts'
+
 urlpatterns = [
     path('list/', contactListView.as_view(), name='contact-list'),
     path('add/', addContactView.as_view(), name='contact-add'),
