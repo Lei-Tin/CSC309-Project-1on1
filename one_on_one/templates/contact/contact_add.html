@@ -9,7 +9,7 @@
     <div id="overlay">
         <div class="popup-window">
             {% comment %} Change this to JavaScript {% endcomment %}
-            <a type="button" class="btn close-button" href="{% url 'contact-list' %}">
+            <a type="button" class="btn close-button" href="{% url 'contacts:contact-list' %}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x"
                     viewBox="0 0 16 16">
                     <path
@@ -30,7 +30,7 @@
                 <div class="card search-results">
                     {% comment %} Render the contacts based on search results, might need to use JavaScript {% endcomment %}
 
-                    <a class="dropdown-item search-result-profile" href="{% url 'contact-list' %}">
+                    <a class="dropdown-item search-result-profile" href="{% url 'contacts:contact-list' %}">
                         <div class="search-result-profile-pic"><img src="{% static 'profile-picture.png' %}" alt="Wilson image" class="img-thumbnail"> </div>
                         <div class="search-result-name">Wilso1</div>
                     </a>
@@ -51,7 +51,7 @@
                 My Contacts
             </div>
 
-            <a class="btn btn-primary btn-lg" href="{% url 'contact-add' %}">Add new contact</a>
+            <a class="btn btn-primary btn-lg" href="{% url 'contacts:contact-add' %}">Add new contact</a>
 
             <div class="main-content-container">
 
@@ -63,7 +63,7 @@
                     <div class="profile-description">
                         <h2>Alice</h2>
                         <p>alice@uoft.com</p>
-                        <a class="btn btn-success contacts-invite-button" href="{% url 'contact-invite' %}">Invite to meeting</a>
+                        <a class="btn btn-success contacts-invite-button" href="{% url 'contacts:contact-invite' %}">Invite to meeting</a>
                         <button type="button" class="btn setting-button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-gear" viewBox="0 0 16 16">
