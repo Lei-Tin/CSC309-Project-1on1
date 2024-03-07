@@ -1,27 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+{% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1on1 - Register</title>
-    <link rel="icon" type="image/x-icon" href="../favicon.ico">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./authentication.css">
-</head>
+{% include 'header.html' with css='accounts/authentication.css' title='Register'%}
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="../index.html">1on1</a>
-        </nav>
-    </header>
-
+    {% include 'navbar.html' %}
     <main>
         <section class="jumbotron text-center">
             <div class="form-container">
                 <h1 class="display-4">Register</h1>
-                <form class="authentication-form" id="register-form" action="../calendar/calendar.html">
+                {% comment %} Replace these content with the POST request to the register view {% endcomment %}
+                <form class="authentication-form" id="register-form" action="{% url 'calendar-list' %}">
                     <div class="txt_field">
                         <input type="name" required>
                         <span></span>
@@ -52,9 +40,7 @@
         </section>
     </main>
 
-    <footer class="text-center py-4">
-        <p>&copy; 2024 1on1. All rights reserved.</p>
-    </footer>
+    {% include 'footer.html' %}
 </body>
 
 </html>

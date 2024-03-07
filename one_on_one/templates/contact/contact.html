@@ -1,0 +1,60 @@
+{% load static %}
+
+{% include 'header.html' with css='contacts/contacts.css' title='Contacts'%}
+
+<body>
+    {% include 'navbar_logged.html' with current='contacts' %}
+
+    <main>
+        <!-- Find a better way to do this -->
+        <script src="https://kit.fontawesome.com/1831208eff.js" crossorigin="anonymous"></script>
+
+        <div class="jumbotron contacts-list">
+            <div class="display-4">
+                My Contacts
+            </div>
+
+            <a class="btn btn-primary btn-lg" href="{% url 'contact-add' %}">Add new contact</a>
+
+            <div class="main-content-container">
+
+                {% comment %} This div is one person, replace with template render logic {% endcomment %}
+                <div class="contacts-profile">
+                    <div class="contacts-profile-picture">
+                        <img src="{% static 'profile-picture.png' %}" alt="Profile Picture">
+                    </div>
+                    <div class="profile-description">
+                        <h2>Alice</h2>
+                        <p>alice@uoft.com</p>
+                        <a class="btn btn-success contacts-invite-button" href="{% url 'contact-invite' %}">Invite to meeting</a>
+                        <button type="button" class="btn setting-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-gear" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0">
+                                </path>
+                                <path
+                                    d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z">
+                                </path>
+                            </svg>
+                        </button>
+                        
+                        <div class="setting-panel">
+                            <a class="dropdown-item">Edit</a>
+                            <a class="dropdown-item text-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-4">
+        <p>&copy; 2024 1on1. All rights reserved.</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

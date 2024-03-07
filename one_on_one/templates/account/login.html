@@ -1,0 +1,37 @@
+{% load static %}
+
+{% include 'header.html' with css='accounts/authentication.css' title='Login' %}
+
+<body>
+    {% include 'navbar.html' %}
+
+    <main>
+        <section class="jumbotron text-center">
+            <div class="form-container">
+                <h1 class="display-4">Login</h1>
+                {% comment %} Replace these content with the POST request to the login view {% endcomment %}
+                <form class="authentication-form" id="login-form" action="{% url 'calendar-list' %}">
+                    <div class="txt_field">
+                        <input type="text" required>
+                        <span></span>
+                        <label>Username</label>
+                    </div>
+                    <div class="txt_field">
+                        <input type="password" required>
+                        <span></span>
+                        <label>Password</label>
+                    </div>
+                    <div class="pass">Forgot Password?</div>
+                    <input type="submit" value="Login">
+                    <div class="signup_link">
+                        Not a member? <a href="{% url 'register' %}">Signup</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+
+</html>

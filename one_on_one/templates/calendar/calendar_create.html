@@ -1,25 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1on1 - My Calendar</title>
-    <link rel="icon" type="image/x-icon" href="../favicon.ico">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../style.css">
-
-    <!-- Calendar specific stylesheet -->
-    <link rel="stylesheet" href="./calendar.css">
-
-    <script src="https://kit.fontawesome.com/1831208eff.js" crossorigin="anonymous"></script>
-</head>
+{% include 'header.html' with css='calendars/calendar.css' %}
 
 <body>
+    <!-- Find a better way to do this -->
+    <script src="https://kit.fontawesome.com/1831208eff.js" crossorigin="anonymous"></script>
+
+    {% comment %} Change this into actual popup using JavaScript {% endcomment %}
     <div id="overlay">
         <div class="popup-window">
             <!-- Close button -->
-            <a type="button" class="btn close-button" href="./calendar.html">
+            <a type="button" class="btn close-button" href="{% url 'calendar-list' %}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x"
                     viewBox="0 0 16 16">
                     <path
@@ -34,7 +23,7 @@
                 </div>
     
                 <div class="form-content">
-                    <form id="calendar-create-form" action="../calendar/calendar.html">
+                    <form id="calendar-create-form" action="{% url 'calendar-list' %}">
                         <div class="form-drop-down">
                             <label for="name-event-input">Name your event</label>
                             <input type="text" id="name-event-input" class="form-control">
@@ -95,49 +84,14 @@
         </div>
     </div>
 
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="../index.html">1on1</a>
-            <div class="icon-container">
-                <a href="../calendar/calendar.html" title="Calendar"><i class="fa-solid fa-calendar"></i></a>
-                <a href="../contacts/contacts.html" title="Contacts"><i class="fa-regular fa-address-book"></i></a>
-                <div class="dropdown">
-                    <a class="dropdown-toggle" href="#" title="Alerts" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa-regular fa-bell"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                        <div class="dropdown-item">
-                            <p>User X has added you to the contacts</p>
-                            <div class="actions">
-                                <a href="#" class="accept"><i class="fas fa-check"></i></a>
-                                <a href="#" class="decline"><i class="fas fa-times"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="dropdown">
-                <div class="mini-profile-container dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="username">Username</span>
-                    <div class="mini-profile">
-                        <img src="../profile-picture.png" alt="User Name">
-                    </div>
-                </div>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="#">Profile</a>
-                    <a class="dropdown-item" href="#">Settings</a>
-                    <a class="dropdown-item" href="index.html">Logout</a>
-                </div>
-            </div>
-        </nav>
-    </header>
+    {% include 'navbar_logged.html' with current='calendars' %}
 
     <main>
         <div class="jumbotron calendar-list">
             <div class="display-4">
                 My Calendars
             </div>
-            <a class="btn btn-primary btn-lg" href="./calendar_create.html">Create a new calendar</a>
+            <a class="btn btn-primary btn-lg" href="{% url 'calendar-create' %}">Create a new calendar</a>
 
             <div class="main-content-container">
                 <div class="calendar-brief rounded">
@@ -151,6 +105,8 @@
                         </ul>
                     </div>
 
+
+                    {% comment %} Change this into actual button to enter the calendar {% endcomment %}
                     <div class="calendar-btn">
                         <a href="./meeting_calendar.html" class="btn btn-success">Enter Calendar</a>
                     </div>
@@ -174,9 +130,7 @@
         </div>
     </main>
 
-    <footer class="text-center py-4">
-        <p>&copy; 2024 1on1. All rights reserved.</p>
-    </footer>
+    {% include 'footer.html' %}
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.9/dist/umd/popper.min.js"></script>
