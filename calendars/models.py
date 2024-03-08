@@ -9,26 +9,13 @@ class Calendar(models.Model):
     end_date = models.DateField(blank=False, null=False)
 
 
-class OwnerAvailability(models.Model):
+class Availability(models.Model):
     PREFERENCE_LEVELS = [
         (1, 'Not preferred'),
         (2, 'Preferred'),
         (3, 'Highly preferred')]
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
-    start_period = models.DateTimeField(blank=False, null=False)
-    end_period = models.DateTimeField(blank=False, null=False)
-    preference = models.IntegerField(choices=PREFERENCE_LEVELS, default=2)
-
-
-class Schedule(models.Model):
-    calendar = models.OneToOneField(Calendar, on_delete=models.CASCADE)
-
-
-class InviteeAvailability(models.Model):
-    PREFERENCE_LEVELS = [
-        (1, 'Not preferred'),
-        (2, 'Preferred'),
-        (3, 'Highly preferred')]
+    user = models.ForeignKey("auth.user", on_delete=models.CASCADE)
     start_period = models.DateTimeField(blank=False, null=False)
     end_period = models.DateTimeField(blank=False, null=False)
     preference = models.IntegerField(choices=PREFERENCE_LEVELS, default=2)
@@ -39,8 +26,8 @@ class Invitee(models.Model):
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
     invitee = models.ForeignKey("auth.user", on_delete=models.CASCADE)
     deadline = models.DateTimeField(blank=False, null=False)
-    # If availability is null, that means the invitee has not accepted the invitation yet
-    availability = models.OneToOneField(InviteeAvailability, on_delete=models.CASCADE, null=True)
+
+    # We denote an invitee as accepted if they have provided at least one availability
 
     class Meta:
         constraints = [
@@ -49,10 +36,14 @@ class Invitee(models.Model):
 
 
 class Meets(models.Model):
-    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
-    accepted = models.ForeignKey("auth.user", on_delete=models.CASCADE)
+    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
+    meeter = models.ForeignKey("auth.user", on_delete=models.CASCADE)
+    start_period = models.DateTimeField(blank=False, null=False)
+    end_period = models.DateTimeField(blank=False, null=False)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['schedule', 'accepted'])
+            models.UniqueConstraint(fields=['calendar', 'meeter'])
+            # TODO: Should there be added constraint for meeter and start_period so that the same person cannot be
+            # suggested to meet two people at the same time
         ]
