@@ -49,7 +49,7 @@ class Invitee(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['calendar', 'invitee'])
+            models.UniqueConstraint(fields=['calendar', 'invitee'], name='invitation')
         ]
 
 
@@ -67,7 +67,7 @@ class Meets(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['calendar', 'meeter'])
+            models.UniqueConstraint(fields=['calendar', 'meeter'], name='meeting')
             # TODO: Should there be added constraint for meeter and start_period so that the same person cannot be
             # suggested to meet two people at the same time
         ]
