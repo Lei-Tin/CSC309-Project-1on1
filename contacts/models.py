@@ -8,8 +8,8 @@ class Contacts(models.Model):
     Requested (user) - foreign key of user, the user that the requester wants to add to their contacts
     Accepted (bool) - a boolean for whether the requested user accepts to add the requester to their contacts
     """
-    requester = models.OneToOneField("auth.user", on_delete=models.CASCADE)
-    requested = models.OneToOneField("auth.user", on_delete=models.CASCADE)
+    requester = models.OneToOneField("auth.user", on_delete=models.CASCADE, related_name='request_made')
+    requested = models.OneToOneField("auth.user", on_delete=models.CASCADE, related_name='request_received')
     accepted = models.BooleanField(default=False)
 
     class Meta:
