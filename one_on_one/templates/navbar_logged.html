@@ -5,14 +5,14 @@
         <a class="navbar-brand" href="{% url 'index' %}">1on1</a>
         <div class="icon-container">
             {% if current == 'calendars' %}
-            <a href="{% url 'calendar-list' %}" title="Calendar"><i class="fa-solid fa-calendar"></i></a>
-            <a href="{% url 'contact-list' %}" title="Contacts"><i class="fa-regular fa-address-book"></i></a>
+            <a href="{% url 'calendars:calendar-list' %}" title="Calendar"><i class="fa-solid fa-calendar"></i></a>
+            <a href="{% url 'contacts:contact-list' %}" title="Contacts"><i class="fa-regular fa-address-book"></i></a>
             {% elif current == 'contacts' %}
-            <a href="{% url 'calendar-list' %}" title="Calendar"><i class="fa-regular fa-calendar"></i></a>
-            <a href="{% url 'contact-list' %}" title="Contacts"><i class="fa-solid fa-address-book"></i></a>
+            <a href="{% url 'calendars:calendar-list' %}" title="Calendar"><i class="fa-regular fa-calendar"></i></a>
+            <a href="{% url 'contacts:contact-list' %}" title="Contacts"><i class="fa-solid fa-address-book"></i></a>
             {% else %}
-            <a href="{% url 'calendar-list' %}" title="Calendar"><i class="fa-regular fa-calendar"></i></a>
-            <a href="{% url 'contact-list' %}" title="Contacts"><i class="fa-regular fa-address-book"></i></a>
+            <a href="{% url 'calendars:calendar-list' %}" title="Calendar"><i class="fa-regular fa-calendar"></i></a>
+            <a href="{% url 'contacts:contact-list' %}" title="Contacts"><i class="fa-regular fa-address-book"></i></a>
             {% endif %}
             <div class="dropdown">
                 <a class="dropdown-toggle" href="#" title="Alerts" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="dropdown-menu dropdown-menu-right user-dropdown-menu">
-                <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                <a class="dropdown-item" href="{% url 'accounts:profile' %}">Profile</a>
                 <a class="dropdown-item" href="#">Settings</a>
                 <a class="dropdown-item" href="{% url 'index' %}">Logout</a>
             </div>

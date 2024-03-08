@@ -13,7 +13,7 @@
             <div class="display-4">
                 My Calendars
             </div>
-            <a class="btn btn-primary btn-lg" href="{% url 'calendar-create' %}">Create a new calendar</a>
+            <a class="btn btn-primary btn-lg" href="{% url 'calendars:calendar-create' %}">Create a new calendar</a>
 
 
             {% comment %} Replace this into actual for loop to render the stuffs {% endcomment %}
@@ -32,7 +32,7 @@
                     {% comment %} Change this into actual button to enter the calendar {% endcomment %}
                     <div class="calendar-btn">
                         {% comment %} This url here is some random calendar with id=1, currently just enters the page always {% endcomment %}
-                        <a href="{% url 'calendar-view' calendar_id=1 %}" class="btn btn-success">Enter Calendar</a>
+                        <a href="{% url 'calendars:calendar-view' calendar_id=1 %}" class="btn btn-success">Enter Calendar</a>
                     </div>
                 </div>
             </div>

@@ -8,7 +8,7 @@
     <div id="overlay">
         <div class="popup-window">
             <!-- Close button -->
-            <a type="button" class="btn close-button" href="{% url 'calendar-list' %}">
+            <a type="button" class="btn close-button" href="{% url 'calendars:calendar-list' %}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x"
                     viewBox="0 0 16 16">
                     <path
@@ -23,7 +23,7 @@
                 </div>
     
                 <div class="form-content">
-                    <form id="calendar-create-form" action="{% url 'calendar-list' %}">
+                    <form id="calendar-create-form" action="{% url 'calendars:calendar-list' %}">
                         <div class="form-drop-down">
                             <label for="name-event-input">Name your event</label>
                             <input type="text" id="name-event-input" class="form-control">
@@ -91,8 +91,10 @@
             <div class="display-4">
                 My Calendars
             </div>
-            <a class="btn btn-primary btn-lg" href="{% url 'calendar-create' %}">Create a new calendar</a>
+            <a class="btn btn-primary btn-lg" href="{% url 'calendars:calendar-create' %}">Create a new calendar</a>
 
+
+            {% comment %} Replace this into actual for loop to render the stuffs {% endcomment %}
             <div class="main-content-container">
                 <div class="calendar-brief rounded">
                     <div class="calendar-meeting-details">
@@ -105,25 +107,10 @@
                         </ul>
                     </div>
 
-
                     {% comment %} Change this into actual button to enter the calendar {% endcomment %}
                     <div class="calendar-btn">
-                        <a href="./meeting_calendar.html" class="btn btn-success">Enter Calendar</a>
-                    </div>
-                </div>
-
-                <div class="calendar-brief rounded">
-                    <div class="calendar-meeting-details">
-                        <h4>CSC495 Meeting</h4>
-                        <h6>Participants</h6>
-                        <ul>
-                            <li>David</li>
-                            <li>Esper</li>
-                            <li>Francis</li>
-                        </ul>
-                    </div>
-                    <div class="calendar-btn">
-                        <a href="./meeting_calendar.html" class="btn btn-success">Enter Calendar</a>
+                        {% comment %} This url here is some random calendar with id=1, currently just enters the page always {% endcomment %}
+                        <a href="{% url 'calendars:calendar-view' calendar_id=1 %}" class="btn btn-success">Enter Calendar</a>
                     </div>
                 </div>
             </div>

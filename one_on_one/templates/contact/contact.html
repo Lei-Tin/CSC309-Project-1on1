@@ -14,7 +14,7 @@
                 My Contacts
             </div>
 
-            <a class="btn btn-primary btn-lg" href="{% url 'contact-add' %}">Add new contact</a>
+            <a class="btn btn-primary btn-lg" href="{% url 'contacts:contact-add' %}">Add new contact</a>
 
             <div class="main-content-container">
 
@@ -26,7 +26,7 @@
                     <div class="profile-description">
                         <h2>Alice</h2>
                         <p>alice@uoft.com</p>
-                        <a class="btn btn-success contacts-invite-button" href="{% url 'contact-invite' %}">Invite to meeting</a>
+                        <a class="btn btn-success contacts-invite-button" href="{% url 'contacts:contact-invite' %}">Invite to meeting</a>
                         <button type="button" class="btn setting-button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-gear" viewBox="0 0 16 16">
