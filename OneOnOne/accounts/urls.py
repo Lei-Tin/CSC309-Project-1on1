@@ -17,12 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from contacts.views import contactListView, addContactView, inviteContactView
+from accounts.views import registerView, loginView, profileView
 
-app_name = 'contacts'
+app_name = 'accounts'
 
 urlpatterns = [
-    path('list/', contactListView.as_view(), name='contact-list'),
-    path('add/', addContactView.as_view(), name='contact-add'),
-    path('invite/', inviteContactView.as_view(), name='contact-invite'),
+    # Frontend, might be replaced by React
+    # path('register/', registerView.as_view(), name='register'),
+    # path('login/', loginView.as_view(), name='login'),
+    # path('profile/', profileView.as_view(), name='profile'),
+
+    # The following are API Calls
 ]
