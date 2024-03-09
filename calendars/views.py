@@ -5,24 +5,10 @@ from django.views.generic import TemplateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework import serializers
 
 from .models import Calendar, Availability, Invitee, Meets
 
-class CalendarSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Calendar
-        fields = '__all__'
-
-class AvailabilitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Availability
-        fields = '__all__'
-
-class InviteeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Invitee
-        fields = '__all__'
+from .serializers import CalendarSerializer, AvailabilitySerializer, InviteeSerializer
 
 # Create your views here.
 class calendarListView(TemplateView):
@@ -141,7 +127,7 @@ class InviteeStatus(APIView):
         # Using list serializer
         invitees = Invitee.objects.filter(calendar_id=calendar_id)
         serializer = InviteeSerializer(invitees, many=True)
-        
+
         return Response(serializer.data)
 
 
