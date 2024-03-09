@@ -26,8 +26,17 @@ from django.urls import include
 
 from django.shortcuts import redirect
 
+# Link to simplejwt's documentation
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('index/', indexView.as_view(), name='index'),
     path('accounts/', include('accounts.urls'), name='accounts'),
     path('calendars/', include('calendars.urls'), name='calendars'),
