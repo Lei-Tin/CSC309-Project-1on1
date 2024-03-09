@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from models import Calendar, Availability, Invitee, Meets
+from .models import Calendar, Availability, Invitee, Meets
 
 # Create your views here.
 class calendarListView(TemplateView):
