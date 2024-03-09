@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from calendars.views import calendarListView, createCalendarView, calendarSelectionView
-from calendars.views import CalendarStatus, MeetingStatus
+from calendars.views import CalendarStatus, MeetingStatus, AvailabilityStatus, InviteeStatus
 
 app_name = 'calendars'
 
@@ -30,4 +30,6 @@ urlpatterns = [
     # The following are API calls
     path('<int:calendar_id>/status/', CalendarStatus.as_view(), name='calendar-status'),
     path('<int:calendar_id>/meetings/', MeetingStatus.as_view(), name='meeting-status'),
+    path('<int:calendar_id>/invitees/', InviteeStatus.as_view(), name='invitee-status'),
+    path('<int:calendar_id>/availabilities/', AvailabilityStatus.as_view(), name='availability-status'),
 ]

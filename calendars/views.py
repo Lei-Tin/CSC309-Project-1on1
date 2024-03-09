@@ -5,8 +5,24 @@ from django.views.generic import TemplateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework import serializers
 
 from .models import Calendar, Availability, Invitee, Meets
+
+class CalendarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Calendar
+        fields = '__all__'
+
+class AvailabilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Availability
+        fields = '__all__'
+
+class InviteeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Invitee
+        fields = '__all__'
 
 # Create your views here.
 class calendarListView(TemplateView):
@@ -60,7 +76,30 @@ class CalendarStatus(APIView):
         # It should return a dict of the following structure: 
         """
         {
-            'availiability': [
+            'owner': owner_id, 
+            'name': name_of_calendar,
+            'start_date': start_date,
+            'end_date': end_date
+        }
+        """
+        # Using the serializer
+        calendar = Calendar.objects.get(id=calendar_id)
+        serializer = CalendarSerializer(calendar)
+        return Response(serializer.data)
+    
+class AvailabilityStatus(APIView):
+    def get(self, request, calendar_id):
+        """Obtains all availability status given a calendar_id"""
+
+        # Check if the calendar_id passed in the URL is valid
+        # If it is not valid, return a 404
+        if not Calendar.objects.filter(id=calendar_id).exists():
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        # It should return a dict of the following structure: 
+        """
+        {
+            'availabilities': [
                 # A list of dictionaries containing all users' availabilities within this calendar
                 {
                     'user_id': id,
@@ -69,48 +108,41 @@ class CalendarStatus(APIView):
                     'preference': preference
                 },
                 ...
-            ],
+            ]
+        }
+        """
+        # Using list serializer
+        availabilities = Availability.objects.filter(calendar_id=calendar_id)
+        serializer = AvailabilitySerializer(availabilities, many=True)
+        return Response(serializer.data)
+    
+class InviteeStatus(APIView):
+    def get(self, request, calendar_id):
+        """Obtains all invitee status given a calendar_id"""
+
+        # Check if the calendar_id passed in the URL is valid
+        # If it is not valid, return a 404
+        if not Calendar.objects.filter(id=calendar_id).exists():
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        # It should return a dict of the following structure: 
+        """
+        {
             'invitees': [
-                # A list of dictionaries containing all users that are invited to the calendar, 
-                # including their current acceptance statuses
+                # A list of dictionaries containing all users' invitee status within this calendar
                 {
                     'user_id': id,
                     'deadline': deadline
-                    'status': status  # We compute the status by checking if the user is in the availability list
                 },
                 ...
-            ],
-            'owner': owner_id
+            ]
         }
         """
-
-        d = {
-            'owner': Calendar.objects.get(id=calendar_id).owner.id, 
-             'availiability': [], 
-             'invitees': []
-             }
+        # Using list serializer
+        invitees = Invitee.objects.filter(calendar_id=calendar_id)
+        serializer = InviteeSerializer(invitees, many=True)
         
-        # Convert every entry in the queryset to a dictionary
-        for availability in Availability.objects.filter(calendar_id=calendar_id):
-            d['availiability'].append({
-                'user_id': availability.user.id,
-                'start_period': availability.start_period,
-                'end_period': availability.end_period,
-                'preference': availability.preference
-            })
-
-        accepted_users = set()
-        for availability in Availability.objects.filter(calendar_id=calendar_id):
-            accepted_users.add(availability.user.id)
-
-        for invitee in Invitee.objects.filter(calendar_id=calendar_id):
-            d['invitees'].append({
-                'user_id': invitee.invitee.id,
-                'deadline': invitee.deadline,
-                'status': invitee.invitee in accepted_users
-            })
-
-        return Response(d)
+        return Response(serializer.data)
 
 
 class MeetingStatus(APIView):
