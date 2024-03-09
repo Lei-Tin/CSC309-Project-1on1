@@ -44,6 +44,9 @@ class calendarSelectionView(TemplateView):
 
 # API Views for Status
 # Calls for obtaining the status of the current calendar's availbility situation
+    
+# For RESTFUL API, need to handle
+# get, post, put, patch, delete
 class CalendarStatus(APIView):
     """
     This API Call is used to obtain information about the current calendar's filled information
