@@ -162,17 +162,10 @@ class MeetingStatus(APIView):
         }
         """
 
-        d = {'meets': []}
-
-        # Convert every entry in the queryset to a dictionary
-        for meet in Meets.objects.filter(calendar_id=calendar_id):
-            d['meets'].append({
-                'user_id': meet.meeter.id,
-                'start_period': meet.start_period,
-                'end_period': meet.end_period
-            })
-
-        return Response(d)
+        # Using serializers
+        meets = Meets.objects.filter(calendar_id=calendar_id)
+        serializer = AvailabilitySerializer(meets, many=True)
+        return Response(serializer.data)
 
 
     
