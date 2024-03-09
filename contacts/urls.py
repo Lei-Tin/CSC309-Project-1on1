@@ -22,7 +22,10 @@ from contacts.views import contactListView, addContactView, inviteContactView
 app_name = 'contacts'
 
 urlpatterns = [
-    path('list/', contactListView.as_view(), name='contact-list'),
-    path('add/', addContactView.as_view(), name='contact-add'),
-    path('invite/', inviteContactView.as_view(), name='contact-invite'),
+    # Frontend, might be replaced by React
+    # path('list/', contactListView.as_view(), name='contact-list'),
+    # path('add/', addContactView.as_view(), name='contact-add'),
+    # path('invite/', inviteContactView.as_view(), name='contact-invite'),
+
+    # The following are API Calls
 ]

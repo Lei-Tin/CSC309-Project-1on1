@@ -23,9 +23,10 @@ from calendars.views import CalendarStatus, MeetingStatus, AvailabilityStatus, I
 app_name = 'calendars'
 
 urlpatterns = [
-    path('list/', calendarListView.as_view(), name='calendar-list'),
-    path('create/', createCalendarView.as_view(), name='calendar-create'),
-    path('<int:calendar_id>/', calendarSelectionView.as_view(), name='calendar-view'),
+    # Front end views
+    # path('list/', calendarListView.as_view(), name='calendar-list'),
+    # path('create/', createCalendarView.as_view(), name='calendar-create'),
+    # path('<int:calendar_id>/', calendarSelectionView.as_view(), name='calendar-view'),
 
     # The following are API calls
     path('<int:calendar_id>/status/', CalendarStatus.as_view(), name='calendar-status'),

@@ -34,14 +34,21 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
+    # Administrative interface
     path('admin/', admin.site.urls),
+
+    # JWT token views
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('index/', indexView.as_view(), name='index'),
+
+    # Index view, might be removed as we are using React later
+    # path('index/', indexView.as_view(), name='index'),
+    # path('', lambda request: redirect('index/', permanent=False)),  # Redirect to root when no path is given
+
+    # Conections to other apps
     path('accounts/', include('accounts.urls'), name='accounts'),
     path('calendars/', include('calendars.urls'), name='calendars'),
     path('contacts/', include('contacts.urls'), name='contacts'),
-    path('', lambda request: redirect('index/', permanent=False)),  # Redirect to root when no path is given
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
