@@ -18,3 +18,15 @@ DJANGO_SUPERUSER_USERNAME=test
 DJANGO_SUPERUSER_PASSWORD=123
 DJANGO_SUPERUSER_EMAIL="test@example.com"
 ```
+
+## VM Startup
+
+The VM used here is Ubuntu 20.04.6 LTS emulated on Windows Machine. 
+
+### Setup instructions
+
+```
+sudo su
+sh startup.sh
+sh run.sh
+```

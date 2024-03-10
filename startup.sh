@@ -1,11 +1,18 @@
-# TODO: Install necessary stuffs
+# Install Python
+echo "Installing Python..."
+apt install python3 -y
+apt install python3-pip -y
+
+# Install necessary stuffs
 echo "Installing necessary dependencies..."
 pip3 install -r requirements.txt
+
+# Make migrations for Django
 python3 OneOnOne/manage.py makemigrations
 python3 OneOnOne/manage.py migrate
 
-# Remove superuser
-# It removes if exist, otherwise do nothing
+# Remove superuser if exists
+# Otherwise do nothing
 echo "Removing superuser..."
 python3 OneOnOne/manage.py shell -c "from django.contrib.auth.models import User; 
 User.objects.filter(username='test').delete()"
