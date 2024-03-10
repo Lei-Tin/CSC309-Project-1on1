@@ -1,4 +1,4 @@
-from .models import Calendar, Availability, Invitee
+from .models import *
 from rest_framework import serializers
 from datetime import datetime
 
@@ -47,4 +47,10 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 class InviteeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Invitee
+        fields = '__all__'
+
+
+class ScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Meets
         fields = '__all__'

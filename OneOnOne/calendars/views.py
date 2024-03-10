@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import TemplateView
@@ -8,10 +9,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status, viewsets
 
-from .models import Calendar, Availability, Invitee, Meets
 from .permissions import IsOwnerOrInvitee
 
-from .serializers import CalendarSerializer, AvailabilitySerializer, InviteeSerializer
+from .serializers import *
 
 
 # Create your views here.
@@ -96,6 +96,63 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
         return obj
 
 
+class ScheduleViewSet(viewsets.ModelViewSet):
+    queryset = Meets.objects.all()
+    serializer_class = ScheduleSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        calendar_id = self.kwargs.get('calendar_id')
+        calendar = get_object_or_404(Calendar, pk=calendar_id)
+        return self.queryset.filter(calendar=calendar)
+
+    def perform_create(self, serializer):
+        calendar_id = self.kwargs.get('calendar_id')
+        calendar = get_object_or_404(Calendar, pk=calendar_id)
+
+        # Ensure the user creating the schedule is the owner of the calendar
+        if self.request.user != calendar.owner:
+            return Response({'detail': 'You are not authorized to create a schedule for this calendar.'}, status=403)
+
+        potential_meetings = calculate_meetings(calendar)
+
+        with transaction.atomic():
+            for meeting in potential_meetings:
+                Meets.objects.create(
+                    calendar=calendar,
+                    meeter=meeting['meeter'],
+                    start_period=meeting['start_period'],
+                    end_period=meeting['end_period']
+                )
+
+        # TODO: remember to redirect to the get_queryset on success
+        return Response({'detail': 'Schedule created successfully.'})
+
+
+def calculate_meetings(calendar):
+    owner_availabilities = Availability.objects.filter(calendar=calendar, user=calendar.owner)
+    invitee_availabilities = Availability.objects.filter(calendar=calendar).exclude(user=calendar.owner)
+    meetings_to_schedule = []
+
+    for owner_availability in owner_availabilities:
+        # Find overlapping availabilities with invitees for this owner availability
+        overlapping_availabilities = invitee_availabilities.filter(
+            start_period__lt=owner_availability.end_period,
+            end_period__gt=owner_availability.start_period
+        ).order_by('-preference', 'user_id')
+
+        # If there are overlaps, take the one with the highest preference (or lowest user ID in case of a tie)
+        if overlapping_availabilities.exists():
+            chosen_availability = overlapping_availabilities.first()
+            meetings_to_schedule.append({
+                'calendar': calendar,
+                'meeter': chosen_availability.user,
+                'start_period': max(owner_availability.start_period, chosen_availability.start_period),
+                'end_period': min(owner_availability.end_period, chosen_availability.end_period),
+            })
+
+    return meetings_to_schedule
+
 
 # API Views for Status
 # Calls for obtaining the status of the current calendar's availbility situation
@@ -162,39 +219,39 @@ class InviteeStatus(APIView):
         return Response(serializer.data)
 
 
-class MeetingStatus(APIView):
-    """
-    This API Call is used to obtain information about the current calendar's meeting status
-    Already finalized meeting times for everyone in the calendar
-
-    Currently POST is not supported, only GET
-    """
-
-    def get(self, request, calendar_id):
-        # Check if the calendar_id passed in the URL is valid
-        # If it is not valid, return a 404
-        if not Calendar.objects.filter(id=calendar_id).exists():
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        # It should return a dict of the following structure: 
-        """
-        {
-            'meets': [
-                # A list of dictionaries containing all users' meets within this calendar
-                {
-                    'user_id': id,
-                    'start_period': start_time,
-                    'end_period': end_time
-                },
-                ...
-            ]
-        }
-        """
-
-        # Using serializers
-        meets = Meets.objects.filter(calendar_id=calendar_id)
-        serializer = AvailabilitySerializer(meets, many=True)
-        return Response(serializer.data)
+# class MeetingStatus(APIView):
+#     """
+#     This API Call is used to obtain information about the current calendar's meeting status
+#     Already finalized meeting times for everyone in the calendar
+#
+#     Currently POST is not supported, only GET
+#     """
+#
+#     def get(self, request, calendar_id):
+#         # Check if the calendar_id passed in the URL is valid
+#         # If it is not valid, return a 404
+#         if not Calendar.objects.filter(id=calendar_id).exists():
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+#
+#         # It should return a dict of the following structure:
+#         """
+#         {
+#             'meets': [
+#                 # A list of dictionaries containing all users' meets within this calendar
+#                 {
+#                     'user_id': id,
+#                     'start_period': start_time,
+#                     'end_period': end_time
+#                 },
+#                 ...
+#             ]
+#         }
+#         """
+#
+#         # Using serializers
+#         meets = Meets.objects.filter(calendar_id=calendar_id)
+#         serializer = AvailabilitySerializer(meets, many=True)
+#         return Response(serializer.data)
 
 # TODO: Maybe consider adding views that are used as API endpoints to fetch information like:
 # Invited user's statuses with the calendar
