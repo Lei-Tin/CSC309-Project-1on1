@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.generic import TemplateView
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
@@ -15,6 +15,32 @@ from .serializers import CalendarSerializer, AvailabilitySerializer, InviteeSeri
 
 
 # Create your views here.
+class calendarListView(APIView):
+    # Return a JsonResponse of all the calendars
+    def get(self, request):
+        serializer = CalendarSerializer(Calendar.objects.all(), many=True)
+        return JsonResponse(serializer.data, safe=False)
+    
+    # Create a new calendar
+    def post(self, request):
+        serializer = CalendarSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save(owner=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class calendarSelectionView(TemplateView):
+    def get(self, request, calendar_id):
+        # TDOO: Add logic to this
+        # TODO: Distinguish between the page that is shown to the user who created the calendar
+        # and the user who was invited to the calendar
+        return render(request, 'calendar/calendar_view.html')
+    
+    def post(self, request):
+        # TODO: Add logic to this
+        return HttpResponse('POST request')
+    
 class AvailabilityViewSet(viewsets.ModelViewSet):
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
@@ -40,37 +66,6 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
         obj = super().get_object()
         self.check_object_permissions(self.request, obj)
         return obj
-
-# class calendarListView(TemplateView):
-#     def get(self, request):
-#         # TDOO: Add logic to this
-#         return render(request, 'calendar/calendar.html')
-#
-#     def post(self, request):
-#         # TODO: Add logic to this
-#         return HttpResponse('POST request')
-#
-# class createCalendarView(TemplateView):
-#     def get(self, request):
-#         # TDOO: Add logic to this
-#         return render(request, 'calendar/calendar_create.html')
-#
-#     def post(self, request):
-#         # TODO: Add logic to this, from the post request from the form
-#         return HttpResponse('POST request')
-#
-# class calendarSelectionView(TemplateView):
-#     def get(self, request, calendar_id):
-#         # TDOO: Add logic to this
-#
-#         # TODO: Distinguish between the page that is shown to the user who created the calendar
-#         # and the user who was invited to the calendar
-#         return render(request, 'calendar/calendar_view.html')
-#
-#     def post(self, request):
-#         # TODO: Add logic to this
-#         return HttpResponse('POST request')
-
 
 # API Views for Status
 # Calls for obtaining the status of the current calendar's availbility situation
@@ -107,37 +102,6 @@ class CalendarStatus(APIView):
         serializer = CalendarSerializer(calendar)
         return Response(serializer.data)
 
-
-# class AvailabilityStatus(APIView):
-#     def get(self, request, calendar_id):
-#         """Obtains all availability status given a calendar_id"""
-#
-#         # Check if the calendar_id passed in the URL is valid
-#         # If it is not valid, return a 404
-#         if not Calendar.objects.filter(id=calendar_id).exists():
-#             return Response(status=status.HTTP_404_NOT_FOUND)
-#
-#         # It should return a dict of the following structure:
-#         """
-#         {
-#             'availabilities': [
-#                 # A list of dictionaries containing all users' availabilities within this calendar
-#                 {
-#                     'user_id': id,
-#                     'start_period': start_time,
-#                     'end_period': end_time,
-#                     'preference': preference
-#                 },
-#                 ...
-#             ]
-#         }
-#         """
-#         # Using list serializer
-#         availabilities = Availability.objects.filter(calendar_id=calendar_id)
-#         serializer = AvailabilitySerializer(availabilities, many=True)
-#         return Response(serializer.data)
-
-
 class InviteeStatus(APIView):
     def get(self, request, calendar_id):
         """Obtains all invitee status given a calendar_id"""
@@ -165,6 +129,7 @@ class InviteeStatus(APIView):
         serializer = InviteeSerializer(invitees, many=True)
 
         return Response(serializer.data)
+
 
 
 class MeetingStatus(APIView):

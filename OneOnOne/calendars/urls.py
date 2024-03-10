@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from .views import calendarListView, calendarSelectionView
 from .views import CalendarStatus, MeetingStatus, AvailabilityViewSet, InviteeStatus
 from rest_framework.routers import DefaultRouter
 
@@ -32,6 +33,7 @@ urlpatterns = [
     # path('<int:calendar_id>/', calendarSelectionView.as_view(), name='calendar-view'),
 
     # The following are API calls
+    path('', calendarListView.as_view(), name='calendar-list'),
     path('<int:calendar_id>/status/', CalendarStatus.as_view(), name='calendar-status'),
     path('<int:calendar_id>/meetings/', MeetingStatus.as_view(), name='meeting-status'),
     path('<int:calendar_id>/invitees/', InviteeStatus.as_view(), name='invitee-status'),
