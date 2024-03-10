@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.generic import TemplateView
 
 from rest_framework.response import Response
@@ -11,28 +11,24 @@ from .models import Calendar, Availability, Invitee, Meets
 from .serializers import CalendarSerializer, AvailabilitySerializer, InviteeSerializer
 
 # Create your views here.
-class calendarListView(TemplateView):
+class calendarListView(APIView):
+    # Return a JsonResponse of all the calendars
     def get(self, request):
-        # TDOO: Add logic to this
-        return render(request, 'calendar/calendar.html')
+        serializer = CalendarSerializer(Calendar.objects.all(), many=True)
+        return JsonResponse(serializer.data, safe=False)
     
+    # Create a new calendar
     def post(self, request):
-        # TODO: Add logic to this
-        return HttpResponse('POST request')
+        serializer = CalendarSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save(owner=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class createCalendarView(TemplateView):
-    def get(self, request):
-        # TDOO: Add logic to this
-        return render(request, 'calendar/calendar_create.html')
-    
-    def post(self, request):
-        # TODO: Add logic to this, from the post request from the form
-        return HttpResponse('POST request')
-    
+
 class calendarSelectionView(TemplateView):
     def get(self, request, calendar_id):
         # TDOO: Add logic to this
-
         # TODO: Distinguish between the page that is shown to the user who created the calendar
         # and the user who was invited to the calendar
         return render(request, 'calendar/calendar_view.html')
@@ -75,6 +71,7 @@ class CalendarStatus(APIView):
         calendar = Calendar.objects.get(id=calendar_id)
         serializer = CalendarSerializer(calendar)
         return Response(serializer.data)
+
     
 class AvailabilityStatus(APIView):
     def get(self, request, calendar_id):
@@ -104,7 +101,8 @@ class AvailabilityStatus(APIView):
         availabilities = Availability.objects.filter(calendar_id=calendar_id)
         serializer = AvailabilitySerializer(availabilities, many=True)
         return Response(serializer.data)
-    
+
+
 class InviteeStatus(APIView):
     def get(self, request, calendar_id):
         """Obtains all invitee status given a calendar_id"""
@@ -132,6 +130,7 @@ class InviteeStatus(APIView):
         serializer = InviteeSerializer(invitees, many=True)
 
         return Response(serializer.data)
+
 
 
 class MeetingStatus(APIView):
