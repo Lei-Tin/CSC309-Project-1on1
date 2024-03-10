@@ -166,9 +166,40 @@ class MeetingStatus(APIView):
         meets = Meets.objects.filter(calendar_id=calendar_id)
         serializer = AvailabilitySerializer(meets, many=True)
         return Response(serializer.data)
-
-
     
 # TODO: Maybe consider adding views that are used as API endpoints to fetch information like:
 # Invited user's statuses with the calendar
 # Fetching the suggested schedule's API
+    
+class testAPIView(APIView):
+    """
+    get:
+    Return some stuff
+    
+    I think I can even write **MARKDOWN**
+    ## Params
+    - PARAM1: What
+
+    ## Responses
+    - 200: GOOD
+
+    post:
+    Create some stuff
+
+    put:
+    Update some stuff
+
+    delete:
+    Delete some stuff
+    """
+    def get(self, request, name):
+        return Response('GET request')
+
+    def post(self, request):
+        return Response('POST request')
+
+    def put(self, request):
+        return Response('PUT request')
+
+    def delete(self, request):
+        return Response('DELETE request')
