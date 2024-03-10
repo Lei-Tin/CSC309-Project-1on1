@@ -20,8 +20,6 @@ from django.urls import path
 from calendars.views import calendarListView, createCalendarView, calendarSelectionView
 from calendars.views import CalendarStatus, MeetingStatus, AvailabilityStatus, InviteeStatus
 
-from calendars.views import testAPIView
-
 app_name = 'calendars'
 
 urlpatterns = [
@@ -35,5 +33,4 @@ urlpatterns = [
     path('<int:calendar_id>/meetings/', MeetingStatus.as_view(), name='meeting-status'),
     path('<int:calendar_id>/invitees/', InviteeStatus.as_view(), name='invitee-status'),
     path('<int:calendar_id>/availabilities/', AvailabilityStatus.as_view(), name='availability-status'),
-    path('<str:name>/test/', testAPIView.as_view(), name='test-api-view'),
 ]
