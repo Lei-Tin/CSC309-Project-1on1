@@ -23,6 +23,8 @@ DJANGO_SUPERUSER_EMAIL="test@example.com"
 
 The VM used here is Ubuntu 20.04.6 LTS emulated on Windows Machine. 
 
+If you are using VirtualBox or any other VM platforms, please look into installing the additional tools for the platform for a better experience. 
+
 ### Setup instructions
 
 ```
