@@ -17,14 +17,33 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from .views import calendarListView, calendarSelectionView
-from .views import CalendarStatus, MeetingStatus, AvailabilityViewSet, InviteeStatus
+# from .views import calendarListView, calendarSelectionView
+from .views import CalendarViewSet, MeetingStatus, AvailabilityViewSet, InviteeStatus
 from rest_framework.routers import DefaultRouter
 
 app_name = 'calendars'
 
-router = DefaultRouter()
-router.register(r'availabilities', AvailabilityViewSet)
+calendar_list = CalendarViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+calendar_detail = CalendarViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
+
+availability_list = AvailabilityViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+availability_detail = AvailabilityViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
 
 urlpatterns = [
     # Front end views
@@ -33,9 +52,11 @@ urlpatterns = [
     # path('<int:calendar_id>/', calendarSelectionView.as_view(), name='calendar-view'),
 
     # The following are API calls
-    path('', calendarListView.as_view(), name='calendar-list'),
-    path('<int:calendar_id>/status/', CalendarStatus.as_view(), name='calendar-status'),
-    path('<int:calendar_id>/meetings/', MeetingStatus.as_view(), name='meeting-status'),
-    path('<int:calendar_id>/invitees/', InviteeStatus.as_view(), name='invitee-status'),
-    path('', include(router.urls)),
+    path('', calendar_list, name='calendar-list'),
+    path('<int:pk>', calendar_detail, name='calendar-detail'),
+    # path('<int:calendar_id>/status/', CalendarStatus.as_view(), name='calendar-status'),
+    # path('<int:calendar_id>/meetings/', MeetingStatus.as_view(), name='meeting-status'),
+    # path('<int:calendar_id>/invitees/', InviteeStatus.as_view(), name='invitee-status'),
+    path('<int:calendar_id>/availabilities/', availability_list, name='availability-list'),
+    path('<int:calendar_id>/availabilities/<int:pk>/', availability_detail, name='availability-detail'),
 ]
