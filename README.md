@@ -27,8 +27,16 @@ If you are using VirtualBox or any other VM platforms, please look into installi
 
 ### Setup instructions
 
+Enabling file sharing
 ```
-sudo su
+su
+sudo adduser $USER vboxsf
+```
+
+(Restart VM)
+
+```
+su
 sh startup.sh
 sh run.sh
 ```
