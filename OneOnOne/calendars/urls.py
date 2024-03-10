@@ -15,12 +15,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
-from calendars.views import calendarListView, calendarSelectionView
-from calendars.views import CalendarStatus, MeetingStatus, AvailabilityStatus, InviteeStatus
+from .views import calendarListView, calendarSelectionView
+from .views import CalendarStatus, MeetingStatus, AvailabilityViewSet, InviteeStatus
+from rest_framework.routers import DefaultRouter
 
 app_name = 'calendars'
+
+router = DefaultRouter()
+router.register(r'availabilities', AvailabilityViewSet)
 
 urlpatterns = [
     # Front end views
@@ -33,5 +37,5 @@ urlpatterns = [
     path('<int:calendar_id>/status/', CalendarStatus.as_view(), name='calendar-status'),
     path('<int:calendar_id>/meetings/', MeetingStatus.as_view(), name='meeting-status'),
     path('<int:calendar_id>/invitees/', InviteeStatus.as_view(), name='invitee-status'),
-    path('<int:calendar_id>/availabilities/', AvailabilityStatus.as_view(), name='availability-status'),
+    path('', include(router.urls)),
 ]

@@ -2,6 +2,7 @@ from .models import Calendar, Availability, Invitee
 from rest_framework import serializers
 from datetime import datetime
 
+
 class CalendarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Calendar
@@ -27,10 +28,12 @@ class CalendarSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('This field expects a date in the format YYYY-MM-DD')
 
 
+
 class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
         fields = '__all__'
+
 
 class InviteeSerializer(serializers.ModelSerializer):
     class Meta:
