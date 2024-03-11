@@ -33,6 +33,8 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+from rest_framework.documentation import include_docs_urls
+
 urlpatterns = [
     # Administrative interface
     path('admin/', admin.site.urls),
@@ -45,10 +47,11 @@ urlpatterns = [
     # path('index/', indexView.as_view(), name='index'),
     # path('', lambda request: redirect('index/', permanent=False)),  # Redirect to root when no path is given
 
-    # Conections to other apps
+    # Connections to other apps
     path('accounts/', include('accounts.urls'), name='accounts'),
     path('calendars/', include('calendars.urls'), name='calendars'),
     path('contacts/', include('contacts.urls'), name='contacts'),
+    path(r'docs/', include_docs_urls(title='OneOnOne API', public=True)),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

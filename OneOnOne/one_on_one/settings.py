@@ -56,7 +56,13 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-    )
+    ), 
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=5),
 }
 
 SIMPLE_JWT = {
@@ -152,7 +158,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
 STATICFILES_DIRS =( os.path.join(STATIC_ROOT, 'css/'),
-                    os.path.join(STATIC_ROOT, 'javascript/'),
+                    # os.path.join(STATIC_ROOT, 'javascript/'),
                     os.path.join(STATIC_ROOT, 'images/')
                   )
 
