@@ -132,6 +132,7 @@ class respondToFriendRequestView(APIView):
         "accepted": <accept/reject>
     }
     ```
+
     ### Response
     #### Success
     Status `200` OK
