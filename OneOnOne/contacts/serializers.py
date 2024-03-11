@@ -92,7 +92,7 @@ class ContactRequestSerializer(serializers.Serializer):
         except Contacts.DoesNotExist:
             raise serializers.ValidationError('Request does not exist')
         if contact.requested != self.context['request'].user:
-            raise serializers.ValidationError('You cannot respond to this request')
+            raise serializers.ValidationError('You are not the requested user of this request')
         return value
 
     def save(self, **kwargs):

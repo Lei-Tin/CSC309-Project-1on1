@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from contacts.views import contactListView, friendRequestsView, inviteContactView, respondToFriendRequestView
+from contacts.views import contactListView, friendRequestsView, manageContactView, respondToFriendRequestView
 
 app_name = 'contacts'
 
@@ -29,7 +29,7 @@ urlpatterns = [
     path('friendRequests/', friendRequestsView.as_view(), name='friend-requests'),
     
     # Endpoint for sending friend request to user with <user_id>
-    path('friendRequests/user/', inviteContactView.as_view(), name='invite-contact'),
+    path('friendRequests/user/', manageContactView.as_view(), name='invite-contact'),
 
     # Endpoint for accepting or rejecting friend request with <request_id>
     path('friendRequests/request/', respondToFriendRequestView.as_view(), name='respond-to-friend-request')
