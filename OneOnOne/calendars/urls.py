@@ -14,12 +14,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 
-# from .views import calendarListView, calendarSelectionView
-from .views import CalendarViewSet, MeetingStatus, AvailabilityViewSet, InviteeStatus
-from rest_framework.routers import DefaultRouter
+from .views import CalendarViewSet, AvailabilityViewSet
 
 app_name = 'calendars'
 
@@ -46,17 +43,9 @@ availability_detail = AvailabilityViewSet.as_view({
 })
 
 urlpatterns = [
-    # Front end views
-    # path('list/', calendarListView.as_view(), name='calendar-list'),
-    # path('create/', createCalendarView.as_view(), name='calendar-create'),
-    # path('<int:calendar_id>/', calendarSelectionView.as_view(), name='calendar-view'),
-
     # The following are API calls
     path('', calendar_list, name='calendar-list'),
     path('<int:pk>', calendar_detail, name='calendar-detail'),
-    # path('<int:calendar_id>/status/', CalendarStatus.as_view(), name='calendar-status'),
-    # path('<int:calendar_id>/meetings/', MeetingStatus.as_view(), name='meeting-status'),
-    # path('<int:calendar_id>/invitees/', InviteeStatus.as_view(), name='invitee-status'),
     path('<int:calendar_id>/availabilities/', availability_list, name='availability-list'),
     path('<int:calendar_id>/availabilities/<int:pk>/', availability_detail, name='availability-detail'),
 ]
