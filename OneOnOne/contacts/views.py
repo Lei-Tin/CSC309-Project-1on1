@@ -58,7 +58,7 @@ class inviteContactView(APIView):
         """
         Delete a friend from user's contact list. Input should be in the following format:
         {
-            "requested": "<requested-username>"
+            "username": "<username>"
         }
         """
         serializer = ContactDeleteSerializer(data=request.data, context={'request': request})

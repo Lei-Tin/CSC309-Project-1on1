@@ -50,9 +50,9 @@ class ContactSerializer(serializers.ModelSerializer):
 
 
 class ContactDeleteSerializer(serializers.Serializer):
-    requested = serializers.CharField()
+    username = serializers.CharField()
 
-    def validate_requested(self, value):
+    def validate_username(self, value):
         requester = self.context['request'].user
         requested_username = value
         try:
@@ -67,12 +67,14 @@ class ContactDeleteSerializer(serializers.Serializer):
 
     def delete(self, **kwargs):
         requester = self.context['request'].user
-        requested_username = self.validated_data['requested']
-        requested = User.objects.get(username=requested_username)
-        contact = Contacts.objects.get(requester=requester, requested=requested)
+        requested_username = self.validated_data['username']
+        deleted_user = User.objects.get(username=requested_username)
+        try:
+            contact = Contacts.objects.get(requester=requester, requested=deleted_user)
+        except Contacts.DoesNotExist:
+            contact = Contacts.objects.get(requester=deleted_user, requested=requester)
         contact.delete()
         return contact
-
 
 
 class ContactRequestSerializer(serializers.Serializer):
