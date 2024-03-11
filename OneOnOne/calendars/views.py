@@ -1,21 +1,19 @@
 from django.db import transaction
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-from django.views.generic import TemplateView
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework import status, viewsets
 
-from .permissions import IsOwnerOrInvitee
-
+from .permissions import *
 from .serializers import *
 
 
 # Create your views here.
 class CalendarViewSet(viewsets.ModelViewSet):
+    """
+
+    """
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
     permission_classes = [IsAuthenticated]
@@ -35,11 +33,27 @@ class CalendarViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         """
-        This view handles updates to the name of a calendar, which is defined by the serializer
+        This view handles updates to the name of a calendar, which is defined by the serializer.
         Users cannot modify a start or end date once the calendar has been created
         """
         # TODO: change the success response to be the calendar details (currently only the name change is seen)
         return super().update(request, *args, **kwargs)
+
+
+class InviteeViewSet(viewsets.ModelViewSet):
+    queryset = Invitee.objects.all()
+    serializer_class = InviteeSerializer
+    permission_classes = [IsAuthenticated, IsOwner]
+
+    def get_queryset(self):
+        calendar_id = self.kwargs.get('calendar_id')
+        calendar = get_object_or_404(Calendar, pk=calendar_id)
+        return self.queryset.filter(calendar=calendar)
+
+    def perform_create(self, serializer):
+        calendar_id = self.kwargs.get('calendar_id')
+        calendar = get_object_or_404(Calendar, pk=calendar_id)
+        serializer.save(calendar=calendar)
 
 
 class AvailabilityViewSet(viewsets.ModelViewSet):
@@ -125,35 +139,6 @@ def calculate_meetings(calendar):
             })
 
     return meetings_to_schedule
-
-
-class InviteeStatus(APIView):
-    def get(self, request, calendar_id):
-        """Obtains all invitee status given a calendar_id"""
-
-        # Check if the calendar_id passed in the URL is valid
-        # If it is not valid, return a 404
-        if not Calendar.objects.filter(id=calendar_id).exists():
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        # It should return a dict of the following structure: 
-        """
-        {
-            'invitees': [
-                # A list of dictionaries containing all users' invitee status within this calendar
-                {
-                    'user_id': id,
-                    'deadline': deadline
-                },
-                ...
-            ]
-        }
-        """
-        # Using list serializer
-        invitees = Invitee.objects.filter(calendar_id=calendar_id)
-        serializer = InviteeSerializer(invitees, many=True)
-
-        return Response(serializer.data)
 
 
 # TODO: Maybe consider adding views that are used as API endpoints to fetch information like:

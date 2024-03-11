@@ -32,9 +32,12 @@ class InviteeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Invitee
         fields = '__all__'
+        read_only_fields = ['calendar']
 
 
 class ScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Meets
         fields = '__all__'
+        read_only_fields = ['calendar', 'meeter', 'start_period', 'end_period']
+

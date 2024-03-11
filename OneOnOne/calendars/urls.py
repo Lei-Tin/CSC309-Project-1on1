@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import CalendarViewSet, AvailabilityViewSet
+from .views import *
 
 app_name = 'calendars'
 
@@ -31,6 +31,11 @@ calendar_detail = CalendarViewSet.as_view({
     'delete': 'destroy'
 })
 
+invitee_list = InviteeViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+
 availability_list = AvailabilityViewSet.as_view({
     'get': 'list',
     'post': 'create'
@@ -42,10 +47,21 @@ availability_detail = AvailabilityViewSet.as_view({
     'delete': 'destroy'
 })
 
+schedule_ops = ScheduleViewSet.as_view({
+    'get': 'list',
+    'post': 'create',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
+
+
 urlpatterns = [
     # The following are API calls
     path('', calendar_list, name='calendar-list'),
     path('<int:pk>', calendar_detail, name='calendar-detail'),
+    path('<int:calendar_id>/invitee/', invitee_list, name='invitee-list'),
     path('<int:calendar_id>/availabilities/', availability_list, name='availability-list'),
     path('<int:calendar_id>/availabilities/<int:pk>/', availability_detail, name='availability-detail'),
+    path('<int:calendar_id>/schedule/', schedule_ops, name='schedule-ops'),
 ]
