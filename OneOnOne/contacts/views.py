@@ -13,12 +13,17 @@ from .serializers import ContactSerializer, ContactRequestSerializer, ContactDel
 class contactListView(APIView):
     """
     get:
-    Obtain the list of username of friends of the user. In the following format:
+    Obtain the list of username of friends of the user.
+    ### Output Format
     ```
     {
         "friends": ["username1", "username2", ...]
     }
     ```
+
+    ### Response
+    #### Success
+    Status `200` OK
     """
     def get(self, request):
         user = request.user
@@ -32,13 +37,18 @@ class contactListView(APIView):
 class friendRequestsView(APIView):
     """
     get:
-    Obtain the list of friend requests that the user has received but not accepted yet. In the following format:
+    Obtain the list of friend requests that the user has received but not accepted yet.
+    ### Output Format
     ```
     {
         'id': <request-id>,
         'requester_username': "<requester-username>",
     }
     ```
+
+    ### Response
+    #### Success
+    Status `200` OK
     """
     def get(self, request):
         user = request.user
@@ -50,28 +60,49 @@ class friendRequestsView(APIView):
 class manageContactView(APIView):
     """
     post:
-    Send a friend request to the user with the username specified. Input should be in the following format:
+    Send a friend request to the user with the username specified. 
+    ### Input Format
     ```
     {
         "requested": "<requested-username>"
     }
     ```
 
-    ## Validation Errors
+    ### Response
+    #### Success
+    Status `201` Created
+
+    #### Errors
+    Status `400` Bad Request
+
+    With the following error messages:
+    
     - You cannot add yourself to your contacts
     - User does not exist
     - You have already sent a request to this user
     - This user has already sent you a request
 
     delete:
-    Delete a friend from user's contact list. Input should be in the following format:
+    Delete a friend from user's contact list.
+
+    ### Input Format
     ```
     {
         "username": "<username>"
     }
+    ```
 
-    ## Validation Errors
+    ### Response
+    #### Success
+    Status `204` No Content
+
+    #### Errors
+    Status `400` Bad Request
+
+    With the following error messages:
+
     - User does not exist
+
     - You are not friends with this user
     """
     def post(self, request):
@@ -93,15 +124,23 @@ class manageContactView(APIView):
 class respondToFriendRequestView(APIView):
     """
     post:
-    Accept or reject a friend request. Input should be in the following format:
+    Accept or reject a friend request.
+    ### Input Format
     ```
     {
         "request_id": <request-id>,
         "accepted": <accept/reject>
     }
     ```
+    ### Response
+    #### Success
+    Status `200` OK
 
-    ## Validation Errors
+    #### Errors
+    Status `400` Bad Request
+
+    With the following error messages:
+
     - Request does not exist
     - You are not the requested user of this request
     - Invalid action
