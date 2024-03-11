@@ -16,16 +16,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
-from accounts.views import registerView, loginView, profileView
+from .views import RegisterView, LoginView, ProfileView
 
 app_name = 'accounts'
 
 urlpatterns = [
     # Frontend, might be replaced by React
-    # path('register/', registerView.as_view(), name='register'),
-    # path('login/', loginView.as_view(), name='login'),
-    # path('profile/', profileView.as_view(), name='profile'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('profile/', ProfileView.as_view(), name='profile'),
 
     # The following are API Calls
 ]
