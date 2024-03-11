@@ -16,3 +16,6 @@ class Contacts(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['requester', 'requested'], name='membership')
         ]
+    
+    def __str__(self):
+        return f'{self.requester.username} to {self.requested.username}'

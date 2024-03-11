@@ -17,15 +17,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from contacts.views import contactListView, addContactView, inviteContactView
+from contacts.views import contactListView, friendRequestsView, inviteContactView, respondToFriendRequestView
 
 app_name = 'contacts'
 
 urlpatterns = [
-    # Frontend, might be replaced by React
-    # path('list/', contactListView.as_view(), name='contact-list'),
-    # path('add/', addContactView.as_view(), name='contact-add'),
-    # path('invite/', inviteContactView.as_view(), name='contact-invite'),
+    # Endpoint for list user with <user_id>'s friends list (accepted friend request)
+    path('', contactListView.as_view(), name='contact-list'),
 
-    # The following are API Calls
+    # Endpoint for listing all pending friend requests current user received (accepted = False)
+    path('friendRequests/', friendRequestsView.as_view(), name='friend-requests'),
+    
+    # Endpoint for sending friend request to user with <user_id>
+    path('friendRequests/user/', inviteContactView.as_view(), name='invite-contact'),
+
+    # Endpoint for accepting or rejecting friend request with <request_id>
+    path('friendRequests/request/', respondToFriendRequestView.as_view(), name='respond-to-friend-request')
 ]
