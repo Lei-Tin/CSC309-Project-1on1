@@ -12,38 +12,42 @@ from .serializers import *
 # Create your views here.
 class CalendarViewSet(viewsets.ModelViewSet):
     """
-    list:
-    Obtain the list of all calendars created by the currently authenticated user
-    ### Response
-    #### Success - 200 OK
-    #### Not authenticated - 401 Unauthorized
-    read:
-    Obtain calendar details
-    ### Response
-    #### Success - 200 OK
-    #### Not authenticated - 401 Unauthorized
-    #### Not owner - 403 Forbidden
-    #### Invalid calendar - 404 Not Found
-    create:
-    Create a new calendar
-    ### Response
-    #### Success - 200 OK
-    #### Not authenticated - 401 Unauthorized
-    update:
-    Updates the name of a calendar, which is defined by the serializer.
-    Users cannot modify a start or end date once the calendar has been created
-    ### Response
-    #### Success - 200 OK
-    #### Not authenticated - 401 Unauthorized
-    #### Not owner - 403 Forbidden
-    #### Invalid calendar - 404 Not Found
-    delete:
-    Deletes the calendar, and removes all associated content with the calendar
-    ### Response
-    #### Success - 200 OK
-    #### Not authenticated - 401 Unauthorized
-    #### Not owner - 403 Forbidden
-    #### Invalid calendar - 404 Not Found
+        list:
+        Obtain the list of all calendars created by the currently authenticated user
+        ### Response
+        #### Success - 200 OK
+        #### Not authenticated - 401 Unauthorized
+
+        read:
+        Obtain calendar details
+        ### Response
+        #### Success - 200 OK
+        #### Not authenticated - 401 Unauthorized
+        #### Not owner - 403 Forbidden
+        #### Invalid calendar - 404 Not Found
+
+        create:
+        Create a new calendar
+        ### Response
+        #### Success - 200 OK
+        #### Not authenticated - 401 Unauthorized
+
+        update:
+        Updates the name of a calendar, which is defined by the serializer.
+        Users cannot modify a start or end date once the calendar has been created
+        ### Response
+        #### Success - 200 OK
+        #### Not authenticated - 401 Unauthorized
+        #### Not owner - 403 Forbidden
+        #### Invalid calendar - 404 Not Found
+
+        delete:
+        Deletes the calendar, and removes all associated content with the calendar
+        ### Response
+        #### Success - 200 OK
+        #### Not authenticated - 401 Unauthorized
+        #### Not owner - 403 Forbidden
+        #### Invalid calendar - 404 Not Found
     """
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
@@ -70,6 +74,7 @@ class InviteeViewSet(viewsets.ModelViewSet):
         #### Not authenticated - 401 Unauthorized
         #### Not owner - 403 Forbidden
         #### Invalid calendar - 404 Not Found
+
         read:
         Obtain details of a specific invitee
         ### Response
@@ -77,6 +82,7 @@ class InviteeViewSet(viewsets.ModelViewSet):
         #### Not authenticated - 401 Unauthorized
         #### Not owner - 403 Forbidden
         #### Invalid calendar - 404 Not Found
+
         create:
         Invite a new user to be in a calendar
         ### Response
@@ -85,6 +91,7 @@ class InviteeViewSet(viewsets.ModelViewSet):
         #### Not owner - 403 Forbidden
         #### Invalid calendar - 404 Not Found
         #### Finalized - 410 Gone
+
         update:
         Updates the deadline for the invitee to add an availability (no other fields can be modified)
         ### Response
@@ -93,6 +100,7 @@ class InviteeViewSet(viewsets.ModelViewSet):
         #### Not owner - 403 Forbidden
         #### Invalid calendar - 404 Not Found
         #### Finalized - 410 Gone
+
         delete:
         Deletes the invite, and removes all associated content with the invitee
         ### Response
@@ -127,6 +135,7 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
         #### Not authenticated - 401 Unauthorized
         #### Not owner or invitee - 403 Forbidden
         #### Invalid calendar - 404 Not Found
+
         read:
         Obtain details of a specific availability provided by a user
         ### Response
@@ -134,6 +143,7 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
         #### Not authenticated - 401 Unauthorized
         #### Not owner or invitee - 403 Forbidden
         #### Invalid calendar - 404 Not Found
+
         create:
         Create a new availability for a calendar
         ### Response
@@ -142,6 +152,7 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
         #### Not owner or invitee - 403 Forbidden
         #### Invalid calendar - 404 Not Found
         #### Deadline passed - 410 Gone
+
         update:
         Updates the time period or preference level for a specific availability
         ### Response
@@ -150,6 +161,7 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
         #### Not owner or invitee - 403 Forbidden
         #### Invalid calendar - 404 Not Found
         #### Deadline passed - 410 Gone
+
         delete:
         Deletes the availability period
         ### Response
@@ -198,6 +210,7 @@ class ScheduleViewSet(viewsets.ModelViewSet):
         #### Not authenticated - 401 Unauthorized
         #### Not owner - 403 Forbidden
         #### Invalid calendar - 404 Not Found
+
         create:
         DELETES OLD SCHEDULE IF EXISTS, then generates a new suggested schedule
         ### Response
@@ -205,6 +218,7 @@ class ScheduleViewSet(viewsets.ModelViewSet):
         #### Not authenticated - 401 Unauthorized
         #### Not owner - 403 Forbidden
         #### Invalid calendar - 404 Not Found
+
         update:
         Updates the time period or preference level for a specific availability
         ### Response
@@ -213,6 +227,7 @@ class ScheduleViewSet(viewsets.ModelViewSet):
         #### Not owner - 403 Forbidden
         #### Invalid calendar - 404 Not Found
         #### Finalized - 410 Gone
+
         delete:
         Deletes the meeting period for a schedule
         ### Response
