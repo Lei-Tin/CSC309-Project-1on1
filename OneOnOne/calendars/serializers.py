@@ -34,6 +34,17 @@ class InviteeSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['calendar']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        request = self.context.get('request') if self.context else None
+
+        if request and request.method in ['PUT', 'PATCH']:
+            # Restrict fields to 'name' only for update operations
+            allowed = {'deadline'}
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
 
 class ScheduleSerializer(serializers.ModelSerializer):
     class Meta:

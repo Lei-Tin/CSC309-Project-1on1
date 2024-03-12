@@ -43,3 +43,9 @@ class IsOwner(permissions.BasePermission):
 
         # If conditions not met, deny permission
         return False
+
+
+class IsFinalized(permissions.BasePermission):
+    # TODO: when the calendar is not finalized, meets can be editted
+    def has_permission(self, request, view):
+        return True

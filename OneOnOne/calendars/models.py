@@ -8,11 +8,13 @@ class Calendar(models.Model):
     Name (char) - the name of the calendar
     Start_date (Date) - the starting date of the calendar
     End_date (Date) - the ending date of the calendar
+    Finalized (bool) - whether or not the schedule for the calendar is finalized
     """
     owner = models.ForeignKey("auth.user", on_delete=models.CASCADE)
     name = models.CharField(max_length=50, blank=False, null=False)
     start_date = models.DateField(blank=False, null=False)
     end_date = models.DateField(blank=False, null=False)
+    finalized = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
