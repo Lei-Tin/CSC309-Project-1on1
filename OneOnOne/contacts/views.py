@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
 
-from rest_framework.views import APIView
+from rest_framework.views import APIView, status
 from rest_framework.response import Response
 
 from .models import Contacts
@@ -117,8 +117,8 @@ class manageContactView(APIView):
                 "message": f'Friend request sent to {request.data["requested"]}'
             }
             serializer.save()
-            return Response(success_message, status=201)
-        return Response(serializer.errors, status=400)
+            return Response(success_message, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
     def delete(self, request):
@@ -128,8 +128,8 @@ class manageContactView(APIView):
                 "message": f'Friend {request.data["username"]} deleted'
             }
             serializer.delete()
-            return Response(success_message, status=204)
-        return Response(serializer.errors, status=400)
+            return Response(success_message, status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
        
         
 class respondToFriendRequestView(APIView):
@@ -167,5 +167,5 @@ class respondToFriendRequestView(APIView):
                 "message": f'Request {request.data["request_id"]} {serializer.data["action"]}'
             }
             serializer.save()
-            return Response(success_message, status=200)
-        return Response(serializer.errors, status=400)
+            return Response(success_message, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
