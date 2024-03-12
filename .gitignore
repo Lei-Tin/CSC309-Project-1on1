@@ -3,3 +3,6 @@
 **/db.sqlite3
 **/migrations/0*.py
 **/.idea/
+
+# Ignore media files uploaded by users
+**/media/profile_pictures/

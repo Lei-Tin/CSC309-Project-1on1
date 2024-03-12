@@ -17,7 +17,7 @@ class contactListView(APIView):
     ### Output Format
     ```
     {
-        "friends": ["username1", "username2", ...]
+        "friends": [<username1>, <username2>, ...]
     }
     ```
 
@@ -41,8 +41,8 @@ class friendRequestsView(APIView):
     ### Output Format
     ```
     {
-        'id': <request-id>,
-        'requester_username': "<requester-username>",
+        "id": <request-id>,
+        "requester_username": <requester-username>,
     }
     ```
 
@@ -88,7 +88,7 @@ class manageContactView(APIView):
     ### Input Format
     ```
     {
-        "username": "<username>"
+        "username": <username>
     }
     ```
 
@@ -102,7 +102,6 @@ class manageContactView(APIView):
     With the following error messages:
 
     - User does not exist
-
     - You are not friends with this user
     """
     def post(self, request):

@@ -15,12 +15,12 @@ class RegisterView(generics.CreateAPIView):
     ### Input Format
     ```
     {
-        "username":
-        "first_name":
-        "last_name":
-        "email":
-        "password":
-        "confirm_password":
+        "username": <username>, 
+        "first_name": <first-name>, 
+        "last_name": <last-name>, 
+        "email": <email>, 
+        "password": <password>,
+        "confirm_password": <confirm-password>
     }
     ```
 
@@ -54,8 +54,8 @@ class LoginView(generics.CreateAPIView):
     ### Input Format
     ```
     {
-        "username":
-        "password":
+        "username": <username>,
+        "password": <password>
     }
     ```
     ### Responses
@@ -84,26 +84,39 @@ class ProfileView(APIView):
     Get the profile details for the logged-in user
 
     put:
-    Update the profile with given data
+    Update the profile with given data shown below
+    ### Input Format
+    ```
+    {
+        "user": <user-id>, 
+        "first_name": <first-name>, 
+        "last_name": <last-name>, 
+        "email": <email>, 
+        "current_password": <password>,
+        "new_password": <confirm-password>,
+        "confirm_password": <confirm-password>,
+        "profile_picture": <profile-picture-upload>
+    }
+    ```
 
     ### Responses
     #### Success
-    Status '200' Ok
+    Status `200` Ok
 
     #### Errors
-    Status '401' Unauthorized
+    Status `401` Unauthorized
 
     ### Output Format
     ```
     {
         "user": {
-            "id":
-            "username":
-            "first_name":
-            "last_name":
-            "email":
+            "id": <user-id>,
+            "username": <username>,
+            "first_name": <first-name>,
+            "last_name": <last-name>,
+            "email": <email>
         },
-        "profile_picture":
+        "profile_picture": <profile-picture-path>,
     }
     ```
     """
