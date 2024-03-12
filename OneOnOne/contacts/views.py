@@ -72,11 +72,14 @@ class manageContactView(APIView):
     #### Success
     Status `201` Created
 
+    With the following message:
+    Friend request sent to <requested-username>
+
     #### Errors
     Status `400` Bad Request
 
     With the following error messages:
-    
+
     - You cannot add yourself to your contacts
     - User does not exist
     - You have already sent a request to this user
@@ -96,28 +99,36 @@ class manageContactView(APIView):
     #### Success
     Status `204` No Content
 
+    With the following message:
+    Friend <username> deleted
+
     #### Errors
     Status `400` Bad Request
 
     With the following error messages:
 
     - User does not exist
-
     - You are not friends with this user
     """
     def post(self, request):
         serializer = ContactSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
+            success_message = {
+                "message": f'Friend request sent to {request.data["requested"]}'
+            }
             serializer.save()
-            return Response(status=201)
+            return Response(success_message, status=201)
         return Response(serializer.errors, status=400)
     
 
     def delete(self, request):
         serializer = ContactDeleteSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
+            success_message = {
+                "message": f'Friend {request.data["username"]} deleted'
+            }
             serializer.delete()
-            return Response(status=204)
+            return Response(success_message, status=204)
         return Response(serializer.errors, status=400)
        
         
@@ -129,13 +140,16 @@ class respondToFriendRequestView(APIView):
     ```
     {
         "request_id": <request-id>,
-        "accepted": <accept/reject>
+        "action": <accept/reject>
     }
     ```
 
     ### Response
     #### Success
     Status `200` OK
+
+    With the following message:
+    Request <request-id> <accept/reject>
 
     #### Errors
     Status `400` Bad Request
@@ -149,6 +163,9 @@ class respondToFriendRequestView(APIView):
     def post(self, request):
         serializer = ContactRequestSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
+            success_message = { 
+                "message": f'Request {request.data["request_id"]} {serializer.data["action"]}'
+            }
             serializer.save()
-            return Response(status=200)
+            return Response(success_message, status=200)
         return Response(serializer.errors, status=400)
