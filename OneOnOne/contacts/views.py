@@ -187,8 +187,9 @@ class respondToFriendRequestView(APIView):
     def post(self, request):
         serializer = ContactRequestSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
+            action = 'accepted' if serializer.data['action'] else 'rejected'
             success_message = { 
-                "message": f'Request {request.data["request_id"]} {serializer.data["action"]}'
+                "message": f'User with username: {request.data["username"]} has been {action}'
             }
             serializer.save()
             return Response(success_message, status=status.HTTP_200_OK)
