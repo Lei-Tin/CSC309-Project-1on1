@@ -29,6 +29,9 @@ calendar_detail = CalendarViewSet.as_view({
     'put': 'update',
     'delete': 'destroy'
 })
+calendar_finalize = CalendarViewSet.as_view({
+    'put': 'finalize'
+})
 
 invitee_list = InviteeViewSet.as_view({
     'get': 'list',
@@ -62,11 +65,10 @@ urlpatterns = [
     # The following are API calls
     path('', calendar_list, name='calendar-list'),
     path('<int:pk>', calendar_detail, name='calendar-detail'),
+    path('<int:pk>/finalize/', calendar_finalize, name='finalize'),
     path('<int:calendar_id>/invitee/', invitee_list, name='invitee-list'),
     path('<int:calendar_id>/invitee/<int:pk>', invitee_detail, name='invitee-detail'),
     path('<int:calendar_id>/availabilities/', availability_list, name='availability-list'),
     path('<int:calendar_id>/availabilities/<int:pk>/', availability_detail, name='availability-detail'),
     path('<int:calendar_id>/schedule/', schedule_ops, name='schedule-ops'),
-    path('<int:calendar_id>/schedule/<int:pk>/finalize/', ScheduleViewSet.as_view({'put': 'finalize'}), name='schedule-finalize'),
-
 ]

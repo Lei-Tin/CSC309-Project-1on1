@@ -69,6 +69,20 @@ class CalendarViewSet(viewsets.ModelViewSet):
         # TODO: change the success response to be the calendar details (currently only the name change is seen)
         return super().update(request, *args, **kwargs)
 
+    @action(detail=True, methods=['put'])
+    def finalize(self, request, pk=None):
+        calendar = get_object_or_404(Calendar, pk=pk)
+
+        # Check if the calendar is already finalized
+        if calendar.finalized:
+            return Response({'detail': 'This calendar is already finalized.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        with transaction.atomic():
+            calendar.finalized = True
+            calendar.save()
+
+        return Response({'detail': 'Calendar has been successfully finalized.'}, status=status.HTTP_200_OK)
+
 
 class InviteeViewSet(viewsets.ModelViewSet):
     """
@@ -265,20 +279,6 @@ class ScheduleViewSet(viewsets.ModelViewSet):
         calendar_id = self.kwargs.get('calendar_id')
         calendar = get_object_or_404(Calendar, pk=calendar_id)
         return self.queryset.filter(calendar=calendar)
-
-    @action(detail=True, methods=['put'], url_path='finalize')
-    def finalize_calendar(self, request, pk=None):
-        calendar = get_object_or_404(Calendar, pk=pk)
-
-        # Check if the calendar is already finalized
-        if calendar.finalized:
-            return Response({'detail': 'This calendar is already finalized.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        with transaction.atomic():
-            calendar.finalized = True
-            calendar.save()
-
-        return Response({'detail': 'Calendar has been successfully finalized.'}, status=status.HTTP_200_OK)
 
     def perform_create(self, serializer):
         calendar_id = self.kwargs.get('calendar_id')
