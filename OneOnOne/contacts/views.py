@@ -45,7 +45,6 @@ class friendRequestsView(APIView):
     ### Output Format when successful
     ```
     {
-        "id": <request-id>,
         "requester_username": <requester-username>,
     }
     ```
@@ -155,8 +154,8 @@ class respondToFriendRequestView(APIView):
     ### Input Format
     ```
     {
-        "request_id": <request-id>,
-        "action": <accept/reject>
+        "username": <username>,
+        "action": <True/False>
     }
     ```
 
@@ -167,7 +166,7 @@ class respondToFriendRequestView(APIView):
     ### Output Format when successful
     ```
     {
-        "message": "Request <request-id> <accept/reject>"
+        "message": "User with username: <username> has been <accepted/rejected>"
     }
     ```
 
@@ -180,9 +179,8 @@ class respondToFriendRequestView(APIView):
 
     With the following error messages:
 
-    - Request does not exist
-    - You are not the requested user of this request
-    - Invalid action
+    - User does not exist
+    - No friend request from this user
     """
     def post(self, request):
         serializer = ContactRequestSerializer(data=request.data, context={'request': request})
