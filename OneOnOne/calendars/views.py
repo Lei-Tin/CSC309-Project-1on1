@@ -12,42 +12,44 @@ from .serializers import *
 # Create your views here.
 class CalendarViewSet(viewsets.ModelViewSet):
     """
+        ### Global response codes and explanations
+
         list:
         Obtain the list of all calendars created by the currently authenticated user
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
 
         read:
         Obtain calendar details
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner
+        #### `404` Not Found - Invalid calendar
 
         create:
         Create a new calendar
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
 
         update:
         Updates the name of a calendar, which is defined by the serializer.
         Users cannot modify a start or end date once the calendar has been created
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner
+        #### `404` Not Found - Invalid calendar
 
         delete:
         Deletes the calendar, and removes all associated content with the calendar
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner
+        #### `404` Not Found - Invalid calendar
     """
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
@@ -70,45 +72,45 @@ class InviteeViewSet(viewsets.ModelViewSet):
         list:
         Obtain the list of all invitees of a calendar.
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner
+        #### `404` Not Found - Invalid calendar
 
         read:
         Obtain details of a specific invitee
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner
+        #### `404` Not Found - Invalid calendar or invite
 
         create:
         Invite a new user to be in a calendar
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
-        #### Finalized - 410 Gone
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner
+        #### `404` Not Found - Invalid calendar
+        #### `410` Gone - Finalized
 
         update:
         Updates the deadline for the invitee to add an availability (no other fields can be modified)
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
-        #### Finalized - 410 Gone
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner
+        #### `404` Not Found - Invalid calendar or invite
+        #### `410` Gone - Finalized
 
         delete:
         Deletes the invite, and removes all associated content with the invitee
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
-        #### Finalized - 410 Gone
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner
+        #### `404` Not Found - Invalid calendar or invite
+        #### `410` Gone - Finalized
     """
     queryset = Invitee.objects.all()
     serializer_class = InviteeSerializer
@@ -131,45 +133,45 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
         list:
         Obtain the list of all availabilities provided for a calendar.
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner or invitee - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner or invitee
+        #### `404` Not Found - Invalid calendar
 
         read:
         Obtain details of a specific availability provided by a user
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner or invitee - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner or invitee
+        #### `404` Not Found - Invalid calendar or availability
 
         create:
         Create a new availability for a calendar
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner or invitee - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
-        #### Deadline passed - 410 Gone
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner or invitee
+        #### `404` Not Found - Invalid calendar
+        #### `410` Gone - Deadline passed
 
         update:
         Updates the time period or preference level for a specific availability
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner or invitee - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
-        #### Deadline passed - 410 Gone
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner or invitee
+        #### `404` Not Found - Invalid calendar or availability
+        #### `410` Gone - Deadline passed
 
         delete:
         Deletes the availability period
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner or invitee - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
-        #### Deadline passed - 410 Gone
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner or invitee
+        #### `404` Not Found - Invalid calendar or availability
+        #### `410` Gone - Deadline passed
     """
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
@@ -187,7 +189,7 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
         calendar = get_object_or_404(Calendar, pk=calendar_id)
         # Save the new Availability instance with `calendar` and `user` manually
         serializer.save(user=self.request.user, calendar=calendar)
-        # TODO: what about 410
+        # TODO: what about `410`
 
     def get_object(self):
         """
@@ -206,36 +208,36 @@ class ScheduleViewSet(viewsets.ModelViewSet):
         list:
         Obtain the list of meets that make up a schedule for the calendar
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner
+        #### `404` Not Found - Invalid calendar
 
         create:
         DELETES OLD SCHEDULE IF EXISTS, then generates a new suggested schedule
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner
+        #### `404` Not Found - Invalid calendar
 
         update:
         Updates the time period or preference level for a specific availability
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
-        #### Finalized - 410 Gone
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner
+        #### `404` Not Found - Invalid calendar
+        #### `410` Gone - Finalized
 
         delete:
         Deletes the meeting period for a schedule
         ### Response
-        #### Success - 200 OK
-        #### Not authenticated - 401 Unauthorized
-        #### Not owner - 403 Forbidden
-        #### Invalid calendar - 404 Not Found
-        #### Finalized - 410 Gone
+        #### `200` OK - Success
+        #### `401` Unauthorized - Not authenticated
+        #### `403` Forbidden - Not owner
+        #### `404` Not Found - Invalid calendar
+        #### `410` Gone - Finalized
     """
     queryset = Meets.objects.all()
     serializer_class = ScheduleSerializer
