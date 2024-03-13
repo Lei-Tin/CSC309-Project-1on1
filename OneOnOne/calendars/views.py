@@ -182,24 +182,6 @@ class InviteeViewSet(viewsets.ModelViewSet):
     #### `403` Forbidden - Not owner
     #### `404` Not Found - Invalid calendar
 
-    ### Output Format when successful
-    ```
-    {
-        "id": <invitee-id>,
-        "calendar": <calendar-id>,
-        "invitee": <invitee-userid>,
-        "deadline": <deadline>,
-        "status": <status>
-    }
-    ```
-
-    ### Output Format when unsuccessful (404, when user is not invited)
-    ```
-    {
-        "detail": "Not found."
-    }
-    ```
-
     read:
     Obtain details of a specific invitee
 
@@ -231,9 +213,17 @@ class InviteeViewSet(viewsets.ModelViewSet):
     ```
     {
         "id": <invitee-id>,
+        "calendar": <calendar-id>,
         "invitee": <invitee-userid>,
         "deadline": <deadline>,
-        "calendar": <calendar-id>,
+        "has_availability": <true/false>
+    }
+    ```
+
+    ### Output Format when unsuccessful (404, when user is not invited)
+    ```
+    {
+        "detail": "Not found."
     }
     ```
 
@@ -257,10 +247,11 @@ class InviteeViewSet(viewsets.ModelViewSet):
     ### Output Format when successful
     ```
     {
-        "id": <calendar-id>,
+        "id": <invitee-id>,
+        "calendar": <calendar-id>,
         "invitee": <invitee-userid>,
-        "deadline": <new-deadline>,
-        "calendar": <calendar-id>
+        "deadline": <deadline>,
+        "has_availability": <true/false>
     }
     ```
 
