@@ -1,18 +1,20 @@
+from django.contrib.auth.models import User
+
 from .models import *
 from rest_framework import serializers
 from datetime import datetime
 
+from contacts.models import *
 
 class CalendarSerializer(serializers.ModelSerializer):
     name = serializers.CharField(help_text="A name for the calendar")
     start_date = serializers.CharField(help_text="The starting date for the calendar")
     end_date = serializers.CharField(help_text="The ending date for the calendar")
-    finalized = serializers.CharField(help_text="Whether a schedule has been finalized for this calendar")
 
     class Meta:
         model = Calendar
         fields = '__all__'
-        read_only_fields = ['owner']
+        read_only_fields = ['owner', 'finalized']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -46,6 +48,30 @@ class InviteeSerializer(serializers.ModelSerializer):
         model = Invitee
         fields = '__all__'
         read_only_fields = ['calendar']
+
+    def validate_invitee_id(self, invitee):
+        request = self.context.get('request')
+        if request and request.method in ['POST']:
+            calendar_id = self.initial_data.get('calendar')
+            calendar = Calendar.objects.get(pk=calendar_id)
+            owner = calendar.owner
+
+            # Check if the invitee is in the calendar owner's confirmed contacts
+            if not Contacts.objects.filter(requester=owner, requested=invitee, accepted=True).exists() \
+                    or Contacts.objects.filter(requester=invitee, requested=owner, accepted=True).exists():
+                raise serializers.ValidationError("The invitee is not a confirmed contact of the calendar owner.")
+
+    def create(self, validated_data):
+        """
+        Create an Invitee instance.
+        """
+        invitee_id = validated_data.pop('invitee')
+        try:
+            invitee = User.objects.get(pk=invitee_id)
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"invitee_id": "No user found with the given ID."})
+        validated_data['invitee'] = invitee
+        return super().create(validated_data)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

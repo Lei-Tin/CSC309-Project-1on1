@@ -60,7 +60,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         return Calendar.objects.filter(owner=user)
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(owner=self.request.user, finalized=False)
 
     def update(self, request, *args, **kwargs):
         # TODO: change the success response to be the calendar details (currently only the name change is seen)
