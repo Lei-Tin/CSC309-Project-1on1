@@ -131,7 +131,7 @@ class InviteeViewSet(viewsets.ModelViewSet):
     """
     queryset = Invitee.objects.all()
     serializer_class = InviteeSerializer
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
 
     def get_queryset(self):
         # TODO: what about getting the list of invitees that have no updated info yet
@@ -207,7 +207,7 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
     """
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrInvitee]
+    permission_classes = [IsAuthenticated, IsOwnerOrInvitee, IsNotFinalized]
 
     def get_queryset(self):
         calendar_id = self.kwargs.get('calendar_id')
@@ -273,7 +273,7 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     """
     queryset = Meets.objects.all()
     serializer_class = ScheduleSerializer
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
 
     def get_queryset(self):
         calendar_id = self.kwargs.get('calendar_id')
