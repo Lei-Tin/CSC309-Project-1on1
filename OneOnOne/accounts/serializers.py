@@ -148,6 +148,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         if new_password:
             user.set_password(new_password)
+        
         user.save()
 
         instance.profile_picture = validated_data.get('profile_picture', instance.profile_picture)

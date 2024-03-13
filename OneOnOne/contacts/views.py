@@ -83,7 +83,7 @@ class manageContactView(APIView):
     ### Output Format when unsuccessful
     ```
     {
-        "error": "<error-message>"
+        "error": <error-message>
     }
     ```
 
@@ -117,7 +117,7 @@ class manageContactView(APIView):
     ### Output Format when unsuccessful
     ```
     {
-        "error": "<error-message>"
+        "error": <error-message>
     }
     ```
 
@@ -174,7 +174,7 @@ class respondToFriendRequestView(APIView):
     ### Output Format when unsuccessful
     ```
     {
-        "error": "<error-message>"
+        "error": <error-message>
     }
     ```
 

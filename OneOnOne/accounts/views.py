@@ -27,6 +27,26 @@ class RegisterView(generics.CreateAPIView):
     ### Responses
     #### `201` Created - Successful creation
     #### `400` Bad Request - Any field is missing or invalid
+
+    ### Output Format when successful
+    ```
+    {
+        "username": <username>,
+        "first_name": <first-name>,
+        "last_name": <last-name>,
+        "email": <email>
+    }
+
+    ### Output Format when unsuccessful
+    ```
+    {
+        "<field-name>": <error_message>
+    }
+
+    With the following error messages:
+    - This field is required
+    - A user with username already exists
+    ```
     """
     permission_classes = [AllowAny]
     queryset = User.objects.all()
@@ -59,13 +79,23 @@ class LoginView(generics.CreateAPIView):
     #### `200` OK - Successful login
     #### `400` Bad Request - Any field is missing or invalid
 
-    ## Output Format when successful
+    ### Output Format when successful
     ```
     {
         "refresh": <refresh-token>,
         "access": <access-token>
     }
+
+    ### Output Format when unsuccessful
     ```
+    {
+        "non_field_errors": <error_message>   
+    }
+
+    With the following error messages:
+    - User not activated
+    - Username and password do not match
+    - Both fields are required
     """
     permission_classes = [AllowAny]
     serializer_class = LoginSerializer
@@ -104,11 +134,11 @@ class ProfileView(APIView):
     ```
 
     put:
-    Update the profile with given data shown below
+    Update the profile with given data shown below, only the fields that are given will be updated
+    If a user wants to update the password, the `current_password`, `new_password` and `confirm_password` fields are required
     ### Input Format
     ```
     {
-        "user": <user-id>, 
         "first_name": <first-name>, 
         "last_name": <last-name>, 
         "email": <email>, 
@@ -121,7 +151,7 @@ class ProfileView(APIView):
 
     ### Responses
     #### `200` OK - Successful update to profile
-    #### `401` Unauthorized - Access token is invalid
+    #### `401` Unauthorized - Access token is invalid, or certain fields are invalid
 
     ### Output Format when successful
     ```
@@ -136,6 +166,17 @@ class ProfileView(APIView):
         "profile_picture": <profile-picture-path>,
     }
     ```
+
+    ### Output Format when unsuccessful
+    ```
+    {
+        "non_field_errors": <error_message>
+    }
+
+    With the following error messages:
+    - Enter current password first
+    - Current password is incorrect
+    - Password must match
     """
     permission_classes = [IsAuthenticated]
 
