@@ -45,7 +45,11 @@ class IsOwner(permissions.BasePermission):
         return False
 
 
-class IsFinalized(permissions.BasePermission):
-    # TODO: when the calendar is not finalized, meets can be editted
+class IsNotFinalized(permissions.BasePermission):
     def has_permission(self, request, view):
-        return True
+        calendar_id = view.kwargs.get('calendar_id')
+
+        calendar = Calendar.objects.get(pk=calendar_id)
+
+        # Return True if the calendar is not finalized yet, False otherwise
+        return not calendar.finalized

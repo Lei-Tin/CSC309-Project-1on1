@@ -67,4 +67,6 @@ urlpatterns = [
     path('<int:calendar_id>/availabilities/', availability_list, name='availability-list'),
     path('<int:calendar_id>/availabilities/<int:pk>/', availability_detail, name='availability-detail'),
     path('<int:calendar_id>/schedule/', schedule_ops, name='schedule-ops'),
+    path('<int:calendar_id>/schedule/<int:pk>/finalize/', ScheduleViewSet.as_view({'put': 'finalize'}), name='schedule-finalize'),
+
 ]

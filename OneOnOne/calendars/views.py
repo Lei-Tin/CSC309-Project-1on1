@@ -1,4 +1,6 @@
-from django.db import transaction
+from django.db import transaction, IntegrityError
+from rest_framework.decorators import action
+from rest_framework.exceptions import *
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
@@ -7,6 +9,7 @@ from rest_framework import status, viewsets
 
 from .permissions import *
 from .serializers import *
+from contacts.models import Contacts
 
 
 # Create your views here.
@@ -125,7 +128,22 @@ class InviteeViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         calendar_id = self.kwargs.get('calendar_id')
         calendar = get_object_or_404(Calendar, pk=calendar_id)
-        serializer.save(calendar=calendar)
+        invitee_id = serializer.validated_data.get('invitee')
+        try:
+            invitee = User.objects.get(pk=invitee_id)
+        except User.DoesNotExist:
+            raise ValidationError({'invitee_id': 'The user with this id does not exist.'})
+        if not Contacts.objects.filter(requester=invitee, requested=calendar.owner, accepted=True).exists() and \
+                not Contacts.objects.filter(requester=calendar.owner, requested=invitee, accepted=True).exists():
+            raise ValidationError({'contacts': 'The calendar owner must be an accepted contact of the invitee.'})
+
+        try:
+            # Attempt to save the invitee, which might violate the unique constraint
+            serializer.save(calendar=calendar, invitee=invitee)
+        except IntegrityError:
+            # If an IntegrityError is caught, raise a ValidationError
+            # DRF will handle this exception and return a 400 Bad Request response
+            raise ValidationError("An invitee with these details already exists.")
 
 
 class AvailabilityViewSet(viewsets.ModelViewSet):
@@ -241,12 +259,26 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     """
     queryset = Meets.objects.all()
     serializer_class = ScheduleSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
 
     def get_queryset(self):
         calendar_id = self.kwargs.get('calendar_id')
         calendar = get_object_or_404(Calendar, pk=calendar_id)
         return self.queryset.filter(calendar=calendar)
+
+    @action(detail=True, methods=['put'], url_path='finalize')
+    def finalize_calendar(self, request, pk=None):
+        calendar = get_object_or_404(Calendar, pk=pk)
+
+        # Check if the calendar is already finalized
+        if calendar.finalized:
+            return Response({'detail': 'This calendar is already finalized.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        with transaction.atomic():
+            calendar.finalized = True
+            calendar.save()
+
+        return Response({'detail': 'Calendar has been successfully finalized.'}, status=status.HTTP_200_OK)
 
     def perform_create(self, serializer):
         calendar_id = self.kwargs.get('calendar_id')
@@ -259,6 +291,9 @@ class ScheduleViewSet(viewsets.ModelViewSet):
         potential_meetings = calculate_meetings(calendar)
 
         with transaction.atomic():
+            # Delete all existing meetings for the calendar first
+            Meets.objects.filter(calendar=calendar).delete()
+
             for meeting in potential_meetings:
                 Meets.objects.create(
                     calendar=calendar,
@@ -268,7 +303,6 @@ class ScheduleViewSet(viewsets.ModelViewSet):
                 )
 
         # TODO: remember to redirect to the get_queryset on success
-        # TODO: remember to not return an error if creating a second time
         return Response({'detail': 'Schedule created successfully.'})
     # TODO: how to custom handle edit
 
@@ -296,7 +330,6 @@ def calculate_meetings(calendar):
             })
 
     return meetings_to_schedule
-
 
 # TODO: Maybe consider adding views that are used as API endpoints to fetch information like:
 # Invited user's statuses with the calendar
