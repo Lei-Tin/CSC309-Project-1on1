@@ -55,7 +55,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         "name": <calendar-name>,
         "start_date": <start-date>,
         "end_date": <end-date>,
-        "finalized": <finalized-status>,
+        "finalized": <true/false>,
         "owner": <owner-userid>
     }
     ```
