@@ -14,16 +14,16 @@ class contactListView(APIView):
     """
     get:
     Obtain the list of username of friends of the user.
-    ### Output Format
-    ```
-    {
-        "friends": ["username1", "username2", ...]
-    }
-    ```
 
     ### Response
-    #### Success
-    Status `200` OK
+    #### `200` OK - Successful request
+
+    ### Output Format when successful
+    ```
+    {
+        "friends": [<username1>, <username2>, ...]
+    }
+    ```
     """
     def get(self, request):
         user = request.user
@@ -38,17 +38,16 @@ class friendRequestsView(APIView):
     """
     get:
     Obtain the list of friend requests that the user has received but not accepted yet.
-    ### Output Format
-    ```
-    {
-        'id': <request-id>,
-        'requester_username': "<requester-username>",
-    }
-    ```
 
     ### Response
-    #### Success
-    Status `200` OK
+    #### `200` OK - Successful request
+
+    ### Output Format when successful
+    ```
+    {
+        "requester_username": <requester-username>,
+    }
+    ```
     """
     def get(self, request):
         user = request.user
@@ -61,6 +60,7 @@ class manageContactView(APIView):
     """
     post:
     Send a friend request to the user with the username specified. 
+
     ### Input Format
     ```
     {
@@ -69,14 +69,22 @@ class manageContactView(APIView):
     ```
 
     ### Response
-    #### Success
-    Status `201` Created
+    #### `201` Created - Successfully created
+    #### `400` Bad Request - Any error is encountered, shown below
 
-    With the following message:
-    Friend request sent to <requested-username>
+    ### Output Format when successful
+    ```
+    {
+        "message": "Friend request sent to <requested-username>"
+    }
+    ```
 
-    #### Errors
-    Status `400` Bad Request
+    ### Output Format when unsuccessful
+    ```
+    {
+        "error": <error-message>
+    }
+    ```
 
     With the following error messages:
 
@@ -91,19 +99,27 @@ class manageContactView(APIView):
     ### Input Format
     ```
     {
-        "username": "<username>"
+        "username": <username>
     }
     ```
 
     ### Response
-    #### Success
-    Status `204` No Content
+    #### `204` No Content - Successfully deleted
+    #### `400` Bad Request - Any error is encountered, shown below
 
-    With the following message:
-    Friend <username> deleted
+    ### Output Format when successful
+    ```
+    {
+        "message": "Friend <username> deleted"
+    }
+    ```
 
-    #### Errors
-    Status `400` Bad Request
+    ### Output Format when unsuccessful
+    ```
+    {
+        "error": <error-message>
+    }
+    ```
 
     With the following error messages:
 
@@ -139,32 +155,40 @@ class respondToFriendRequestView(APIView):
     ### Input Format
     ```
     {
-        "request_id": <request-id>,
-        "action": <accept/reject>
+        "username": <username>,
+        "action": <True/False>
     }
     ```
 
     ### Response
-    #### Success
-    Status `200` OK
+    #### `200` OK - Successful request
+    #### `400` Bad Request - Any error is encountered, shown below
 
-    With the following message:
-    Request <request-id> <accept/reject>
+    ### Output Format when successful
+    ```
+    {
+        "message": "User with username: <username> has been <accepted/rejected>"
+    }
+    ```
 
-    #### Errors
-    Status `400` Bad Request
+    ### Output Format when unsuccessful
+    ```
+    {
+        "error": <error-message>
+    }
+    ```
 
     With the following error messages:
 
-    - Request does not exist
-    - You are not the requested user of this request
-    - Invalid action
+    - User does not exist
+    - No friend request from this user
     """
     def post(self, request):
         serializer = ContactRequestSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
+            action = 'accepted' if serializer.data['action'] else 'rejected'
             success_message = { 
-                "message": f'Request {request.data["request_id"]} {serializer.data["action"]}'
+                "message": f'User with username: {request.data["username"]} has been {action}'
             }
             serializer.save()
             return Response(success_message, status=status.HTTP_200_OK)

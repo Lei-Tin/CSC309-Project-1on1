@@ -15,21 +15,40 @@ class RegisterView(generics.CreateAPIView):
     ### Input Format
     ```
     {
-        "username":
-        "first_name":
-        "last_name":
-        "email":
-        "password":
-        "confirm_password":
+        "username": <username>, 
+        "first_name": <first-name>, 
+        "last_name": <last-name>, 
+        "email": <email>, 
+        "password": <password>,
+        "confirm_password": <confirm-password>
     }
     ```
 
     ### Responses
-    #### Success
-    Status `201` Created
+    #### `201` Created - Successful creation
+    #### `400` Bad Request - Any field is missing or invalid
 
-    #### Errors
-    Status `400` Bad Request
+    ### Output Format when successful
+    ```
+    {
+        "username": <username>,
+        "first_name": <first-name>,
+        "last_name": <last-name>,
+        "email": <email>
+    }
+    ```
+
+    ### Output Format when unsuccessful
+    ```
+    {
+        "<field-name>": <error_message>
+    }
+    ```
+    
+    With the following error messages:
+    
+    - This field is required
+    - A user with username already exists
     """
     permission_classes = [AllowAny]
     queryset = User.objects.all()
@@ -54,16 +73,34 @@ class LoginView(generics.CreateAPIView):
     ### Input Format
     ```
     {
-        "username":
-        "password":
+        "username": <username>,
+        "password": <password>
     }
     ```
     ### Responses
-    #### Success
-    Status `200` Ok
+    #### `200` OK - Successful login
+    #### `400` Bad Request - Any field is missing or invalid
 
-    #### Errors
-    Status `400` Bad Request
+    ### Output Format when successful
+    ```
+    {
+        "refresh": <refresh-token>,
+        "access": <access-token>
+    }
+    ```
+
+    ### Output Format when unsuccessful
+    ```
+    {
+        "non_field_errors": <error_message>   
+    }
+    ```
+
+    With the following error messages:
+
+    - User not activated
+    - Username and password do not match
+    - Both fields are required
     """
     permission_classes = [AllowAny]
     serializer_class = LoginSerializer
@@ -81,31 +118,72 @@ class LoginView(generics.CreateAPIView):
 class ProfileView(APIView):
     """
     get:
-    Get the profile details for the logged-in user
-
-    put:
-    Update the profile with given data
+    Get the profile details for the logged-in user through the access token
 
     ### Responses
-    #### Success
-    Status '200' Ok
+    #### `200` OK - Successul retrieval of profile
+    #### `401` Unauthorized - Access token is invalid
 
-    #### Errors
-    Status '401' Unauthorized
-
-    ### Output Format
+    ### Output Format when successful
     ```
     {
         "user": {
-            "id":
-            "username":
-            "first_name":
-            "last_name":
-            "email":
+            "id": <user-id>,
+            "username": <username>,
+            "first_name": <first-name>,
+            "last_name": <last-name>,
+            "email": <email>
         },
-        "profile_picture":
+        "profile_picture": <profile-picture-path>,
     }
     ```
+
+    put:
+    Update the profile with given data shown below, only the fields that are given will be updated
+    If a user wants to update the password, the `current_password`, `new_password` and `confirm_password` fields are required
+    ### Input Format
+    ```
+    {
+        "first_name": <first-name>, 
+        "last_name": <last-name>, 
+        "email": <email>, 
+        "current_password": <password>,
+        "new_password": <confirm-password>,
+        "confirm_password": <confirm-password>,
+        "profile_picture": <profile-picture-upload>
+    }
+    ```
+
+    ### Responses
+    #### `200` OK - Successful update to profile
+    #### `401` Unauthorized - Access token is invalid, or certain fields are invalid
+
+    ### Output Format when successful
+    ```
+    {
+        "user": {
+            "id": <user-id>,
+            "username": <username>,
+            "first_name": <first-name>,
+            "last_name": <last-name>,
+            "email": <email>
+        },
+        "profile_picture": <profile-picture-path>,
+    }
+    ```
+
+    ### Output Format when unsuccessful
+    ```
+    {
+        "non_field_errors": <error_message>
+    }
+    ```
+
+    With the following error messages:
+
+    - Enter current password first
+    - Current password is incorrect
+    - Password must match
     """
     permission_classes = [IsAuthenticated]
 
@@ -122,4 +200,4 @@ class ProfileView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=400)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)

@@ -5,11 +5,10 @@ from django.contrib.auth.models import User
 
 class FriendRequestListSerializer(serializers.ModelSerializer):
     requester_username = serializers.SerializerMethodField()
-    request_id = serializers.IntegerField(source='id', read_only=True)
     class Meta:
         model = Contacts
-        fields = ['request_id', 'requester_username']
-        read_only_fields = ['request_id', 'requester_username']
+        fields = ['requester_username']
+        read_only_fields = ['requester_username']
     
     def get_requester_username(self, obj):
         return obj.requester.username
@@ -78,26 +77,23 @@ class ContactDeleteSerializer(serializers.Serializer):
 
 
 class ContactRequestSerializer(serializers.Serializer):
-    request_id = serializers.IntegerField()
-    action = serializers.CharField()
-
-    def validate_action(self, value):
-        if value not in ['accept', 'reject']:
-            raise serializers.ValidationError('Invalid action')
-        return value
+    username = serializers.CharField()
+    action = serializers.BooleanField()
     
-    def validate_request_id(self, value):
+    def validate_username(self, value):
         try: 
-            contact = Contacts.objects.get(id=value)
-        except Contacts.DoesNotExist:
-            raise serializers.ValidationError('Request does not exist')
-        if contact.requested != self.context['request'].user:
-            raise serializers.ValidationError('You are not the requested user of this request')
+            requester = User.objects.get(username=value)
+        except User.DoesNotExist:
+            raise serializers.ValidationError('User does not exist')
+        if not Contacts.objects.filter(requested=self.context['request'].user, requester=requester).exists():
+            raise serializers.ValidationError('No friend request from this user')
         return value
 
     def save(self, **kwargs):
-        contact = Contacts.objects.get(id=self.validated_data['request_id'])
-        if self.validated_data['action'] == 'accept':
+        requester = User.objects.get(username=self.validated_data['username'])
+        requested = self.context['request'].user
+        contact = Contacts.objects.get(requested=requested, requester=requester)
+        if self.validated_data['action']:
             contact.accepted = True
             contact.save()
         else:
