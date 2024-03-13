@@ -283,7 +283,6 @@ class InviteeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
 
     def get_queryset(self):
-        # TODO: what about getting the list of invitees that have no updated info yet
         calendar_id = self.kwargs.get('calendar_id')
         calendar = get_object_or_404(Calendar, pk=calendar_id)
         return self.queryset.filter(calendar=calendar)

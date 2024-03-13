@@ -6,6 +6,7 @@ from datetime import datetime
 
 from contacts.models import *
 
+
 class CalendarSerializer(serializers.ModelSerializer):
     name = serializers.CharField(help_text="A name for the calendar")
     start_date = serializers.CharField(help_text="The starting date for the calendar")
@@ -42,11 +43,18 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 class InviteeSerializer(serializers.ModelSerializer):
     invitee = serializers.CharField(help_text="The user id of the invited user to the calendar")
     deadline = serializers.CharField(help_text="The last time that the invitee can add an availability")
+    has_availability = serializers.SerializerMethodField()
 
     class Meta:
         model = Invitee
-        fields = '__all__'
+        fields = ['id', 'calendar', 'invitee', 'deadline', 'has_availability']
         read_only_fields = ['calendar']
+
+    def get_has_availability(self, obj):
+        request = self.context.get('request')
+        calendar = request.parser_context['kwargs'].get('calendar_id')
+        has_availability = Availability.objects.filter(calendar=calendar, user=obj.invitee).exists()
+        return has_availability
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -65,4 +73,3 @@ class ScheduleSerializer(serializers.ModelSerializer):
         model = Meets
         fields = '__all__'
         read_only_fields = ['calendar', 'meeter', 'start_period', 'end_period']
-
