@@ -89,10 +89,17 @@ class LoginView(generics.CreateAPIView):
     }
     ```
 
-    ### Output Format when unsuccessful
+    ### Output Format when unsuccessful (Missing input fields)
     ```
     {
-        "non_field_errors": <error_message>   
+        "<field_name>": <error_message>
+    }
+    ```
+
+    ### Output Format when unsuccessful (Error in input fields)
+    ```
+    {
+        "non_field_error": <error_message>
     }
     ```
 
