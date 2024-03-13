@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import CalendarViewSet, AvailabilityViewSet
+from .views import *
 
 app_name = 'calendars'
 
@@ -27,7 +27,19 @@ calendar_list = CalendarViewSet.as_view({
 calendar_detail = CalendarViewSet.as_view({
     'get': 'retrieve',
     'put': 'update',
-    'patch': 'partial_update',
+    'delete': 'destroy'
+})
+calendar_finalize = CalendarViewSet.as_view({
+    'put': 'finalize'
+})
+
+invitee_list = InviteeViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+invitee_detail = InviteeViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
     'delete': 'destroy'
 })
 
@@ -38,14 +50,25 @@ availability_list = AvailabilityViewSet.as_view({
 availability_detail = AvailabilityViewSet.as_view({
     'get': 'retrieve',
     'put': 'update',
-    'patch': 'partial_update',
     'delete': 'destroy'
 })
+
+schedule_ops = ScheduleViewSet.as_view({
+    'get': 'list',
+    'post': 'create',
+    'put': 'update',
+    'delete': 'destroy'
+})
+
 
 urlpatterns = [
     # The following are API calls
     path('', calendar_list, name='calendar-list'),
     path('<int:pk>', calendar_detail, name='calendar-detail'),
+    path('<int:pk>/finalize/', calendar_finalize, name='finalize'),
+    path('<int:calendar_id>/invitee/', invitee_list, name='invitee-list'),
+    path('<int:calendar_id>/invitee/<int:pk>', invitee_detail, name='invitee-detail'),
     path('<int:calendar_id>/availabilities/', availability_list, name='availability-list'),
     path('<int:calendar_id>/availabilities/<int:pk>/', availability_detail, name='availability-detail'),
+    path('<int:calendar_id>/schedule/', schedule_ops, name='schedule-ops'),
 ]

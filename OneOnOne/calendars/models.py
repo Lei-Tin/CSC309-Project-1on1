@@ -1,4 +1,5 @@
 from django.db import models
+from rest_framework import serializers
 
 
 # Create your models here.
@@ -8,11 +9,13 @@ class Calendar(models.Model):
     Name (char) - the name of the calendar
     Start_date (Date) - the starting date of the calendar
     End_date (Date) - the ending date of the calendar
+    Finalized (bool) - whether or not the schedule for the calendar is finalized
     """
     owner = models.ForeignKey("auth.user", on_delete=models.CASCADE)
     name = models.CharField(max_length=50, blank=False, null=False)
     start_date = models.DateField(blank=False, null=False)
     end_date = models.DateField(blank=False, null=False)
+    finalized = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -57,7 +60,7 @@ class Invitee(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['calendar', 'invitee'], name='invitation')
         ]
-    
+
     def __str__(self):
         return f"{self.invitee} - {self.calendar}"
 
@@ -80,6 +83,6 @@ class Meets(models.Model):
             # TODO: Should there be added constraint for meeter and start_period so that the same person cannot be
             # suggested to meet two people at the same time
         ]
-    
+
     def __str__(self):
         return f"{self.meeter} - {self.calendar}"
