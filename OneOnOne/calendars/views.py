@@ -15,44 +15,42 @@ from contacts.models import Contacts
 # Create your views here.
 class CalendarViewSet(viewsets.ModelViewSet):
     """
-        ### Global response codes and explanations
+    list:
+    Obtain the list of all calendars created by the currently authenticated user
+    ### Response
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
 
-        list:
-        Obtain the list of all calendars created by the currently authenticated user
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
+    read:
+    Obtain calendar details
+    ### Response
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner
+    #### `404` Not Found - Invalid calendar
 
-        read:
-        Obtain calendar details
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner
-        #### `404` Not Found - Invalid calendar
+    create:
+    Create a new calendar
+    ### Response
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
 
-        create:
-        Create a new calendar
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
+    update:
+    Updates the name of a calendar, which is defined by the serializer.
+    Users cannot modify a start or end date once the calendar has been created
+    ### Response
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner
+    #### `404` Not Found - Invalid calendar
 
-        update:
-        Updates the name of a calendar, which is defined by the serializer.
-        Users cannot modify a start or end date once the calendar has been created
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner
-        #### `404` Not Found - Invalid calendar
-
-        delete:
-        Deletes the calendar, and removes all associated content with the calendar
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner
-        #### `404` Not Found - Invalid calendar
+    delete:
+    Deletes the calendar, and removes all associated content with the calendar
+    ### Response
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner
+    #### `404` Not Found - Invalid calendar
     """
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
@@ -72,48 +70,48 @@ class CalendarViewSet(viewsets.ModelViewSet):
 
 class InviteeViewSet(viewsets.ModelViewSet):
     """
-        list:
-        Obtain the list of all invitees of a calendar.
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner
-        #### `404` Not Found - Invalid calendar
+    list:
+    Obtain the list of all invitees of a calendar.
+    ### Responses
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner
+    #### `404` Not Found - Invalid calendar
 
-        read:
-        Obtain details of a specific invitee
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner
-        #### `404` Not Found - Invalid calendar or invite
+    read:
+    Obtain details of a specific invitee
+    ### Responses
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner
+    #### `404` Not Found - Invalid calendar or invite
 
-        create:
-        Invite a new user to be in a calendar
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner
-        #### `404` Not Found - Invalid calendar
-        #### `410` Gone - Finalized
+    create:
+    Invite a new user to be in a calendar
+    ### Responses
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner
+    #### `404` Not Found - Invalid calendar
+    #### `410` Gone - Finalized
 
-        update:
-        Updates the deadline for the invitee to add an availability (no other fields can be modified)
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner
-        #### `404` Not Found - Invalid calendar or invite
-        #### `410` Gone - Finalized
+    update:
+    Updates the deadline for the invitee to add an availability (no other fields can be modified)
+    ### Responses
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner
+    #### `404` Not Found - Invalid calendar or invite
+    #### `410` Gone - Finalized
 
-        delete:
-        Deletes the invite, and removes all associated content with the invitee
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner
-        #### `404` Not Found - Invalid calendar or invite
-        #### `410` Gone - Finalized
+    delete:
+    Deletes the invite, and removes all associated content with the invitee
+    ### Responses
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner
+    #### `404` Not Found - Invalid calendar or invite
+    #### `410` Gone - Finalized
     """
     queryset = Invitee.objects.all()
     serializer_class = InviteeSerializer
@@ -148,48 +146,48 @@ class InviteeViewSet(viewsets.ModelViewSet):
 
 class AvailabilityViewSet(viewsets.ModelViewSet):
     """
-        list:
-        Obtain the list of all availabilities provided for a calendar.
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner or invitee
-        #### `404` Not Found - Invalid calendar
+    list:
+    Obtain the list of all availabilities provided for a calendar.
+    ### Responses
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner or invitee
+    #### `404` Not Found - Invalid calendar
 
-        read:
-        Obtain details of a specific availability provided by a user
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner or invitee
-        #### `404` Not Found - Invalid calendar or availability
+    read:
+    Obtain details of a specific availability provided by a user
+    ### Responses
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner or invitee
+    #### `404` Not Found - Invalid calendar or availability
 
-        create:
-        Create a new availability for a calendar
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner or invitee
-        #### `404` Not Found - Invalid calendar
-        #### `410` Gone - Deadline passed
+    create:
+    Create a new availability for a calendar
+    ### Responses
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner or invitee
+    #### `404` Not Found - Invalid calendar
+    #### `410` Gone - Deadline passed
 
-        update:
-        Updates the time period or preference level for a specific availability
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner or invitee
-        #### `404` Not Found - Invalid calendar or availability
-        #### `410` Gone - Deadline passed
+    update:
+    Updates the time period or preference level for a specific availability
+    ### Responses
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner or invitee
+    #### `404` Not Found - Invalid calendar or availability
+    #### `410` Gone - Deadline passed
 
-        delete:
-        Deletes the availability period
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner or invitee
-        #### `404` Not Found - Invalid calendar or availability
-        #### `410` Gone - Deadline passed
+    delete:
+    Deletes the availability period
+    ### Responses
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner or invitee
+    #### `404` Not Found - Invalid calendar or availability
+    #### `410` Gone - Deadline passed
     """
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
@@ -223,39 +221,39 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
 
 class ScheduleViewSet(viewsets.ModelViewSet):
     """
-        list:
-        Obtain the list of meets that make up a schedule for the calendar
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner
-        #### `404` Not Found - Invalid calendar
+    list:
+    Obtain the list of meets that make up a schedule for the calendar
+    ### Responses
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner
+    #### `404` Not Found - Invalid calendar
 
-        create:
-        DELETES OLD SCHEDULE IF EXISTS, then generates a new suggested schedule
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner
-        #### `404` Not Found - Invalid calendar
+    create:
+    DELETES OLD SCHEDULE IF EXISTS, then generates a new suggested schedule
+    ### Responses
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner
+    #### `404` Not Found - Invalid calendar
 
-        update:
-        Updates the time period or preference level for a specific availability
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner
-        #### `404` Not Found - Invalid calendar
-        #### `410` Gone - Finalized
+    update:
+    Updates the time period or preference level for a specific availability
+    ### Responses
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner
+    #### `404` Not Found - Invalid calendar
+    #### `410` Gone - Finalized
 
-        delete:
-        Deletes the meeting period for a schedule
-        ### Response
-        #### `200` OK - Success
-        #### `401` Unauthorized - Not authenticated
-        #### `403` Forbidden - Not owner
-        #### `404` Not Found - Invalid calendar
-        #### `410` Gone - Finalized
+    delete:
+    Deletes the meeting period for a schedule
+    ### Responses
+    #### `200` OK - Success
+    #### `401` Unauthorized - Not authenticated
+    #### `403` Forbidden - Not owner
+    #### `404` Not Found - Invalid calendar
+    #### `410` Gone - Finalized
     """
     queryset = Meets.objects.all()
     serializer_class = ScheduleSerializer
