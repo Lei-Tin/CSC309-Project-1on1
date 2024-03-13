@@ -51,7 +51,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls'), name='accounts'),
     path('calendars/', include('calendars.urls'), name='calendars'),
     path('contacts/', include('contacts.urls'), name='contacts'),
-    path(r'docs/', include_docs_urls(title='OneOnOne API', public=True)),
+    path(r'docs/', include_docs_urls(title='OneOnOne API', public=True, permission_classes=[], authentication_classes=[])),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
