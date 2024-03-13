@@ -59,11 +59,16 @@ class LoginView(generics.CreateAPIView):
     }
     ```
     ### Responses
-    #### Success
-    Status `200` Ok
+    #### `200` - Success
+    #### `400` - Bad request
 
-    #### Errors
-    Status `400` Bad Request
+    ## Output Format when successful
+    ```
+    {
+        "refresh": <refresh-token>,
+        "access": <access-token>
+    }
+    ```
     """
     permission_classes = [AllowAny]
     serializer_class = LoginSerializer
@@ -83,6 +88,24 @@ class ProfileView(APIView):
     get:
     Get the profile details for the logged-in user
 
+    ### Responses
+    #### `200` - Success
+    #### `401` - Unauthorized
+
+    ### Output Format when successful
+    ```
+    {
+        "user": {
+            "id": <user-id>,
+            "username": <username>,
+            "first_name": <first-name>,
+            "last_name": <last-name>,
+            "email": <email>
+        },
+        "profile_picture": <profile-picture-path>,
+    }
+    ```
+
     put:
     Update the profile with given data shown below
     ### Input Format
@@ -100,13 +123,10 @@ class ProfileView(APIView):
     ```
 
     ### Responses
-    #### Success
-    Status `200` Ok
+    #### `200` - Success
+    #### `401` - Unauthorized
 
-    #### Errors
-    Status `401` Unauthorized
-
-    ### Output Format
+    ### Output Format when successful
     ```
     {
         "user": {
