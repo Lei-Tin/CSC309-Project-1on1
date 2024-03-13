@@ -14,16 +14,16 @@ class contactListView(APIView):
     """
     get:
     Obtain the list of username of friends of the user.
-    ### Output Format
+
+    ### Response
+    #### `200` - Successful
+
+    ### Output Format when successful
     ```
     {
         "friends": [<username1>, <username2>, ...]
     }
     ```
-
-    ### Response
-    #### Success
-    Status `200` OK
     """
     def get(self, request):
         user = request.user
@@ -38,17 +38,17 @@ class friendRequestsView(APIView):
     """
     get:
     Obtain the list of friend requests that the user has received but not accepted yet.
-    ### Output Format
+
+    ### Response
+    #### `200` - Successful
+
+    ### Output Format when successful
     ```
     {
         "id": <request-id>,
         "requester_username": <requester-username>,
     }
     ```
-
-    ### Response
-    #### Success
-    Status `200` OK
     """
     def get(self, request):
         user = request.user
@@ -69,14 +69,22 @@ class manageContactView(APIView):
     ```
 
     ### Response
-    #### Success
-    Status `201` Created
+    #### `201` - Successfully created
+    #### `400` - Bad request
 
-    With the following message:
-    Friend request sent to <requested-username>
+    ### Output Format when successful
+    ```
+    {
+        "message": "Friend request sent to <requested-username>"
+    }
+    ```
 
-    #### Errors
-    Status `400` Bad Request
+    ### Output Format when unsuccessful
+    ```
+    {
+        "error": "<error-message>"
+    }
+    ```
 
     With the following error messages:
 
@@ -96,14 +104,21 @@ class manageContactView(APIView):
     ```
 
     ### Response
-    #### Success
-    Status `204` No Content
+    #### `204` - No Content
+    #### `400` - Bad request
 
-    With the following message:
-    Friend <username> deleted
+    ### Output Format when successful
+    ```
+    {
+        "message": "Friend <username> deleted"
+    }
 
-    #### Errors
-    Status `400` Bad Request
+    ### Output Format when unsuccessful
+    ```
+    {
+        "error": "<error-message>"
+    }
+    ```
 
     With the following error messages:
 
@@ -145,14 +160,22 @@ class respondToFriendRequestView(APIView):
     ```
 
     ### Response
-    #### Success
-    Status `200` OK
+    #### `200` - Successful
+    #### `400` - Bad request
 
-    With the following message:
-    Request <request-id> <accept/reject>
+    ### Output Format when successful
+    ```
+    {
+        "message": "Request <request-id> <accept/reject>"
+    }
+    ```
 
-    #### Errors
-    Status `400` Bad Request
+    ### Output Format when unsuccessful
+    ```
+    {
+        "error": "<error-message>"
+    }
+    ```
 
     With the following error messages:
 
