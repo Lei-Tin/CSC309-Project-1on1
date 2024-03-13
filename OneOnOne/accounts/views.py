@@ -44,6 +44,7 @@ class RegisterView(generics.CreateAPIView):
     }
 
     With the following error messages:
+    
     - This field is required
     - A user with username already exists
     ```
@@ -93,6 +94,7 @@ class LoginView(generics.CreateAPIView):
     }
 
     With the following error messages:
+
     - User not activated
     - Username and password do not match
     - Both fields are required
@@ -174,6 +176,7 @@ class ProfileView(APIView):
     }
 
     With the following error messages:
+
     - Enter current password first
     - Current password is incorrect
     - Password must match
