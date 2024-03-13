@@ -16,7 +16,7 @@ class contactListView(APIView):
     Obtain the list of username of friends of the user.
 
     ### Response
-    #### `200` - Successful
+    #### `200` OK - Successful request
 
     ### Output Format when successful
     ```
@@ -40,7 +40,7 @@ class friendRequestsView(APIView):
     Obtain the list of friend requests that the user has received but not accepted yet.
 
     ### Response
-    #### `200` - Successful
+    #### `200` OK - Successful request
 
     ### Output Format when successful
     ```
@@ -61,6 +61,7 @@ class manageContactView(APIView):
     """
     post:
     Send a friend request to the user with the username specified. 
+
     ### Input Format
     ```
     {
@@ -69,8 +70,8 @@ class manageContactView(APIView):
     ```
 
     ### Response
-    #### `201` - Successfully created
-    #### `400` - Bad request
+    #### `201` Created - Successfully created
+    #### `400` Bad Request - Any error is encountered, shown below
 
     ### Output Format when successful
     ```
@@ -104,8 +105,8 @@ class manageContactView(APIView):
     ```
 
     ### Response
-    #### `204` - No Content
-    #### `400` - Bad request
+    #### `204` No Content - Successfully deleted
+    #### `400` Bad Request - Any error is encountered, shown below
 
     ### Output Format when successful
     ```
@@ -160,8 +161,8 @@ class respondToFriendRequestView(APIView):
     ```
 
     ### Response
-    #### `200` - Successful
-    #### `400` - Bad request
+    #### `200` OK - Successful request
+    #### `400` Bad Request - Any error is encountered, shown below
 
     ### Output Format when successful
     ```

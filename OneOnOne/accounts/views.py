@@ -25,11 +25,8 @@ class RegisterView(generics.CreateAPIView):
     ```
 
     ### Responses
-    #### Success
-    Status `201` Created
-
-    #### Errors
-    Status `400` Bad Request
+    #### `201` Created - Successful creation
+    #### `400` Bad Request - Any field is missing or invalid
     """
     permission_classes = [AllowAny]
     queryset = User.objects.all()
@@ -59,8 +56,8 @@ class LoginView(generics.CreateAPIView):
     }
     ```
     ### Responses
-    #### `200` - Success
-    #### `400` - Bad request
+    #### `200` OK - Successful login
+    #### `400` Bad Request - Any field is missing or invalid
 
     ## Output Format when successful
     ```
@@ -86,11 +83,11 @@ class LoginView(generics.CreateAPIView):
 class ProfileView(APIView):
     """
     get:
-    Get the profile details for the logged-in user
+    Get the profile details for the logged-in user through the access token
 
     ### Responses
-    #### `200` - Success
-    #### `401` - Unauthorized
+    #### `200` OK - Successul retrieval of profile
+    #### `401` Unauthorized - Access token is invalid
 
     ### Output Format when successful
     ```
@@ -123,8 +120,8 @@ class ProfileView(APIView):
     ```
 
     ### Responses
-    #### `200` - Success
-    #### `401` - Unauthorized
+    #### `200` OK - Successful update to profile
+    #### `401` Unauthorized - Access token is invalid
 
     ### Output Format when successful
     ```
@@ -155,4 +152,4 @@ class ProfileView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=400)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
