@@ -36,18 +36,19 @@ class RegisterView(generics.CreateAPIView):
         "last_name": <last-name>,
         "email": <email>
     }
+    ```
 
     ### Output Format when unsuccessful
     ```
     {
         "<field-name>": <error_message>
     }
-
+    ```
+    
     With the following error messages:
     
     - This field is required
     - A user with username already exists
-    ```
     """
     permission_classes = [AllowAny]
     queryset = User.objects.all()
@@ -86,12 +87,14 @@ class LoginView(generics.CreateAPIView):
         "refresh": <refresh-token>,
         "access": <access-token>
     }
+    ```
 
     ### Output Format when unsuccessful
     ```
     {
         "non_field_errors": <error_message>   
     }
+    ```
 
     With the following error messages:
 
@@ -174,6 +177,7 @@ class ProfileView(APIView):
     {
         "non_field_errors": <error_message>
     }
+    ```
 
     With the following error messages:
 

@@ -112,6 +112,7 @@ class manageContactView(APIView):
     {
         "message": "Friend <username> deleted"
     }
+    ```
 
     ### Output Format when unsuccessful
     ```
