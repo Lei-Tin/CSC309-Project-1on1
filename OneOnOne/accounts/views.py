@@ -48,7 +48,10 @@ class RegisterView(generics.CreateAPIView):
     With the following error messages:
     
     - This field is required
-    - A user with username already exists
+    - A user with that username already exists
+    - Enter a valid email address
+    - Ensure this field has at least 8 characters
+    - Passwords must match
     """
     permission_classes = [AllowAny]
     queryset = User.objects.all()
@@ -89,10 +92,17 @@ class LoginView(generics.CreateAPIView):
     }
     ```
 
-    ### Output Format when unsuccessful
+    ### Output Format when unsuccessful (Missing input fields)
     ```
     {
-        "non_field_errors": <error_message>   
+        "<field_name>": <error_message>
+    }
+    ```
+
+    ### Output Format when unsuccessful (Error in input fields)
+    ```
+    {
+        "non_field_error": <error_message>
     }
     ```
 
@@ -156,7 +166,8 @@ class ProfileView(APIView):
 
     ### Responses
     #### `200` OK - Successful update to profile
-    #### `401` Unauthorized - Access token is invalid, or certain fields are invalid
+    #### `400` Bad Request - Any field is missing or invalid
+    #### `401` Unauthorized - Access token is invalid
 
     ### Output Format when successful
     ```
@@ -184,6 +195,8 @@ class ProfileView(APIView):
     - Enter current password first
     - Current password is incorrect
     - Password must match
+    - Enter a valid email address
+    - Ensure this field has at least 8 characters
     """
     permission_classes = [IsAuthenticated]
 

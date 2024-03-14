@@ -40,3 +40,7 @@ su
 sh startup.sh
 sh run.sh
 ```
+
+The documentations for our API calls can be found at `127.0.0.1:8000/docs` once the server is running (after `sh run.sh`). 
+
+A brief documentation of our model layout and API documentations can be found in `docs.pdf`. 
