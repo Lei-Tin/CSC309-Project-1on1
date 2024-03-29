@@ -6,3 +6,19 @@
 
 # Ignore media files uploaded by users
 **/media/profile_pictures/
+
+### react ###
+.DS_*
+*.log
+logs
+**/*.backup.*
+**/*.back.*
+
+node_modules
+bower_components
+
+*.sublime*
+
+psd
+thumb
+sketch
