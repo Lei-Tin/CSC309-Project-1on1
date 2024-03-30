@@ -1,23 +1,27 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Login from './components/Accounts/Login/';
-import Register from './components/Accounts/Register/';
-import Profile from './components/Accounts/Profile/';
-import Navbar from './components/Layout/navbar';
-import Navbar_logged from './components/Layout/navbar_logged';
-import HomePage from './components/Index';
-import Footer from './components/Layout/footer';
+
+import HomePage from './components/HomePage';
+
+import Login from './components/Accounts/Login';
+import Register from './components/Accounts/Register';
+import Profile from './components/Accounts/Profile';
+
+import CustomNavbar from './components/Layout/Navbar/CustomNavbar';
+import CustomNavbarLogged from './components/Layout/Navbar/CustomNavbarLogged';
+
+import Footer from './components/Layout/Footer';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navbar />}>
+        <Route path="/" element={<CustomNavbar />}>
           <Route index element={<HomePage />} />
           <Route path="accounts/login" element={<Login />} />
           <Route path="accounts/register" element={<Register />} />
         </Route>
 
-        <Route path="/" element={<Navbar_logged />}>
+        <Route path="/" element={<CustomNavbarLogged />}>
           <Route path="accounts/profile" element={<Profile />} />
           <Route path="contacts" index element={<Login />} />
           <Route path="calendars">

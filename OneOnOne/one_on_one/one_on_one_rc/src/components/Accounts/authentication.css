@@ -28,6 +28,10 @@
     text-align: left;
 }
 
+#consent {
+    margin: 4px;
+}
+
 
 .txt_field input {
     width: 100%;

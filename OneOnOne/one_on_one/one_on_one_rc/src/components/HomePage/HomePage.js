@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.css';
-import '../../static/css/style.css'; // Adjust the path as necessary to match your project structure
+import '../style.css'; // Adjust the path as necessary to match your project structure
 
 
 function HomePage() {
