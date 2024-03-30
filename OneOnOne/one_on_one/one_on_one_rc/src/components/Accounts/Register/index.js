@@ -1,7 +1,8 @@
 import { React, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../../../static/css/accounts/authentication.css';
 import { ACCOUNTS_API_URL } from '../../../constants';
+import TextField from '../../Form/Fields/TextField';
 import axios from "axios";
 
 
@@ -39,6 +40,7 @@ function Register() {
             navigate('/accounts/login');
         })
         .catch((error) => {
+            console.log(error.response);
             if (error.response){
                 setErrorMessage(error.response.data);
             }
@@ -52,36 +54,12 @@ function Register() {
                 <div className="form-container">
                     <h1 className="display-4">Register</h1>
                     <form className="authentication-form" id="register-form" onSubmit={handleSubmit}>
-                        <div className="txt_field">
-                            <input type="text" required value={username} onChange={(e) => setUsername(e.target.value)} />
-                            <span className="error_message">{errorMessage.username}</span>
-                            <label>Name</label>
-                        </div>
-                        <div className="txt_field">
-                            <input type="text" required value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                            <span className = "error_message">{errorMessage.first_name}</span>
-                            <label>First Name</label>
-                        </div>
-                        <div className="txt_field">
-                            <input type="text" required value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                            <span className = "error_message">{errorMessage.lastName}</span>
-                            <label>Last Name</label>
-                        </div>
-                        <div className="txt_field">
-                            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-                            <span className = "error_message">{errorMessage.email}</span>
-                            <label>Email</label>
-                        </div>
-                        <div className="txt_field">
-                            <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-                            <span className = "error_message">{errorMessage.password}</span>
-                            <label>Password</label>
-                        </div>
-                        <div className="txt_field">
-                            <input type="password" required value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-                            <span className = "error_message">{errorMessage.confirm_password}</span>
-                            <label>Confirm Password</label>
-                        </div>
+                        <TextField type="text" label="Username" value={username} onChange={setUsername} errorMessage={errorMessage.username} />
+                        <TextField type="text" label="First Name" value={firstName} onChange={setFirstName} errorMessage={errorMessage.first_name} />
+                        <TextField type="text" label="Last Name" value={lastName} onChange={setLastName} errorMessage={errorMessage.last_name} />
+                        <TextField type="email" label="Email" value={email} onChange={setEmail} errorMessage={errorMessage.email} />
+                        <TextField type="password" label="Password" value={password} onChange={setPassword} errorMessage={errorMessage.password} />
+                        <TextField type="password" label="Confirm Password" value={confirmPassword} onChange={setConfirmPassword} errorMessage={errorMessage.non_field_errors} />
                         <div className="form-check">
                             <input type="checkbox" id="consent" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
                             <label htmlFor="consent">I agree to the terms and conditions</label>

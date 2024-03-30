@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { ACCOUNTS_API_URL } from '../../../constants'; // Ensure this is defined
+import { ACCOUNTS_API_URL } from '../../../constants'; 
+import TextField from '../../Form/Fields/TextField';
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -33,14 +34,8 @@ function Login() {
                 <div className="form-container">
                     <h1 className="display-4">Login</h1>
                     <form className="authentication-form" id="login-form" onSubmit={handleSubmit}>
-                        <div className="txt_field">
-                            <input type="text" required value={username} onChange={(e) => setUsername(e.target.value)} />
-                            <label>Username</label>
-                        </div>
-                        <div className="txt_field">
-                            <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-                            <label>Password</label>
-                        </div>
+                        <TextField type="text" label="Username" value={username} onChange={setUsername} />
+                        <TextField type="password" label="Password" value={password} onChange={setPassword} />
                         <span className="error_message">{nonFieldError}</span>
                         <div className="pass">Forgot Password?</div>
                         <input type="submit" value="Login" />
