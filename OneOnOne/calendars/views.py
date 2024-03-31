@@ -516,6 +516,7 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     # TODO: how to custom handle edit
 
 
+
 def calculate_meetings(calendar):
     owner_availabilities = Availability.objects.filter(calendar=calendar, user=calendar.owner)
     invitee_availabilities = Availability.objects.filter(calendar=calendar).exclude(user=calendar.owner)
@@ -540,6 +541,3 @@ def calculate_meetings(calendar):
 
     return meetings_to_schedule
 
-# TODO: Maybe consider adding views that are used as API endpoints to fetch information like:
-# Invited user's statuses with the calendar
-# Fetching the suggested schedule's API

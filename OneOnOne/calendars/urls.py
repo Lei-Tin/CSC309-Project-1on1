@@ -56,6 +56,11 @@ availability_detail = AvailabilityViewSet.as_view({
 schedule_ops = ScheduleViewSet.as_view({
     'get': 'list',
     'post': 'create',
+    'delete': 'destroy'
+})
+
+schedule_detail = ScheduleViewSet.as_view({
+    'get': 'retrieve',
     'put': 'update',
     'delete': 'destroy'
 })
@@ -71,4 +76,5 @@ urlpatterns = [
     path('<int:calendar_id>/availabilities/', availability_list, name='availability-list'),
     path('<int:calendar_id>/availabilities/<int:pk>/', availability_detail, name='availability-detail'),
     path('<int:calendar_id>/schedule/', schedule_ops, name='schedule-ops'),
+    path('<int:calendar_id>/schedule/<int:pk>/', schedule_detail, name='schedule-detail'),
 ]
