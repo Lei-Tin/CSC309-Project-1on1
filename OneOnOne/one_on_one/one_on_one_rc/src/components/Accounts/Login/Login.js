@@ -22,7 +22,7 @@ function Login() {
             const token = response.data.token;
             localStorage.setItem('token', token);
             // TODO: Redirect to calendar page
-            navigate('/');
+            navigate('/accounts/profile/');
         })
         .catch((error) => {
             if (error.response) {
