@@ -8,6 +8,7 @@ import { FriendNotificationItem, ReminderNotificationItem, InviteNotificationIte
 const NotificationDropdown = () => {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [requesterUsernames, setRequesterUsernames] = useState([]);
+  const [isNotification, setIsNotification] = useState(false);
 
   const toggleNotificationDropdown = () => {
     setIsNotifOpen(!isNotifOpen);
@@ -15,8 +16,12 @@ const NotificationDropdown = () => {
 
   const handleSubmit = (username, action) => {
     axios.post(`${CONTACTS_API_URL}/friendRequests/request/`,
-      {username: username, action: action },
+      { username: username, action: action },
       REQUEST_HEADER_CONFIG)
+      .then(() => {
+        setRequesterUsernames(requesterUsernames.filter((requester) => requester !== username));
+        setIsNotification(requesterUsernames.length > 0);
+      })
   };
 
   useEffect(() => {
@@ -25,6 +30,7 @@ const NotificationDropdown = () => {
         const friendRequests = response.data;
         let extractUsernames = friendRequests.map((request) => request.requester_username);
         setRequesterUsernames(extractUsernames);
+        setIsNotification(extractUsernames.length > 0);
       })
       .catch((error) => {
         console.log(error);
@@ -47,14 +53,18 @@ const NotificationDropdown = () => {
       <div className={`dropdown-menu dropdown-menu-right ${isNotifOpen ? 'show' : ''}`}
         aria-labelledby="dropdownMenuLink"
       >
-        {requesterUsernames.map((username, index) => (
-        <FriendNotificationItem
-          key={index}
-          username={username}
-          onAccept={handleSubmit}
-          onDecline={handleSubmit}
-        />
-      ))}
+        {requesterUsernames.length > 0 ? (
+          requesterUsernames.map((username, index) => (
+            <FriendNotificationItem
+              key={index}
+              username={username}
+              onAccept={() => handleSubmit(username, true)}
+              onDecline={() => handleSubmit(username, false)}
+            />
+          ))
+        ) : (
+          <p className="dropdown-item">You're done with all the notifications!</p>
+        )}
       </div>
     </div>
   );
