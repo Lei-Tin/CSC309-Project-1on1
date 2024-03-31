@@ -15,7 +15,7 @@ react:
 clean: 
 	# Add clean commands here
 	# Removed the __pycache__ and migrations files
-	rm -rf OneOnOne/*/__pycache__/ OneOnOne/*/*/__pycache__ OneOnOne/*/migrations/0*.py
+	rm -rf OneOnOne/*/__pycache__/ OneOnOne/*/*/__pycache__ OneOnOne/*/migrations/0*.py OneOnOne/db.sqlite3
 
 load: clean
 	# Add load commands here
