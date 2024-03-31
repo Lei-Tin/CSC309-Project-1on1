@@ -15,8 +15,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<HomePage />}/>
+
         <Route path="/" element={<CustomNavbar />}>
-          <Route index element={<HomePage />} />
           <Route path="accounts/login" element={<Login />} />
           <Route path="accounts/register" element={<Register />} />
         </Route>
