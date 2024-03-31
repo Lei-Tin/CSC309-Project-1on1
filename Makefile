@@ -1,4 +1,4 @@
-.PHONY: setup django react clean load
+.PHONY: setup django react clean load dump
 
 setup:
 	# Add setup commands here
