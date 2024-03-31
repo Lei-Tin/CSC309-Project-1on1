@@ -18,7 +18,10 @@ function Login() {
         e.preventDefault();
         const payload = { username, password };
         axios.post(`${ACCOUNTS_API_URL}/login/`, payload)
-        .then(() => {
+        .then((response) => {
+            const token = response.data.token;
+            localStorage.setItem('token', token);
+            // TODO: Redirect to calendar page
             navigate('/');
         })
         .catch((error) => {
