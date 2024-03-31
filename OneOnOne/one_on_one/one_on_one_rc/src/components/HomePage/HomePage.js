@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../style.css'; // Adjust the path as necessary to match your project structure
+import 'components/style.css'; 
 
 
 function HomePage() {

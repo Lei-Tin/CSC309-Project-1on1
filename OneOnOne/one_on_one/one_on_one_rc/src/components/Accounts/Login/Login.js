@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { ACCOUNTS_API_URL } from '../../../constants'; 
+import { ACCOUNTS_API_URL } from 'constants'; 
 
-import '../authentication.css';
+import 'components/Accounts/authentication.css';
 
-import TextField from '../../Form/Fields/TextField';
+import { TextField } from 'components/Form';
 
 function Login() {
     const [username, setUsername] = useState('');

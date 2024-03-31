@@ -1,10 +1,10 @@
 import { React, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import '../authentication.css';
+import 'components/Accounts/authentication.css';
 
-import { ACCOUNTS_API_URL } from '../../../constants';
-import TextField from '../../Form/Fields/TextField';
+import { ACCOUNTS_API_URL } from 'constants';
+import { TextField } from 'components/Form';
 import axios from "axios";
 
 

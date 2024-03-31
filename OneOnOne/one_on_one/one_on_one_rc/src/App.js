@@ -1,15 +1,15 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import HomePage from './components/HomePage';
+import HomePage from 'components/HomePage';
 
-import Login from './components/Accounts/Login';
-import Register from './components/Accounts/Register';
-import Profile from './components/Accounts/Profile';
+import Login from 'components/Accounts/Login';
+import Register from 'components/Accounts/Register';
+import Profile from 'components/Accounts/Profile';
 
-import CustomNavbar from './components/Layout/Navbar/CustomNavbar';
-import CustomNavbarLogged from './components/Layout/Navbar/CustomNavbarLogged';
+import CustomNavbar from 'components/Layout/Navbar/CustomNavbar';
+import CustomNavbarLogged from 'components/Layout/Navbar/CustomNavbarLogged';
 
-import Footer from './components/Layout/Footer';
+import Footer from 'components/Layout/Footer';
 
 function App() {
   return (
