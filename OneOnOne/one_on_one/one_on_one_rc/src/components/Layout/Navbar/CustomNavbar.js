@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 const CustomNavbar = () => {
   return (
     <>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <Link to="/" className="navbar-brand">OneOnOne</Link>
       </nav>
       <Outlet />

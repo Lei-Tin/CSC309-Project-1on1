@@ -27,7 +27,6 @@ function Login() {
         .catch((error) => {
             if (error.response) {
                 // Reset previous errors
-                console.log(error.response.data);
                 setNonFieldError(error.response.data.non_field_errors[0]);
                 
             }

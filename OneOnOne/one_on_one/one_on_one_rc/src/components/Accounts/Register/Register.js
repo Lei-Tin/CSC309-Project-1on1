@@ -42,7 +42,6 @@ function Register() {
             navigate('/accounts/login');
         })
         .catch((error) => {
-            console.log(error.response);
             if (error.response){
                 setErrorMessage(error.response.data);
             }
