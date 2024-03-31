@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-
+// TODO: Implement the header, add links to other pages. 
 const CustomNavbarLogged = () => {
     return (
         <>

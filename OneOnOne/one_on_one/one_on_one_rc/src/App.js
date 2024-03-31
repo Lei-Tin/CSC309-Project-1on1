@@ -21,15 +21,15 @@ function App() {
           <Route path="accounts/login" element={<Login />} />
           <Route path="accounts/register" element={<Register />} />
         </Route>
-
-        <Route path="/" element={<CustomNavbarLogged />}>
+        {/* TODO: Implement all elements that requires login and comment out below code block */}
+        {/* <Route path="/" element={<CustomNavbarLogged />}>
           <Route path="accounts/profile" element={<Profile />} />
-          <Route path="contacts" index element={<Login />} />
+          <Route path="contacts" index element={<Contacts />} />
           <Route path="calendars">
-            <Route index element={<Login />} />
-            <Route path=":calendarID" element={<Login/>} />
+            <Route index element={<Calendars />} />
+            <Route path=":calendarID" element={<CalendarsDetail/>} />
           </Route>
-        </Route>
+        </Route> */}
       </Routes>
       <Footer />
     </BrowserRouter>
