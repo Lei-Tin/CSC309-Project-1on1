@@ -5,8 +5,9 @@ import { faCalendar, faAddressBook, faBell } from '@fortawesome/free-regular-svg
 import { faCalendar as faCalendarSolid, faAddressBook as faAddressBookSolid, faCheck, faTimes} from '@fortawesome/free-solid-svg-icons';
 import './navbar.css';
 import axios from 'axios';
-import { ACCOUNTS_API_URL } from 'constants';
+import { ACCOUNTS_API_URL, REQUEST_HEADER_CONFIG } from 'constants';
 import { useNavigate } from 'react-router-dom';
+import NotificationDropdown from './Notification/NotificationDropdown';
 
 
 function Navbar({ current }) {
@@ -23,14 +24,8 @@ function Navbar({ current }) {
     setIsProfileDropdownOpen(!isProfileDropdownOpen);
   };
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`
-    }
-  };
-
   const navigate = useNavigate();
-  axios.get(`${ACCOUNTS_API_URL}/profile/`, config)
+  axios.get(`${ACCOUNTS_API_URL}/profile/`, REQUEST_HEADER_CONFIG)
     .then((response) => {
       setUsername(response.data.user.username);
       setProfilePic(response.data.profile_picture);
@@ -62,44 +57,10 @@ function Navbar({ current }) {
               <Link to="/contacts" title="Contacts"><FontAwesomeIcon icon={faAddressBook} /></Link>
             </>
           )}
-          <div className="dropdown">
-            <a className="dropdown-toggle"
-              title="Alerts"
-              role="button"
-              id="dropdownMenuLink"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded={isNotiDropdownOpen}
-              onClick={toggleNotiDropdown}
-            >
-              <FontAwesomeIcon icon={faBell} />
-            </a>
-            <div className={`dropdown-menu dropdown-menu-right ${isNotiDropdownOpen ? 'show' : ''}`}
-              aria-labelledby="dropdownMenuLink"
-            >
-              {/* TODO: Filled in with real notification */}
-              <div className="dropdown-item">
-                <div className="dropdown-item-content">
-                  <p>Yung Shou-Hi has added you to their contacts</p>
-                </div>
-                <div className="dropdown-item-actions">
-                  <a href="/#" className="accept"> <FontAwesomeIcon icon={faCheck} /></a>
-                  <a href="/#" className="decline"> <FontAwesomeIcon icon={faTimes} /></a>
-                </div>
-              </div>
-              <div className="dropdown-item">
-                <div className="dropdown-item-content">
-                  <p>You have a scheduled meeting in 2 days with Ziling Xiao and QQY</p>
-                </div>
-                <div className="dropdown-item-actions">
-                  <a href="/#" className="dismiss"><i id="dismiss" className="fas fa-times"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
+          <NotificationDropdown />
         </div>
 
-        
+
         <div className="dropdown">
           <div className="mini-profile-container dropdown-toggle"
             data-toggle="dropdown"
