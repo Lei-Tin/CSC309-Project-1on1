@@ -45,8 +45,13 @@ INSTALLED_APPS = [
     'accounts',
     'rest_framework',
     'rest_framework_simplejwt', 
-    'rest_framework.authtoken', 
+    'rest_framework.authtoken',
+    # Frameworks that help to build APIs and connect with React
+    'corsheaders',
 ]
+
+# Since we're working full `localhost`, we'll disable the CORS feature
+CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -79,6 +84,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Middleware that allows to connect with React
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware', 
 ]
 
 ROOT_URLCONF = 'one_on_one.urls'
