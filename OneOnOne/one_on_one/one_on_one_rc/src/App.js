@@ -15,9 +15,12 @@ import Footer from 'components/Layout/Footer';
 import NotFound from './components/ErrorPages/NotFound';
 import Unauthorized from './components/ErrorPages/Unauthorized';
 
+import { UserProvider } from 'contexts/UserContext';
+
 function App() {
   return (
-    <BrowserRouter>
+    <UserProvider>
+      <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
 
@@ -28,17 +31,18 @@ function App() {
           <Route path='*' element={<NotFound />}></Route>
         </Route>
        {/* TODO: Implement all elements that requires login and comment out below code block */}
-        <Route path="/" element={<CustomNavbarLogged />}>
-          <Route path="accounts/profile" element={<Profile />} />
-          <Route path="contacts" index element={<Contacts />} />
-          {/* <Route path="calendars">
-            <Route index element={<Calendars />} />
-            <Route path=":calendarID" element={<CalendarsDetail/>} />
-          </Route> */}
-        </Route>
+          <Route path="/" element={<CustomNavbarLogged />}>
+            <Route path="accounts/profile" element={<Profile />} />
+            <Route path="contacts" index element={<Contacts />} />
+            {/* <Route path="calendars">
+              <Route index element={<Calendars />} />
+              <Route path=":calendarID" element={<CalendarsDetail/>} />
+            </Route> */}
+          </Route>
       </Routes>
-        <Footer/>
-    </BrowserRouter>
+      <Footer/>
+      </BrowserRouter>
+    </UserProvider>
   );
 }
 

@@ -10,6 +10,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import NotificationDropdown from './Notification/NotificationDropdown';
 import { Outlet } from 'react-router-dom';
 
+import { useUser } from 'contexts/UserContext';
+
 function Logout() {
   localStorage.removeItem('token');
 }
@@ -17,7 +19,7 @@ function Logout() {
 
 export default function NavBar() {
   const [username, setUsername] = useState('');
-  const [profilePic, setProfilePic] = useState('');
+  const { profilePic, changeProfilePic } = useUser();
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const toggleProfileDropdown = () => {
@@ -32,7 +34,7 @@ export default function NavBar() {
   })
     .then((response) => {
       setUsername(response.data.user.username);
-      setProfilePic(response.data.profile_picture);
+      changeProfilePic(response.data.profile_picture);
     })
     .catch((error) => {
       console.log(error);

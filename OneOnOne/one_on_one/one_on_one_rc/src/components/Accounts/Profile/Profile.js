@@ -6,6 +6,8 @@ import { ACCOUNTS_API_URL } from "constants";
 
 import './profile.css';
 
+import { useUser } from 'contexts/UserContext';
+
 const TextField = ({ type, label, value, onChange, errorMessage }) => {
     return (
         <div className="form-group">
@@ -17,6 +19,8 @@ const TextField = ({ type, label, value, onChange, errorMessage }) => {
 };
 
 const Profile = () => {
+    const { profilePic, changeProfilePic } = useUser();
+
     const [profile, setProfile] = useState({
         user: { id: '', username: '', first_name: '', last_name: '', email: '' },
         profile_picture: '',
@@ -106,6 +110,7 @@ const Profile = () => {
             .then((response) => {
                 // Force a component refresh
                 setProfile(response.data);
+                changeProfilePic(response.data.profile_picture);
             })
             .catch((error) => {
                 console.log(error);
