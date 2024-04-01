@@ -23,3 +23,21 @@ DJANGO_SUPERUSER_USERNAME=test \
 DJANGO_SUPERUSER_PASSWORD=123 \
 DJANGO_SUPERUSER_EMAIL="test@example.com" \
 python3 OneOnOne/manage.py createsuperuser --noinput
+
+
+# Install Nodejs
+echo "Installing Nodejs..."
+apt install nodejs -y
+
+# Install npm
+echo "Installing npm..."
+apt install npm -y
+
+# Install necessary dependencies
+echo "Installing necessary dependencies..."
+
+# Change directory into frontend
+cd OneOnOne/one_on_one/one_on_one_rc
+
+# Install necessary dependencies
+npm install
