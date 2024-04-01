@@ -11,11 +11,11 @@ import NotificationDropdown from './Notification/NotificationDropdown';
 import { Outlet } from 'react-router-dom';
 
 function Logout() {
-  localStorage.setItem('token', '');
+  localStorage.removeItem('token');
 }
 
 
-function Navbar () {
+export default function NavBar() {
   const [username, setUsername] = useState('');
   const [profilePic, setProfilePic] = useState('');
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
@@ -84,5 +84,3 @@ function Navbar () {
     </>
   );
 }
-
-export default Navbar;
