@@ -76,7 +76,7 @@ function Navbar({ current }) {
             </div>
           </div>
           <div className={`dropdown-menu dropdown-menu-right user-dropdown-menu ${isProfileDropdownOpen ? 'show' : ''}`}>
-            <Link className="dropdown-item" to="/accounts/profile">Profile</Link>
+            <Link className="dropdown-item" to="/accounts/profile" onClick={toggleProfileDropdown}>Profile</Link>
             <Link className="dropdown-item" to="/">Logout</Link>
           </div>
         </div>

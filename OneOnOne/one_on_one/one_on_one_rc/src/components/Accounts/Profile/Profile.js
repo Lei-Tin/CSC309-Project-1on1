@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
@@ -6,15 +6,15 @@ import { ACCOUNTS_API_URL, REQUEST_HEADER_CONFIG } from "constants";
 
 import './profile.css';
 
-const TextField = ({ type, label, value, onChange }) => {
+const TextField = ({ type, label, value, onChange, errorMessage }) => {
     return (
         <div className="form-group">
             <label htmlFor={label}>{label}:</label>
             <input type={type} id={label} value={value} onChange={(e) => onChange(e.target.value)} />
+            {errorMessage && <span className="error">{errorMessage}</span>}
         </div>
     );
 };
-
 
 const Profile = () => {
     const [profile, setProfile] = useState({
@@ -29,52 +29,132 @@ const Profile = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [profilePic, setProfilePic] = useState('');
 
+    const [errorMessage, setErrorMessage] = useState({});
     const [isEditing, setIsEditing] = useState(false);
     const navigate = useNavigate();
 
-    axios.get(`${ACCOUNTS_API_URL}/profile/`, REQUEST_HEADER_CONFIG)
-        .then((response) => {
-            setProfile(response.data);
-        })
-        .catch((error) => {
-            if (error.response && error.response.status === 401) {
-                navigate('/unauthorized');
-            }
-        });
-    
+    useEffect(() => {
+        axios.get(`${ACCOUNTS_API_URL}/profile/`, REQUEST_HEADER_CONFIG)
+            .then((response) => {
+                setProfile(response.data);
+            })
+            .catch((error) => {
+                if (error.response && error.response.status === 401) {
+                    navigate('/unauthorized');
+                }
+            });
+    }, []);
+
     const toggleEdit = () => {
         setIsEditing(!isEditing);
     };
-    
+
+    const handleUpload = (event) => {
+        const file = event.target.files[0];
+        if (!file) {
+            console.log("No file selected");
+            return;
+        }
+
+    }
+
+
+    const handleSubmit = () => {
+        // Based on the out backend django API, if the field value is blank, 
+        // then we should not send it in the payload
+        var payload = {};
+
+        if (firstName) {
+            payload.first_name = firstName;
+        };
+
+        if (lastName) {
+            payload.last_name = lastName;
+        };
+
+        if (currentPassword) {
+            payload.current_password = currentPassword;
+            payload.new_password = newPassword;
+            payload.confirm_password = confirmPassword;
+        };
+
+        axios.put(`${ACCOUNTS_API_URL}/profile/`, payload, REQUEST_HEADER_CONFIG)
+            .then((response) => {
+                setProfile(response.data);
+                setIsEditing(false);
+                setCurrentPassword('');
+                setNewPassword('');
+                setConfirmPassword('');
+                setErrorMessage({});
+            })
+            .catch((error) => {
+                if (error.response) {
+                    console.log(error.response.data);
+                    setErrorMessage(error.response.data);
+                }
+            }
+            );
+    };
+
+    const updateProfilePic = (file) => {
+        // Make API call to update the profile picture
+        const formData = new FormData();
+        formData.append('profile_picture', file);
+
+        axios.put(`${ACCOUNTS_API_URL}/profile/`, formData, REQUEST_HEADER_CONFIG)
+            .then((response) => {
+                // Strip the profile_picture to only contain the filename
+                var profile_pic_filename = response.data.profile_picture.split('/').pop();
+                
+                setProfilePic(`${process.env.PUBLIC_URL}/media/profile_picture/${profile_pic_filename}`);
+            })
+            .catch((error) => {
+                console.log(error);
+            }
+            );
+    }
+
 
     return (
         <div className="profile">
             <div id="content-wrap">
-                <div className="profile-container center">
-                    <img src={profilePic || '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
-                    <button id="upload-profile-pic">Upload Profile Picture</button>
-                </div>
                 <div className="profile-container">
-                    <h2>{profile.user.username}</h2>
-                    <button onClick={toggleEdit}>{isEditing ? "Cancel Edit" : "Edit Profile"}</button>
-                    {isEditing ? (
-                        <div>
-                            {/* Input fields for editing */}
-                            <TextField type="text" label="First Name" value={firstName} onChange={setFirstName} />
-                            <TextField type="text" label="Last Name" value={lastName} onChange={setLastName} />
-                            <TextField type="password" label="Current Password" onChange={setCurrentPassword} />
-                            <TextField type="password" label="New Password" onChange={setNewPassword} />
-                            <TextField type="password" label="Confirm Password" onChange={setConfirmPassword} />
-                            <button type="button" onClick={toggleEdit}>Submit Change</button>
-                        </div>
-                    ) : (
-                        <div>
-                            {/* Paragraphs for display */}
-                            <p>Email: {profile.user.email}</p>
-                            <p>First Name: {profile.user.first_name}</p>
-                            <p>Last Name: {profile.user.last_name}</p>
-                        </div>
-                    )}
+                    <div className="center">
+                        <img src={profilePic || '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
+                        {/* <button className="btn btn-outline-info btn-sm" id="upload-profile-pic" onClick={handleUpload}>Upload Profile Picture</button> */}
+                        <input id="upload" type="file" accept="image/*"
+                            onChange={(event) => {
+                                // console.log(event.target.files[0]);
+                                // Make the API call to the backend to upload the image
+                                updateProfilePic(event.target.files[0]);
+                            }} />
+                    </div>
+                    <div>
+                        <h2>{profile.user.username}</h2>
+                        <button className="btn btn-info btn-sm" onClick={toggleEdit}>{isEditing ? "Cancel Edit" : "Edit Profile"}</button>
+                        {isEditing ? (
+                            <div>
+                                {/* Input fields for editing */}
+                                <TextField type="text" label="First Name" value={firstName} onChange={setFirstName} errorMessage={errorMessage.first_name} />
+                                <TextField type="text" label="Last Name" value={lastName} onChange={setLastName} errorMessage={errorMessage.last_name} />
+                                <div className="password-container">
+                                    <p>Edit your password here: leave blank if you don't want to edit it.</p>
+                                    <TextField type="password" label="Current Password" onChange={setCurrentPassword} errorMessage={errorMessage.current_password} />
+                                    <TextField type="password" label="New Password" onChange={setNewPassword} errorMessage={errorMessage.new_password} />
+                                    <TextField type="password" label="Confirm Password" onChange={setConfirmPassword} errorMessage={errorMessage.confirm_password} />
+                                    {errorMessage.non_field_errors && <p className="error">passwordError: {errorMessage.non_field_errors}</p>}
+                                </div>
+                                <button className="btn btn-success" type="button" onClick={handleSubmit}>Submit Change</button>
+                            </div>
+                        ) : (
+                            <div>
+                                {/* Paragraphs for display */}
+                                <p>Email: {profile.user.email}</p>
+                                <p>First Name: {profile.user.first_name}</p>
+                                <p>Last Name: {profile.user.last_name}</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
