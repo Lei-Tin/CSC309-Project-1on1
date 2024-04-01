@@ -39,8 +39,8 @@ function Login() {
                 <div className="form-container">
                     <h1 className="display-4">Login</h1>
                     <form className="authentication-form" id="login-form" onSubmit={handleSubmit}>
-                        <TextField type="text" label="Username" value={username} onChange={setUsername} />
-                        <TextField type="password" label="Password" value={password} onChange={setPassword} />
+                        <TextField className="txt_field" type="text" label="Username" value={username} onChange={setUsername} />
+                        <TextField className="txt_field" type="password" label="Password" value={password} onChange={setPassword} />
                         <span className="error_message">{nonFieldError}</span>
                         <div className="pass">Forgot Password?</div>
                         <input type="submit" value="Login" />
