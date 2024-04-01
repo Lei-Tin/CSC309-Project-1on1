@@ -14,10 +14,7 @@ const generateWeekDays = (weekStartDate) => {
 
 const CalendarTable = ({ weekStartDate, weekEndDate, actualStartDate, actualEndDate, preference }) => {
     const weekDays = generateWeekDays(weekStartDate);
-    const [selectedSlots, setSelectedSlots] = useState(new Set());
-    const [highPreferenceSet, setHighPreferenceSet] = useState(new Set());
-    const [mediumPreferenceSet, setMediumPreferenceSet] = useState(new Set());
-    const [lowPreferenceSet, setLowPreferenceSet] = useState(new Set());
+    const [selectedSlots, setSelectedSlots] = useState(new Map());
 
     // Helper function to determine if a date should be greyed out
     const isDateOutOfRange = (date) => {
@@ -30,43 +27,12 @@ const CalendarTable = ({ weekStartDate, weekEndDate, actualStartDate, actualEndD
     // Helper function to toggle a slot's selection
     const toggleSlotSelection = (slotKey) => {
         setSelectedSlots((prevSelectedSlots) => {
-            const newSelectedSlots = new Set(prevSelectedSlots);
-
-            const removeFromSet = (setUpdateFn, set) => {
-                const updatedSet = new Set(set);
-                updatedSet.delete(slotKey);
-                setUpdateFn(updatedSet);
-            }
-            
-            const addToSet = (setUpdateFn, set) => {
-                const updatedSet = new Set(set);
-                updatedSet.add(slotKey);
-                setUpdateFn(updatedSet);
-            }
+            const newSelectedSlots = new Map(prevSelectedSlots);
             
             if (newSelectedSlots.has(slotKey)) {
                 newSelectedSlots.delete(slotKey);
-
-                // Remove the slot from the other preference sets
-                removeFromSet(setHighPreferenceSet, highPreferenceSet);
-                removeFromSet(setMediumPreferenceSet, mediumPreferenceSet);
-                removeFromSet(setLowPreferenceSet, lowPreferenceSet);
             } else {
-                // Add the slot to the new preference set
-                if (preference === "high") {
-                    removeFromSet(setMediumPreferenceSet, mediumPreferenceSet);
-                    removeFromSet(setLowPreferenceSet, lowPreferenceSet);
-                    addToSet(setHighPreferenceSet, highPreferenceSet);
-                } else if (preference === "medium") {
-                    removeFromSet(setHighPreferenceSet, highPreferenceSet);
-                    removeFromSet(setLowPreferenceSet, lowPreferenceSet);
-                    addToSet(setMediumPreferenceSet, mediumPreferenceSet);
-                } else if (preference === "low") {
-                    removeFromSet(setHighPreferenceSet, highPreferenceSet);
-                    removeFromSet(setMediumPreferenceSet, mediumPreferenceSet);
-                    addToSet(setLowPreferenceSet, lowPreferenceSet);
-                }
-                newSelectedSlots.add(slotKey);
+                newSelectedSlots.set(slotKey, preference);
             }
             return newSelectedSlots;
         });
@@ -76,17 +42,15 @@ const CalendarTable = ({ weekStartDate, weekEndDate, actualStartDate, actualEndD
     const getSlotClass = (slotKey, isOutsideRange) => {
         if (isOutsideRange) {
             return 'calendar-day-not-available';
-        } else if (highPreferenceSet.has(slotKey)) {
+        } else if (selectedSlots.get(slotKey) === 'high') {
             return 'calendar-high-preference';
-        } else if (mediumPreferenceSet.has(slotKey)) {
+        } else if (selectedSlots.get(slotKey) === 'medium') {
             return 'calendar-medium-preference';
-        } else if (lowPreferenceSet.has(slotKey)) {
+        } else if (selectedSlots.get(slotKey) === 'low') {
             return 'calendar-low-preference';
         }
         return '';
-    }
-
-    console.log(highPreferenceSet, mediumPreferenceSet, lowPreferenceSet)
+    };
 
     return (
         <>
