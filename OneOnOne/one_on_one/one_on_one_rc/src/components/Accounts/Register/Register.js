@@ -46,8 +46,25 @@ function Register() {
                 setErrorMessage(error.response.data);
             }
         });
-
     };
+
+    // On load, check if the user is already logged in
+    // If logged in, then redirect to the profile page
+    if (localStorage.getItem('token') !== null) {
+        // Use axios to verify if the token is valid
+        axios.get(`${ACCOUNTS_API_URL}/profile/`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        }).then(() => {
+            // TODO: Redirect to calendar page
+            navigate('/accounts/profile/');
+        }).catch(() => {
+            // This is when we failed to verify the token
+            // Probably because the token timed out
+            localStorage.removeItem('token');
+        });
+    }
 
     return (
         <main>

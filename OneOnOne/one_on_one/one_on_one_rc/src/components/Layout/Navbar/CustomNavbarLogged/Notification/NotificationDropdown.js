@@ -56,7 +56,7 @@ const NotificationDropdown = () => {
         aria-haspopup="true"
         aria-expanded={isNotifOpen}
         onClick={toggleNotificationDropdown}>
-        <FontAwesomeIcon icon={faBell} />
+        <FontAwesomeIcon icon={faBell} className="icon" />
       </a>
       <div className={`dropdown-menu dropdown-menu-right ${isNotifOpen ? 'show' : ''}`}
         aria-labelledby="dropdownMenuLink"

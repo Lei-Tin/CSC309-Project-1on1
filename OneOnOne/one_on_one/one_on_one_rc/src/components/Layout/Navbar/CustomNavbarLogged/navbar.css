@@ -1,5 +1,7 @@
 .active {
-    font-size: 1.4rem;
     color: #000;
 }
 
+.icon {
+    font-size: 1.4rem;
+}
