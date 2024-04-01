@@ -5,16 +5,8 @@ import axios from "axios";
 import { ACCOUNTS_API_URL } from "constants";
 
 import './profile.css';
+import { TextFieldProfile } from "components/Form/Fields/TextField";
 
-const TextField = ({ type, label, value, onChange, errorMessage }) => {
-    return (
-        <div className="form-group">
-            <label htmlFor={label}>{label}:</label>
-            <input type={type} id={label} value={value} onChange={(e) => onChange(e.target.value)} />
-            {errorMessage && <span className="error">{errorMessage}</span>}
-        </div>
-    );
-};
 
 const Profile = () => {
     const [profile, setProfile] = useState({
@@ -134,13 +126,13 @@ const Profile = () => {
                         {isEditing ? (
                             <div>
                                 {/* Input fields for editing */}
-                                <TextField type="text" label="First Name" value={firstName} onChange={setFirstName} errorMessage={errorMessage.first_name} />
-                                <TextField type="text" label="Last Name" value={lastName} onChange={setLastName} errorMessage={errorMessage.last_name} />
+                                <TextFieldProfile className="form-group" type="text" label="First Name" value={firstName} onChange={setFirstName} errorMessage={errorMessage.first_name} />
+                                <TextFieldProfile className="form-group" type="text" label="Last Name" value={lastName} onChange={setLastName} errorMessage={errorMessage.last_name} />
                                 <div className="password-container">
                                     <p>Edit your password here: leave blank if you don't want to edit it.</p>
-                                    <TextField type="password" label="Current Password" onChange={setCurrentPassword} errorMessage={errorMessage.current_password} />
-                                    <TextField type="password" label="New Password" onChange={setNewPassword} errorMessage={errorMessage.new_password} />
-                                    <TextField type="password" label="Confirm Password" onChange={setConfirmPassword} errorMessage={errorMessage.confirm_password} />
+                                    <TextFieldProfile className="form-group" type="password" label="Current Password" onChange={setCurrentPassword} errorMessage={errorMessage.current_password} />
+                                    <TextFieldProfile className="form-group" type="password" label="New Password" onChange={setNewPassword} errorMessage={errorMessage.new_password} />
+                                    <TextFieldProfile className="form-group" type="password" label="Confirm Password" onChange={setConfirmPassword} errorMessage={errorMessage.confirm_password} />
                                     {errorMessage.non_field_errors && <p className="error">passwordError: {errorMessage.non_field_errors}</p>}
                                 </div>
                                 <button className="btn btn-success" type="button" onClick={handleSubmit}>Submit Change</button>

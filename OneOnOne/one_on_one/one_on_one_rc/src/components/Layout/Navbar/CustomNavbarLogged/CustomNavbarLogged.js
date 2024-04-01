@@ -15,7 +15,7 @@ function Logout() {
 }
 
 
-function Navbar({ current }) {
+function Navbar () {
   const [username, setUsername] = useState('');
   const [profilePic, setProfilePic] = useState('');
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);

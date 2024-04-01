@@ -1,3 +1,3 @@
-import TextField from './TextField';
+import { TextField, TextFieldProfile } from './TextField';
 
-export { TextField };
+export { TextField, TextFieldProfile};
