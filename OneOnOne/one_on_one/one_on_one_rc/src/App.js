@@ -4,7 +4,7 @@ import HomePage from 'components/HomePage';
 
 import Login from 'components/Accounts/Login';
 import Register from 'components/Accounts/Register';
-import Profile from 'components/Accounts/Profile';
+import Profile from 'components/Accounts/Profile'; 
 import Contacts from 'components/Contacts/';
 
 import CustomNavbar from 'components/Layout/Navbar/CustomNavbar';
@@ -26,14 +26,14 @@ function App() {
           <Route path="accounts/register" element={<Register />} />
         </Route>
         {/* TODO: Implement all elements that requires login and comment out below code block */}
-        <Route path="/" element={<CustomNavbarLogged />}>
+        {/* <Route path="/" element={<CustomNavbarLogged />}>
           <Route path="accounts/profile" element={<Profile />} />
           <Route path="contacts" index element={<Contacts />} />
-          {/* <Route path="calendars">
+          <Route path="calendars">
             <Route index element={<Calendars />} />
             <Route path=":calendarID" element={<CalendarsDetail/>} />
-          </Route> */}
-        </Route>
+          </Route>
+        </Route> */}
         <Route path="unauthorized" element={<Unauthorized />}></Route>
         <Route path='*' element={<NotFound />}></Route>
       </Routes>

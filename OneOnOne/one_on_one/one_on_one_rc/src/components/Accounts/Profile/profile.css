@@ -1,26 +1,26 @@
 
 
-.profile-container {
+.profile .profile-container {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-h2 {
+.profile h2 {
     text-align: center;
 }
 
-.form-group {
+.profile .form-group {
     margin-bottom: 15px;
 }
 
-label {
+.profile label {
     display: block;
     margin-bottom: 5px;
 }
 
-#profile_pic {
+.profile #profile_pic {
     border-radius: 50%;
     width: 200px; 
     height: 200px; 
@@ -29,7 +29,7 @@ label {
     margin: 0 auto 10px auto;
 }
 
-#upload-profile-pic {
+.profile #upload-profile-pic {
     display: block;
     margin: 0 auto;
     padding: 0.1rem;
@@ -40,8 +40,8 @@ label {
     border-radius: 4px;
 }
 
-input[type="text"],
-input[type="email"] {
+.profile input[type="text"],
+.profile input[type="email"] {
     width: 100%;
     padding: 10px;
     border-radius: 4px;
@@ -49,7 +49,7 @@ input[type="email"] {
     box-sizing: border-box; /* Makes sure padding does not affect the overall width */
 }
 
-button[type="submit"] {
+.profile button[type="submit"] {
     width: 100%;
     background-color: #007bff;
     color: white;
@@ -60,6 +60,6 @@ button[type="submit"] {
     font-size: 16px;
 }
 
-button[type="submit"]:hover {
+.profile button[type="submit"]:hover {
     background-color: #0056b3;
 }

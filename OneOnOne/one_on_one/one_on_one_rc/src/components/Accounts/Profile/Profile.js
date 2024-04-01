@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./profile.css"
+
 import axios from "axios";
 import { ACCOUNTS_API_URL, REQUEST_HEADER_CONFIG } from "constants";
+
+import './profile.css';
 
 const TextField = ({ type, label, value, onChange }) => {
     return (
@@ -46,32 +48,34 @@ const Profile = () => {
     
 
     return (
-        <div id="content-wrap">
-            <div className="profile-container center">
-                <img src={profilePic || '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
-                <button id="upload-profile-pic">Upload Profile Picture</button>
-            </div>
-            <div className="profile-container">
-                <h2>{profile.user.username}</h2>
-                <button onClick={toggleEdit}>{isEditing ? "Cancel Edit" : "Edit Profile"}</button>
-                {isEditing ? (
-                    <div>
-                        {/* Input fields for editing */}
-                        <TextField type="text" label="First Name" value={firstName} onChange={setFirstName} />
-                        <TextField type="text" label="Last Name" value={lastName} onChange={setLastName} />
-                        <TextField type="password" label="Current Password" onChange={setCurrentPassword} />
-                        <TextField type="password" label="New Password" onChange={setNewPassword} />
-                        <TextField type="password" label="Confirm Password" onChange={setConfirmPassword} />
-                        <button type="button" onClick={toggleEdit}>Submit Change</button>
-                    </div>
-                ) : (
-                    <div>
-                        {/* Paragraphs for display */}
-                        <p>Email: {profile.user.email}</p>
-                        <p>First Name: {profile.user.first_name}</p>
-                        <p>Last Name: {profile.user.last_name}</p>
-                    </div>
-                )}
+        <div className="profile">
+            <div id="content-wrap">
+                <div className="profile-container center">
+                    <img src={profilePic || '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
+                    <button id="upload-profile-pic">Upload Profile Picture</button>
+                </div>
+                <div className="profile-container">
+                    <h2>{profile.user.username}</h2>
+                    <button onClick={toggleEdit}>{isEditing ? "Cancel Edit" : "Edit Profile"}</button>
+                    {isEditing ? (
+                        <div>
+                            {/* Input fields for editing */}
+                            <TextField type="text" label="First Name" value={firstName} onChange={setFirstName} />
+                            <TextField type="text" label="Last Name" value={lastName} onChange={setLastName} />
+                            <TextField type="password" label="Current Password" onChange={setCurrentPassword} />
+                            <TextField type="password" label="New Password" onChange={setNewPassword} />
+                            <TextField type="password" label="Confirm Password" onChange={setConfirmPassword} />
+                            <button type="button" onClick={toggleEdit}>Submit Change</button>
+                        </div>
+                    ) : (
+                        <div>
+                            {/* Paragraphs for display */}
+                            <p>Email: {profile.user.email}</p>
+                            <p>First Name: {profile.user.first_name}</p>
+                            <p>Last Name: {profile.user.last_name}</p>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     )
