@@ -48,7 +48,7 @@ function SelectSchedule() {
     const handlePreferenceChange = (event) => {
         setSelectedPreference(event.target.value);
     }
-    
+
     return (
         <section className="jumbotron calendar-table-list">
             <h1 className="display-4 text-center">{meetingName}</h1>
@@ -72,7 +72,7 @@ function SelectSchedule() {
                 </select>
             </div>
 
-            <CalendarTable startDate={selectedDate[0]} endDate={selectedDate[1]} />
+            <CalendarTable weekStartDate={selectedDate[0]} weekEndDate={selectedDate[1]} actualStartDate={new Date('2024-04-03')} actualEndDate={new Date('2024-04-25')} />
 
             <a className="btn btn-primary">Confirm</a>
         </section>

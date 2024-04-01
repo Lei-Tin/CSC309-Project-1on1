@@ -1,20 +1,42 @@
 import React, { useState } from "react";
+import "components/Calendars/calendar.css";
 
 // Helper function that generates dates for a week given a start date
-const generateWeekDays = (startDate) => {
+const generateWeekDays = (weekStartDate) => {
     const dates = [];
     for (let i = 0; i < 7; i++) {
-        const date = new Date(startDate);
-        date.setDate(startDate.getDate() + i);
+        const date = new Date(weekStartDate);
+        date.setDate(weekStartDate.getDate() + i);
         dates.push(date);
     }
     return dates;
 };
 
-const CalendarTable = ({ startDate, endDate }) => {
-    const weekDays = generateWeekDays(startDate);
-    const [selectedTimeSlots, setSelectedTimeSlots] = useState([]);
-        
+const CalendarTable = ({ weekStartDate, weekEndDate, actualStartDate, actualEndDate }) => {
+    const weekDays = generateWeekDays(weekStartDate);
+    const [selectedSlots, setSelectedSlots] = useState(new Set());
+
+    // Helper function to determine if a date should be greyed out
+    const isDateOutOfRange = (date) => {
+        return date < actualStartDate || date > actualEndDate;
+    };
+
+    // Helper function to format a slot's key
+    const formatSlotKey = (date, hour) => `${date.toLocaleDateString()}-${hour}`
+
+    const toggleSlotSelection = (slotKey) => {
+        setSelectedSlots((prevSelectedSlots) => {
+            const newSelectedSlots = new Set(prevSelectedSlots);
+            if (newSelectedSlots.has(slotKey)) {
+                newSelectedSlots.delete(slotKey);
+            } else {
+                newSelectedSlots.add(slotKey);
+            }
+            return newSelectedSlots;
+        });
+    };
+
+    console.log(selectedSlots);
 
     return (
         <>
@@ -50,10 +72,22 @@ const CalendarTable = ({ startDate, endDate }) => {
                 <tbody>
                     {Array.from({ length: 13 }, (_, i) => 9 + i).map((hour, index) => (
                         <tr key={index}>
-                            <td>{hour}:00 PM</td>
-                            {Array.from({ length: 7 }, (_, index) => (
-                                <td key={index}></td>
-                            ))}
+                            <td>{hour % 24}:00 {hour < 12 || hour === 24 ? 'AM' : 'PM'}</td>
+                            {weekDays.map((date, index) => {
+                                const slotKey = formatSlotKey(date, hour);
+                                const isOutsideRange = isDateOutOfRange(date);
+                                const isSelected = selectedSlots.has(slotKey);
+                                return (
+                                    <td 
+                                        key={index} 
+                                        style={{ 
+                                            backgroundColor: isOutsideRange ? 'grey' : isSelected ? 'lightgreen' : 'inherit',
+                                            cursor: isOutsideRange ? 'not-allowed' : 'pointer',
+                                        }} 
+                                        onClick={() => !isOutsideRange && toggleSlotSelection(slotKey)}
+                                    ></td>
+                                );
+                            })}
                         </tr>
                     ))}
                 </tbody>
