@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { ACCOUNTS_API_URL, CALENDARS_API_URL, CONTACTS_API_URL } from 'constants';
-import { FriendNotificationItem, ReminderNotificationItem, InviteNotificationItem } from './NotificationItem';
+import {  CONTACTS_API_URL } from 'constants';
+import { FriendNotificationItem } from './NotificationItem';
 
 const NotificationDropdown = () => {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
