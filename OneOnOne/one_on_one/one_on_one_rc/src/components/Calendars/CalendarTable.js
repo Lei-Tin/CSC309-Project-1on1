@@ -12,31 +12,81 @@ const generateWeekDays = (weekStartDate) => {
     return dates;
 };
 
-const CalendarTable = ({ weekStartDate, weekEndDate, actualStartDate, actualEndDate }) => {
+const CalendarTable = ({ weekStartDate, weekEndDate, actualStartDate, actualEndDate, preference }) => {
     const weekDays = generateWeekDays(weekStartDate);
     const [selectedSlots, setSelectedSlots] = useState(new Set());
+    const [highPreferenceSet, setHighPreferenceSet] = useState(new Set());
+    const [mediumPreferenceSet, setMediumPreferenceSet] = useState(new Set());
+    const [lowPreferenceSet, setLowPreferenceSet] = useState(new Set());
 
     // Helper function to determine if a date should be greyed out
     const isDateOutOfRange = (date) => {
         return date < actualStartDate || date > actualEndDate;
     };
-
+    
     // Helper function to format a slot's key
     const formatSlotKey = (date, hour) => `${date.toLocaleDateString()}-${hour}`
 
+    // Helper function to toggle a slot's selection
     const toggleSlotSelection = (slotKey) => {
         setSelectedSlots((prevSelectedSlots) => {
             const newSelectedSlots = new Set(prevSelectedSlots);
+
+            const removeFromSet = (setUpdateFn, set) => {
+                const updatedSet = new Set(set);
+                updatedSet.delete(slotKey);
+                setUpdateFn(updatedSet);
+            }
+            
+            const addToSet = (setUpdateFn, set) => {
+                const updatedSet = new Set(set);
+                updatedSet.add(slotKey);
+                setUpdateFn(updatedSet);
+            }
+            
             if (newSelectedSlots.has(slotKey)) {
                 newSelectedSlots.delete(slotKey);
+
+                // Remove the slot from the other preference sets
+                removeFromSet(setHighPreferenceSet, highPreferenceSet);
+                removeFromSet(setMediumPreferenceSet, mediumPreferenceSet);
+                removeFromSet(setLowPreferenceSet, lowPreferenceSet);
             } else {
+                // Add the slot to the new preference set
+                if (preference === "high") {
+                    removeFromSet(setMediumPreferenceSet, mediumPreferenceSet);
+                    removeFromSet(setLowPreferenceSet, lowPreferenceSet);
+                    addToSet(setHighPreferenceSet, highPreferenceSet);
+                } else if (preference === "medium") {
+                    removeFromSet(setHighPreferenceSet, highPreferenceSet);
+                    removeFromSet(setLowPreferenceSet, lowPreferenceSet);
+                    addToSet(setMediumPreferenceSet, mediumPreferenceSet);
+                } else if (preference === "low") {
+                    removeFromSet(setHighPreferenceSet, highPreferenceSet);
+                    removeFromSet(setMediumPreferenceSet, mediumPreferenceSet);
+                    addToSet(setLowPreferenceSet, lowPreferenceSet);
+                }
                 newSelectedSlots.add(slotKey);
             }
             return newSelectedSlots;
         });
     };
 
-    console.log(selectedSlots);
+    // Helper function to determine slot's class based on preference
+    const getSlotClass = (slotKey, isOutsideRange) => {
+        if (isOutsideRange) {
+            return 'calendar-day-not-available';
+        } else if (highPreferenceSet.has(slotKey)) {
+            return 'calendar-high-preference';
+        } else if (mediumPreferenceSet.has(slotKey)) {
+            return 'calendar-medium-preference';
+        } else if (lowPreferenceSet.has(slotKey)) {
+            return 'calendar-low-preference';
+        }
+        return '';
+    }
+
+    console.log(highPreferenceSet, mediumPreferenceSet, lowPreferenceSet)
 
     return (
         <>
@@ -76,14 +126,11 @@ const CalendarTable = ({ weekStartDate, weekEndDate, actualStartDate, actualEndD
                             {weekDays.map((date, index) => {
                                 const slotKey = formatSlotKey(date, hour);
                                 const isOutsideRange = isDateOutOfRange(date);
-                                const isSelected = selectedSlots.has(slotKey);
                                 return (
                                     <td 
                                         key={index} 
-                                        style={{ 
-                                            backgroundColor: isOutsideRange ? 'grey' : isSelected ? 'lightgreen' : 'inherit',
-                                            cursor: isOutsideRange ? 'not-allowed' : 'pointer',
-                                        }} 
+                                        className={getSlotClass(slotKey, isOutsideRange)}
+                                        style={{cursor: isOutsideRange ? 'not-allowed' : 'pointer'}} 
                                         onClick={() => !isOutsideRange && toggleSlotSelection(slotKey)}
                                     ></td>
                                 );
