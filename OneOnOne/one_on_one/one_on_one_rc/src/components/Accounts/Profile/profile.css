@@ -20,6 +20,26 @@ label {
     margin-bottom: 5px;
 }
 
+#profile_pic {
+    border-radius: 50%;
+    width: 200px; 
+    height: 200px; 
+    object-fit: cover; 
+    display: block;
+    margin: 0 auto 10px auto;
+}
+
+#upload-profile-pic {
+    display: block;
+    margin: 0 auto;
+    padding: 0.1rem;
+    background-color: rgb(194, 193, 193);
+    color: white;
+    font-size: small;
+    border: none;
+    border-radius: 4px;
+}
+
 input[type="text"],
 input[type="email"] {
     width: 100%;
