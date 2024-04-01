@@ -5,7 +5,7 @@ import { ACCOUNTS_API_URL } from 'constants';
 
 import 'components/Accounts/authentication.css';
 
-import { TextField } from 'components/Form';
+import { TextField } from 'components/Form/Fields/TextField';
 
 function Login() {
     const [username, setUsername] = useState('');
