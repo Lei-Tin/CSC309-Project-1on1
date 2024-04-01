@@ -21,7 +21,6 @@ from .views import *
 app_name = 'calendars'
 
 calendar_list = CalendarViewSet.as_view({
-    'get': 'list',
     'post': 'create'
 })
 calendar_detail = CalendarViewSet.as_view({
@@ -31,6 +30,12 @@ calendar_detail = CalendarViewSet.as_view({
 })
 calendar_finalize = CalendarViewSet.as_view({
     'put': 'finalize'
+})
+owned_calendars = CalendarViewSet.as_view({
+    'get': 'owned_calendars'
+})
+invited_calendars = CalendarViewSet.as_view({
+    'get': 'invited_calendars'
 })
 
 invitee_list = InviteeViewSet.as_view({
@@ -71,6 +76,8 @@ urlpatterns = [
     path('', calendar_list, name='calendar-list'),
     path('<int:pk>', calendar_detail, name='calendar-detail'),
     path('<int:pk>/finalize/', calendar_finalize, name='finalize'),
+    path('owned', owned_calendars, name='owned-calendars'),
+    path('invited', invited_calendars, name='invited-calendars'),
     path('<int:calendar_id>/invitee/', invitee_list, name='invitee-list'),
     path('<int:calendar_id>/invitee/<int:pk>', invitee_detail, name='invitee-detail'),
     path('<int:calendar_id>/availabilities/', availability_list, name='availability-list'),
