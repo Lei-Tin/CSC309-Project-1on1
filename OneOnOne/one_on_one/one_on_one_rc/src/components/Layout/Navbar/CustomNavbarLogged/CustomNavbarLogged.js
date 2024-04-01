@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar, faAddressBook } from '@fortawesome/free-regular-svg-icons';
@@ -6,7 +6,7 @@ import { faCalendar as faCalendarSolid, faAddressBook as faAddressBookSolid } fr
 import './navbar.css';
 import axios from 'axios';
 import { ACCOUNTS_API_URL } from 'constants';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import NotificationDropdown from './Notification/NotificationDropdown';
 import { Outlet } from 'react-router-dom';
 
@@ -41,27 +41,22 @@ function Navbar({ current }) {
       }
     });
 
+  const location = useLocation();
+  const isActive = (path) => {
+    return location.pathname.startsWith(path);
+  };
+
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <Link className="navbar-brand" to="/">1on1</Link>
         <div className="icon-container">
-          {current === 'calendars' ? (
-            <>
-              <Link to="/calendars" title="Calendar"><FontAwesomeIcon className='active' icon={faCalendarSolid} /></Link>
-              <Link to="/contacts" title="Contacts"><FontAwesomeIcon icon={faAddressBook} /></Link>
-            </>
-          ) : current === 'contacts' ? (
-            <>
-              <Link to="/calendars" title="Calendar"><FontAwesomeIcon icon={faCalendar} /></Link>
-              <Link to="/contacts" title="Contacts"><FontAwesomeIcon className='active' icon={faAddressBookSolid} /></Link>
-            </>
-          ) : (
-            <>
-              <Link to="/calendars" title="Calendar"><FontAwesomeIcon icon={faCalendar} /></Link>
-              <Link to="/contacts" title="Contacts"><FontAwesomeIcon icon={faAddressBook} /></Link>
-            </>
-          )}
+          <Link to="/calendars" title="Calendar">
+            <FontAwesomeIcon icon={isActive('/calendars') ? faCalendarSolid : faCalendar} className={isActive('/calendars') ? 'active' : ''} />
+          </Link>
+          <Link to="/contacts" title="Contacts">
+            <FontAwesomeIcon icon={isActive('/contacts') ? faAddressBookSolid : faAddressBook} className={isActive('/contacts') ? 'active' : ''} />
+          </Link>
           <NotificationDropdown />
         </div>
 
