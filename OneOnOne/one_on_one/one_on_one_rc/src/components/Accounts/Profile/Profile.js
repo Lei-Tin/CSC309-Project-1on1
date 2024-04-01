@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
@@ -27,7 +27,6 @@ const Profile = () => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [profilePic, setProfilePic] = useState('');
 
     const [errorMessage, setErrorMessage] = useState({});
     const [isEditing, setIsEditing] = useState(false);
@@ -107,7 +106,7 @@ const Profile = () => {
             <div id="content-wrap">
                 <div className="profile-container">
                     <div className="center">
-                        <img src={profile.profile_picture != '' ? `/media${profile.profile_picture}` : '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
+                        <img src={profile.profile_picture !== '' ? `/media${profile.profile_picture}` : '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
                         <div className="d-flex justify-content-center">
                             <label for="profile-upload" id="upload-profile-pic" className="btn btn-outline-info btn-sm">Upload Profile Picture</label>
                             <input id="profile-upload" type="file" accept="image/*"

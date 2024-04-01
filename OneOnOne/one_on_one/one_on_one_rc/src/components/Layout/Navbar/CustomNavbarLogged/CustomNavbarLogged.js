@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faAddressBook, faBell } from '@fortawesome/free-regular-svg-icons';
-import { faCalendar as faCalendarSolid, faAddressBook as faAddressBookSolid, faCheck, faTimes} from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faAddressBook } from '@fortawesome/free-regular-svg-icons';
+import { faCalendar as faCalendarSolid, faAddressBook as faAddressBookSolid } from '@fortawesome/free-solid-svg-icons';
 import './navbar.css';
 import axios from 'axios';
 import { ACCOUNTS_API_URL, REQUEST_HEADER_CONFIG } from 'constants';
@@ -14,12 +14,7 @@ import { Outlet } from 'react-router-dom';
 function Navbar({ current }) {
   const [username, setUsername] = useState('');
   const [profilePic, setProfilePic] = useState('');
-  const [isNotiDropdownOpen, setIsNotiDropdownOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-
-  const toggleNotiDropdown = () => {
-    setIsNotiDropdownOpen(!isNotiDropdownOpen);
-  };
 
   const toggleProfileDropdown = () => {
     setIsProfileDropdownOpen(!isProfileDropdownOpen);
@@ -72,7 +67,7 @@ function Navbar({ current }) {
             <span className="username">{username}</span>
             <div className="mini-profile">
               {/* For those without a profile a picture, assign default to it */}
-              <img src={profilePic || '/assets/default_profile_pic.png'} alt="User profile" />
+              <img src={profilePic !== '' ? `/media${profilePic}` : '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
             </div>
           </div>
           <div className={`dropdown-menu dropdown-menu-right user-dropdown-menu ${isProfileDropdownOpen ? 'show' : ''}`}>
