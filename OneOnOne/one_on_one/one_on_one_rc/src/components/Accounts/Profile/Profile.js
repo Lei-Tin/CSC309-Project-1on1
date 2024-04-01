@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
-import { ACCOUNTS_API_URL, REQUEST_HEADER_CONFIG } from "constants";
+import { ACCOUNTS_API_URL } from "constants";
 
 import './profile.css';
 
@@ -33,7 +33,11 @@ const Profile = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`${ACCOUNTS_API_URL}/profile/`, REQUEST_HEADER_CONFIG)
+        axios.get(`${ACCOUNTS_API_URL}/profile/`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          })
             .then((response) => {
                 setProfile(response.data);
             })
@@ -67,7 +71,11 @@ const Profile = () => {
             payload.confirm_password = confirmPassword;
         };
 
-        axios.put(`${ACCOUNTS_API_URL}/profile/`, payload, REQUEST_HEADER_CONFIG)
+        axios.put(`${ACCOUNTS_API_URL}/profile/`, payload, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          })
             .then((response) => {
                 setProfile(response.data);
                 setIsEditing(false);
@@ -90,7 +98,11 @@ const Profile = () => {
         const formData = new FormData();
         formData.append('profile_picture', file);
 
-        axios.put(`${ACCOUNTS_API_URL}/profile/`, formData, REQUEST_HEADER_CONFIG)
+        axios.put(`${ACCOUNTS_API_URL}/profile/`, formData, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          })
             .then((response) => {
                 // Force a component refresh
                 setProfile(response.data);
@@ -108,7 +120,7 @@ const Profile = () => {
                     <div className="center">
                         <img src={profile.profile_picture !== '' ? `/media${profile.profile_picture}` : '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
                         <div className="d-flex justify-content-center">
-                            <label for="profile-upload" id="upload-profile-pic" className="btn btn-outline-info btn-sm">Upload Profile Picture</label>
+                            <label htmlFor="profile-upload" id="upload-profile-pic" className="btn btn-outline-info btn-sm">Upload Profile Picture</label>
                             <input id="profile-upload" type="file" accept="image/*"
                                 onChange={(event) => {
                                     // Make the API call to the backend to upload the image

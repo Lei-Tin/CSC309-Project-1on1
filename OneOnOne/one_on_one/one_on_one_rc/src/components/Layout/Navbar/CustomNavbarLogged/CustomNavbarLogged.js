@@ -5,10 +5,14 @@ import { faCalendar, faAddressBook } from '@fortawesome/free-regular-svg-icons';
 import { faCalendar as faCalendarSolid, faAddressBook as faAddressBookSolid } from '@fortawesome/free-solid-svg-icons';
 import './navbar.css';
 import axios from 'axios';
-import { ACCOUNTS_API_URL, REQUEST_HEADER_CONFIG } from 'constants';
+import { ACCOUNTS_API_URL } from 'constants';
 import { useNavigate } from 'react-router-dom';
 import NotificationDropdown from './Notification/NotificationDropdown';
 import { Outlet } from 'react-router-dom';
+
+function Logout() {
+  localStorage.setItem('token', '');
+}
 
 
 function Navbar({ current }) {
@@ -21,12 +25,17 @@ function Navbar({ current }) {
   };
 
   const navigate = useNavigate();
-  axios.get(`${ACCOUNTS_API_URL}/profile/`, REQUEST_HEADER_CONFIG)
+  axios.get(`${ACCOUNTS_API_URL}/profile/`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  })
     .then((response) => {
       setUsername(response.data.user.username);
       setProfilePic(response.data.profile_picture);
     })
     .catch((error) => {
+      console.log(error);
       if (error.response && error.response.status === 401) {
         navigate('/unauthorized');
       }
@@ -72,7 +81,7 @@ function Navbar({ current }) {
           </div>
           <div className={`dropdown-menu dropdown-menu-right user-dropdown-menu ${isProfileDropdownOpen ? 'show' : ''}`}>
             <Link className="dropdown-item" to="/accounts/profile" onClick={toggleProfileDropdown}>Profile</Link>
-            <Link className="dropdown-item" to="/">Logout</Link>
+            <Link className="dropdown-item" to="/" onClick={Logout}>Logout</Link>
           </div>
         </div>
       </nav>

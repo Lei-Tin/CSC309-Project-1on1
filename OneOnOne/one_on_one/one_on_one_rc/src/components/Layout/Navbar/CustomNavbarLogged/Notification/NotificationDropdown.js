@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { ACCOUNTS_API_URL, CALENDARS_API_URL, CONTACTS_API_URL, REQUEST_HEADER_CONFIG } from 'constants';
+import { ACCOUNTS_API_URL, CALENDARS_API_URL, CONTACTS_API_URL } from 'constants';
 import { FriendNotificationItem, ReminderNotificationItem, InviteNotificationItem } from './NotificationItem';
 
 const NotificationDropdown = () => {
@@ -17,7 +17,11 @@ const NotificationDropdown = () => {
   const handleFriendSubmit = (username, action) => {
     axios.post(`${CONTACTS_API_URL}/friendRequests/request/`,
       { username: username, action: action },
-      REQUEST_HEADER_CONFIG)
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
       .then(() => {
         setRequesterUsernames(requesterUsernames.filter((requester) => requester !== username));
         setIsMoreFriendReq(requesterUsernames.length > 0);
@@ -25,7 +29,11 @@ const NotificationDropdown = () => {
   };
 
   useEffect(() => {
-    axios.get(`${CONTACTS_API_URL}/friendRequests/`, REQUEST_HEADER_CONFIG)
+    axios.get(`${CONTACTS_API_URL}/friendRequests/`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
       .then((response) => {
         const friendRequests = response.data;
         let extractUsernames = friendRequests.map((request) => request.requester_username);
