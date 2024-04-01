@@ -145,9 +145,19 @@ class CalendarViewSet(viewsets.ModelViewSet):
     serializer_class = CalendarSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        user = self.request.user
-        return Calendar.objects.filter(owner=user)
+    @action(detail=False, methods=['get'], url_path='owned')
+    def owned_calendars(self, request):
+        queryset = Calendar.objects.filter(owner=request.user)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'], url_path='invited')
+    def invited_calendars(self, request):
+        invitees = Invitee.objects.filter(invitee=request.user)
+        calendar_id = [invitee.calendar for invitee in invitees]
+        # queryset = Calendar.objects.filter(id__in=calendar_id)
+        serializer = self.get_serializer(calendar_id, many=True)
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user, finalized=False)
@@ -516,6 +526,7 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     # TODO: how to custom handle edit
 
 
+
 def calculate_meetings(calendar):
     owner_availabilities = Availability.objects.filter(calendar=calendar, user=calendar.owner)
     invitee_availabilities = Availability.objects.filter(calendar=calendar).exclude(user=calendar.owner)
@@ -540,6 +551,3 @@ def calculate_meetings(calendar):
 
     return meetings_to_schedule
 
-# TODO: Maybe consider adding views that are used as API endpoints to fetch information like:
-# Invited user's statuses with the calendar
-# Fetching the suggested schedule's API
