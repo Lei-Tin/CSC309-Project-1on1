@@ -7,6 +7,8 @@ import 'components/Accounts/authentication.css';
 
 import { TextField } from 'components/Form/Fields/TextField';
 
+import { useUser } from 'contexts/UserContext';
+
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -14,13 +16,16 @@ function Login() {
     const [nonFieldError, setNonFieldError] = useState('');
     const navigate = useNavigate();
 
+    const { login, logout } = useUser();
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const payload = { username, password };
         axios.post(`${ACCOUNTS_API_URL}/login/`, payload)
         .then((response) => {
             const token = response.data.token;
-            localStorage.setItem('token', token);
+            login(token);
             // TODO: Redirect to calendar page
             navigate('/accounts/profile/');
         })
@@ -47,7 +52,7 @@ function Login() {
         }).catch(() => {
             // This is when we failed to verify the token
             // Probably because the token timed out
-            localStorage.removeItem('token');
+            logout(); 
         });
     }
 

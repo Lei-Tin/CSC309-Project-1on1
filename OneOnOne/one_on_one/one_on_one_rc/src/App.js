@@ -15,34 +15,46 @@ import Footer from 'components/Layout/Footer';
 import NotFound from './components/ErrorPages/NotFound';
 import Unauthorized from './components/ErrorPages/Unauthorized';
 
-import { UserProvider } from 'contexts/UserContext';
+import { useUser } from 'contexts/UserContext';
 
 function App() {
-  return (
-    <UserProvider>
-      <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<IndexPage />} />
+  const { isLoggedIn } = useUser();
 
-        <Route path="/" element={<CustomNavbar />}>
-          <Route path="accounts/login" element={<Login />} />
-          <Route path="accounts/register" element={<Register />} />
-          <Route path="unauthorized" element={<Unauthorized />}></Route>
-          <Route path='*' element={<NotFound />}></Route>
-        </Route>
-       {/* TODO: Implement all elements that requires login and comment out below code block */}
-          <Route path="/" element={<CustomNavbarLogged />}>
-            <Route path="accounts/profile" element={<Profile />} />
-            <Route path="contacts" index element={<Contacts />} />
-            {/* <Route path="calendars">
+  return (
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<IndexPage />} />
+
+      {/* Use a simple method of detecting if we are logged in or not */}
+      {/* Skip the axios check because they will be done anyways when you load the actual pages */}
+      {isLoggedIn ? (
+          <>
+            <Route path="/" element={<CustomNavbarLogged />}>
+              <Route path="accounts/profile" element={<Profile />} />
+              <Route path="contacts" index element={<Contacts />} />
+
+              {/* <Route path="calendars">
               <Route index element={<Calendars />} />
-              <Route path=":calendarID" element={<CalendarsDetail/>} />
-            </Route> */}
-          </Route>
-      </Routes>
-      <Footer/>
-      </BrowserRouter>
-    </UserProvider>
+              <Route path=":calendarID" element={<CalendarsDetail/>} */}
+
+              <Route path="unauthorized" element={<Unauthorized />}></Route>
+              <Route path='*' element={<NotFound />}></Route>
+            </Route>
+          </>
+        ) : (
+          <>
+            <Route path="/" element={<CustomNavbar />}>
+              <Route path="accounts/login" element={<Login />} />
+              <Route path="accounts/register" element={<Register />} />
+              <Route path="unauthorized" element={<Unauthorized />}></Route>
+              <Route path='*' element={<NotFound />}></Route>
+            </Route>
+          </>
+        )
+      }
+    </Routes>
+    <Footer/>
+    </BrowserRouter>
   );
 }
 

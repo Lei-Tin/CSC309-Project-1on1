@@ -48,16 +48,15 @@ const NotificationDropdown = () => {
 
   return (
     <div className="dropdown">
-      <a className="dropdown-toggle"
+      <button className="dropdown-toggle"
         title="Alerts"
-        role="button"
         id="dropdownMenuLink"
         data-toggle="dropdown"
         aria-haspopup="true"
         aria-expanded={isNotifOpen}
         onClick={toggleNotificationDropdown}>
         <FontAwesomeIcon icon={faBell} className="icon" />
-      </a>
+      </button>
       <div className={`dropdown-menu dropdown-menu-right ${isNotifOpen ? 'show' : ''}`}
         aria-labelledby="dropdownMenuLink"
       >

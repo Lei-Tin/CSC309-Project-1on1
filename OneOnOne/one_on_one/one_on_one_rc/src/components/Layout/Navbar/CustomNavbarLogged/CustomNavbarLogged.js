@@ -6,15 +6,11 @@ import { faCalendar as faCalendarSolid, faAddressBook as faAddressBookSolid } fr
 import './navbar.css';
 import axios from 'axios';
 import { ACCOUNTS_API_URL } from 'constants';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import NotificationDropdown from './Notification/NotificationDropdown';
 import { Outlet } from 'react-router-dom';
 
 import { useUser } from 'contexts/UserContext';
-
-function Logout() {
-  localStorage.removeItem('token');
-}
 
 
 export default function NavBar() {
@@ -22,11 +18,12 @@ export default function NavBar() {
   const { profilePic, changeProfilePic } = useUser();
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
+  const { logout } = useUser();
+
   const toggleProfileDropdown = () => {
     setIsProfileDropdownOpen(!isProfileDropdownOpen);
   };
 
-  const navigate = useNavigate();
   axios.get(`${ACCOUNTS_API_URL}/profile/`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -39,7 +36,8 @@ export default function NavBar() {
     .catch((error) => {
       console.log(error);
       if (error.response && error.response.status === 401) {
-        navigate('/unauthorized');
+        // Do nothing
+        // Navbar is not the one that will redirect you
       }
     });
 
@@ -79,7 +77,7 @@ export default function NavBar() {
           </div>
           <div className={`dropdown-menu dropdown-menu-right user-dropdown-menu ${isProfileDropdownOpen ? 'show' : ''}`}>
             <Link className="dropdown-item" to="/accounts/profile" onClick={toggleProfileDropdown}>Profile</Link>
-            <Link className="dropdown-item" to="/" onClick={Logout}>Logout</Link>
+            <Link className="dropdown-item" to="/" onClick={logout}>Logout</Link>
           </div>
         </div>
       </nav>

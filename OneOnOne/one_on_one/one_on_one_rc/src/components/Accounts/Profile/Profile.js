@@ -42,7 +42,7 @@ const Profile = () => {
                     navigate('/unauthorized');
                 }
             });
-    }, [localStorage]);
+    }, [navigate]);
 
     const toggleEdit = () => {
         setIsEditing(!isEditing);
