@@ -8,6 +8,7 @@ import axios from 'axios';
 import { ACCOUNTS_API_URL, REQUEST_HEADER_CONFIG } from 'constants';
 import { useNavigate } from 'react-router-dom';
 import NotificationDropdown from './Notification/NotificationDropdown';
+import { Outlet } from 'react-router-dom';
 
 
 function Navbar({ current }) {
@@ -75,12 +76,12 @@ function Navbar({ current }) {
             </div>
           </div>
           <div className={`dropdown-menu dropdown-menu-right user-dropdown-menu ${isProfileDropdownOpen ? 'show' : ''}`}>
-            <Link className="dropdown-item" to="/profile">Profile</Link>
-            <a className="dropdown-item" href="/#">Settings</a>
+            <Link className="dropdown-item" to="/accounts/profile">Profile</Link>
             <Link className="dropdown-item" to="/">Logout</Link>
           </div>
         </div>
       </nav>
+      <Outlet />
     </>
   );
 }

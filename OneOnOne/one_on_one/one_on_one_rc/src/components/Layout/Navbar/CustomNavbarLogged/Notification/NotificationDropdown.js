@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faBell } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { ACCOUNTS_API_URL, CALENDARS_API_URL, CONTACTS_API_URL, REQUEST_HEADER_CONFIG } from 'constants';
 import { FriendNotificationItem, ReminderNotificationItem, InviteNotificationItem } from './NotificationItem';
@@ -8,19 +8,19 @@ import { FriendNotificationItem, ReminderNotificationItem, InviteNotificationIte
 const NotificationDropdown = () => {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [requesterUsernames, setRequesterUsernames] = useState([]);
-  const [isNotification, setIsNotification] = useState(false);
+  const [isMoreFriendReq, setIsMoreFriendReq] = useState(false);
 
   const toggleNotificationDropdown = () => {
     setIsNotifOpen(!isNotifOpen);
   };
 
-  const handleSubmit = (username, action) => {
+  const handleFriendSubmit = (username, action) => {
     axios.post(`${CONTACTS_API_URL}/friendRequests/request/`,
       { username: username, action: action },
       REQUEST_HEADER_CONFIG)
       .then(() => {
         setRequesterUsernames(requesterUsernames.filter((requester) => requester !== username));
-        setIsNotification(requesterUsernames.length > 0);
+        setIsMoreFriendReq(requesterUsernames.length > 0);
       })
   };
 
@@ -30,7 +30,7 @@ const NotificationDropdown = () => {
         const friendRequests = response.data;
         let extractUsernames = friendRequests.map((request) => request.requester_username);
         setRequesterUsernames(extractUsernames);
-        setIsNotification(extractUsernames.length > 0);
+        setIsMoreFriendReq(extractUsernames.length > 0);
       })
       .catch((error) => {
         console.log(error);
@@ -53,13 +53,13 @@ const NotificationDropdown = () => {
       <div className={`dropdown-menu dropdown-menu-right ${isNotifOpen ? 'show' : ''}`}
         aria-labelledby="dropdownMenuLink"
       >
-        {requesterUsernames.length > 0 ? (
+        {isMoreFriendReq ? (
           requesterUsernames.map((username, index) => (
             <FriendNotificationItem
               key={index}
               username={username}
-              onAccept={() => handleSubmit(username, true)}
-              onDecline={() => handleSubmit(username, false)}
+              onAccept={() => handleFriendSubmit(username, true)}
+              onDecline={() => handleFriendSubmit(username, false)}
             />
           ))
         ) : (
