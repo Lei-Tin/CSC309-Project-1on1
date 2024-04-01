@@ -49,16 +49,6 @@ const Profile = () => {
         setIsEditing(!isEditing);
     };
 
-    const handleUpload = (event) => {
-        const file = event.target.files[0];
-        if (!file) {
-            console.log("No file selected");
-            return;
-        }
-
-    }
-
-
     const handleSubmit = () => {
         // Based on the out backend django API, if the field value is blank, 
         // then we should not send it in the payload
