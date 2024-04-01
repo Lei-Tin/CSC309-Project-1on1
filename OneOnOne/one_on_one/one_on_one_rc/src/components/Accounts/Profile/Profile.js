@@ -43,7 +43,7 @@ const Profile = () => {
                     navigate('/unauthorized');
                 }
             });
-    }, []);
+    }, [localStorage]);
 
     const toggleEdit = () => {
         setIsEditing(!isEditing);
