@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import HomePage from 'components/HomePage';
+import IndexPage from 'components/IndexPage';
 
 import Login from 'components/Accounts/Login';
 import Register from 'components/Accounts/Register';
@@ -22,7 +22,7 @@ function App() {
     <UserProvider>
       <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<IndexPage />} />
 
         <Route path="/" element={<CustomNavbar />}>
           <Route path="accounts/login" element={<Login />} />
