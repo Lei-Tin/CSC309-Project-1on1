@@ -31,7 +31,6 @@
 }
 
 .profile label {
-    display: block;
     margin-bottom: 5px;
 }
 
@@ -45,8 +44,8 @@
 }
 
 .profile #upload-profile-pic {
-    display: block;
     margin: 0 auto;
+    text-align: center;
 }
 
 .profile input[type="text"],
@@ -57,6 +56,10 @@
     border-radius: 4px;
     border: 1px solid #ddd;
     box-sizing: border-box; /* Makes sure padding does not affect the overall width */
+}
+
+.profile input[type="file"] {
+    display: none;
 }
 
 .profile button[type="submit"] {

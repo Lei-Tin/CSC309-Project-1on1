@@ -103,31 +103,29 @@ const Profile = () => {
 
         axios.put(`${ACCOUNTS_API_URL}/profile/`, formData, REQUEST_HEADER_CONFIG)
             .then((response) => {
-                // Strip the profile_picture to only contain the filename
-                var profile_pic_filename = response.data.profile_picture.split('/').pop();
-                
-                setProfilePic(`${process.env.PUBLIC_URL}/media/profile_picture/${profile_pic_filename}`);
+                // Force a component refresh
+                setProfile(response.data);
             })
             .catch((error) => {
                 console.log(error);
             }
-            );
+        );
     }
-
 
     return (
         <div className="profile">
             <div id="content-wrap">
                 <div className="profile-container">
                     <div className="center">
-                        <img src={profilePic || '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
-                        {/* <button className="btn btn-outline-info btn-sm" id="upload-profile-pic" onClick={handleUpload}>Upload Profile Picture</button> */}
-                        <input id="upload" type="file" accept="image/*"
-                            onChange={(event) => {
-                                // console.log(event.target.files[0]);
-                                // Make the API call to the backend to upload the image
-                                updateProfilePic(event.target.files[0]);
+                        <img src={profile.profile_picture != '' ? `/media${profile.profile_picture}` : '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
+                        <div className="d-flex justify-content-center">
+                            <label for="profile-upload" id="upload-profile-pic" className="btn btn-outline-info btn-sm">Upload Profile Picture</label>
+                            <input id="profile-upload" type="file" accept="image/*"
+                                onChange={(event) => {
+                                    // Make the API call to the backend to upload the image
+                                    updateProfilePic(event.target.files[0]);
                             }} />
+                        </div>
                     </div>
                     <div>
                         <h2>{profile.user.username}</h2>
