@@ -11,7 +11,7 @@ import { TextFieldProfile } from "components/Form/Fields/TextField";
 
 
 const Profile = () => {
-    const { profilePic, changeProfilePic } = useUser();
+    const { changeProfilePic } = useUser();
 
     const [profile, setProfile] = useState({
         user: { id: '', username: '', first_name: '', last_name: '', email: '' },
