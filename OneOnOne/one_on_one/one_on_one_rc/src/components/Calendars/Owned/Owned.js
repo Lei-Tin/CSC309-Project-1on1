@@ -2,8 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import 'components/Calendars/calendar.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import PopupModal from 'components/Calendars/Create/Create';
-import InviteeListPopup from 'components/Calendars/Invite/Invite';
+import PopupModal from 'components/Calendars/Create';
+import InviteeListPopup from 'components/Calendars/Invite';
 import { CALENDARS_API_URL } from 'constants';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

@@ -7,7 +7,7 @@ import Register from 'components/Accounts/Register';
 import Profile from 'components/Accounts/Profile';
 import Contacts from 'components/Contacts/';
 
-import SelectAvailability from 'components/Calendars/Availability/SelectAvailability';
+import { SelectAvailability } from 'components/Calendars/Availability';
 
 import Owned from 'components/Calendars/Owned';
 
