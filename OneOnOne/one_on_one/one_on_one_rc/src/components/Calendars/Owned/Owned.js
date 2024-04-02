@@ -56,22 +56,22 @@ const CalendarList = () => {
         .catch(error => console.error('Error creating calendar', error));
     };
 
-    const handleEdit = (calendar) => {
-        setEditingId(calendar.id);
-        setEditValue(calendar.name); // Pre-populate the input with the current name
-    };
-
-    const handleNameChange = (e) => {
-        setEditValue(e.target.value);
-    };
-
-    const handleKeyPress = (e, calendarId) => {
-        if (e.key === 'Enter') {
-            e.preventDefault(); // Prevent form submission or any default action
-            onUpdate(calendarId, editValue); // Assuming onUpdate is a prop method to update the calendar
-            setEditingId(null); // Exit editing mode
-        }
-    };
+//    const handleEdit = (calendar) => {
+//        setEditingId(calendar.id);
+//        setEditValue(calendar.name); // Pre-populate the input with the current name
+//    };
+//
+//    const handleNameChange = (e) => {
+//        setEditValue(e.target.value);
+//    };
+//
+//    const handleKeyPress = (e, calendarId) => {
+//        if (e.key === 'Enter') {
+//            e.preventDefault(); // Prevent form submission or any default action
+//            onUpdate(calendarId, editValue); // Assuming onUpdate is a prop method to update the calendar
+//            setEditingId(null); // Exit editing mode
+//        }
+//    };
 
     const handleDelete = (calendarId) => {
         if (window.confirm('Are you sure you want to delete this calendar?')) {
