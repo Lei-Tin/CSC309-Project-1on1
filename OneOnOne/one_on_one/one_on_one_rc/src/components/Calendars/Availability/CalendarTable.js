@@ -12,9 +12,8 @@ const generateWeekDays = (weekStartDate) => {
     return dates;
 };
 
-const CalendarTable = ({ weekStartDate, actualStartDate, actualEndDate, preference }) => {
+const CalendarTable = ({ selectedSlots, setSelectedSlots, weekStartDate, actualStartDate, actualEndDate, preference }) => {
     const weekDays = generateWeekDays(weekStartDate);
-    const [selectedSlots, setSelectedSlots] = useState(new Map());
 
     // Helper function to determine if a date should be greyed out
     const isDateOutOfRange = (date) => {

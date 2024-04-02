@@ -7,6 +7,8 @@ import Register from 'components/Accounts/Register';
 import Profile from 'components/Accounts/Profile'; 
 import Contacts from 'components/Contacts/';
 
+import SelectAvailability from 'components/Calendars/Availability/SelectAvailability';
+
 import CustomNavbar from 'components/Layout/Navbar/CustomNavbar';
 import CustomNavbarLogged from 'components/Layout/Navbar/CustomNavbarLogged';
 
@@ -36,6 +38,8 @@ function App() {
               {/* <Route path="calendars">
               <Route index element={<Calendars />} />
               <Route path=":calendarID" element={<CalendarsDetail/>} */}
+
+              <Route path="calendars/:calendar_id/availabilities" element={<SelectAvailability />} />
 
               <Route path="unauthorized" element={<Unauthorized />}></Route>
               <Route path='*' element={<NotFound />}></Route>

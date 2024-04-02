@@ -1,5 +1,8 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+import { CALENDARS_API_URL } from 'constants';
 import CalendarTable from "./CalendarTable";
 import "components/Calendars/calendar.css";
 
@@ -36,14 +39,45 @@ function calculateWeekRanges(startDate, endDate) {
     return weekRanges;
 }
 
+function GetCalendarDetails() {
+    let { calendar_id } = useParams();
+    const [calendarDetails, setCalendarDetails] = useState({
+        owner: '',
+        name: '',
+        start_date: '',
+        end_date: '',
+        finalized: false,
+    });
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        axios.get(`${CALENDARS_API_URL}/${calendar_id}/`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        .then((response) => {
+            setCalendarDetails(response.data);
+        })
+        .catch((error) => {
+            if (error.response && error.response.status === 401) {
+                navigate('/unauthorized');
+            }
+        });
+    }, [navigate]);
 
+    return { calendarDetails };
+}
 
+const FormatAvailabilities = (selectedSlots) =>{
+    // Check if selecteSlots is empty
+    if (selectedSlots.size === 0) {
+        alert("Please select at least one availability");
+        return;
+    }
+}
 
 function SelectSchedule() {
-    const formatDate = ([startDate, endDate]) => {
-        return `${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
-    };
-
     const meetingName = "Meeting Name"; // Change this to the actual meeting name
     const actualStartDate = '2024-04-03T00:00:00'; // Change this to the actual start date
     const actualEndDate = '2024-04-25T00:00:00'; // Change this to the actual end date
@@ -61,6 +95,16 @@ function SelectSchedule() {
     const handlePreferenceChange = (event) => {
         setSelectedPreference(event.target.value);
     }
+
+    const [selectedSlots, setSelectedSlots] = useState(new Map());
+
+    const formatDate = ([startDate, endDate]) => {
+        return `${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+    };
+
+    const handleConfirmClick = () => {
+        FormatAvailabilities(selectedSlots);
+    };
 
     return (
         <section className="jumbotron calendar-table-list">
@@ -85,9 +129,9 @@ function SelectSchedule() {
                 </select>
             </div>
 
-            <CalendarTable weekStartDate={selectedDate[0]} actualStartDate={new Date(actualStartDate)} actualEndDate={new Date(actualEndDate)} preference={selectedPreference}/>
+            <CalendarTable selectedSlots={selectedSlots} setSelectedSlots={setSelectedSlots} weekStartDate={selectedDate[0]} actualStartDate={new Date(actualStartDate)} actualEndDate={new Date(actualEndDate)} preference={selectedPreference}/>
 
-            <a className="btn btn-primary">Confirm</a>
+            <a className="btn btn-primary" onClick={handleConfirmClick}>Confirm</a>
         </section>
     );
 }
