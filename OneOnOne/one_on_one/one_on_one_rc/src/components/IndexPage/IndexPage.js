@@ -2,8 +2,23 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import 'components/style.css'; 
 
+import { useNavigate } from 'react-router-dom';
+import { useUser } from 'contexts/UserContext';
+import { useEffect } from 'react';
 
 function HomePage() {
+  const navigate = useNavigate();  
+  const { isLoggedIn } = useUser();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/accounts/profile/');
+    } else {
+      localStorage.removeItem('token'); 
+    }
+  }, [isLoggedIn, navigate]);
+  
+
   return (
     <main>
       <div id="home-page">

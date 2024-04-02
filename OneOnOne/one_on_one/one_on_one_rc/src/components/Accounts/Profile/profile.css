@@ -1,27 +1,56 @@
 
 
-.profile-container {
+.profile .profile-container {
+    width: 80%;
+    margin: 10px auto;
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    /* Make the shadow radius larger */
+    box-shadow: 0 2px 16px rgba(0,0,0,0.1);
 }
 
-h2 {
+.profile h2 {
     text-align: center;
 }
 
-.form-group {
+.profile .form-group {
     margin-bottom: 15px;
 }
 
-label {
-    display: block;
+.profile .error {
+    color: red;
+    margin-bottom: 10px;
+}
+
+.profile .password-container {
+    border-radius: 8px;
+    border-color: #007bff;
+    padding: 20px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+}
+
+.profile label {
     margin-bottom: 5px;
 }
 
-input[type="text"],
-input[type="email"] {
+.profile #profile_pic {
+    border-radius: 50%;
+    width: 200px; 
+    height: 200px; 
+    object-fit: cover; 
+    display: block;
+    margin: 0 auto 10px auto;
+}
+
+.profile #upload-profile-pic {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.profile input[type="text"],
+.profile input[type="email"],
+.profile input[type="password"] {
     width: 100%;
     padding: 10px;
     border-radius: 4px;
@@ -29,7 +58,11 @@ input[type="email"] {
     box-sizing: border-box; /* Makes sure padding does not affect the overall width */
 }
 
-button[type="submit"] {
+.profile input[type="file"] {
+    display: none;
+}
+
+.profile button[type="submit"] {
     width: 100%;
     background-color: #007bff;
     color: white;
@@ -40,6 +73,6 @@ button[type="submit"] {
     font-size: 16px;
 }
 
-button[type="submit"]:hover {
+.profile button[type="submit"]:hover {
     background-color: #0056b3;
 }

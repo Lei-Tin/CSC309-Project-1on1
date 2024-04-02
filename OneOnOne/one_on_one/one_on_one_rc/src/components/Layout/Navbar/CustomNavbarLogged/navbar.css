@@ -1,0 +1,12 @@
+.active {
+    color: #000;
+}
+
+.icon {
+    font-size: 1.4rem;
+}
+
+#dropdownMenuLink {
+    border-width: 0;
+    background-color: transparent;
+}

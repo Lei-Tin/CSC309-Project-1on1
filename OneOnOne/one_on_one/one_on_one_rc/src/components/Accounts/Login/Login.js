@@ -5,7 +5,9 @@ import { ACCOUNTS_API_URL } from 'constants';
 
 import 'components/Accounts/authentication.css';
 
-import { TextField } from 'components/Form';
+import { TextField } from 'components/Form/Fields/TextField';
+
+import { useUser } from 'contexts/UserContext';
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -14,15 +16,18 @@ function Login() {
     const [nonFieldError, setNonFieldError] = useState('');
     const navigate = useNavigate();
 
+    const { login, logout } = useUser();
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const payload = { username, password };
         axios.post(`${ACCOUNTS_API_URL}/login/`, payload)
         .then((response) => {
             const token = response.data.token;
-            localStorage.setItem('token', token);
+            login(token);
             // TODO: Redirect to calendar page
-            navigate('/');
+            navigate('/accounts/profile/');
         })
         .catch((error) => {
             if (error.response) {
@@ -33,14 +38,32 @@ function Login() {
         });
     };
 
+    // On load, check if the user is already logged in
+    // If logged in, then redirect to the profile page
+    if (localStorage.getItem('token') !== null) {
+        // Use axios to verify if the token is valid
+        axios.get(`${ACCOUNTS_API_URL}/profile/`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        }).then(() => {
+            // TODO: Redirect to calendar page
+            navigate('/accounts/profile/');
+        }).catch(() => {
+            // This is when we failed to verify the token
+            // Probably because the token timed out
+            logout(); 
+        });
+    }
+
     return (
         <main>
             <section className="jumbotron text-center">
                 <div className="form-container">
                     <h1 className="display-4">Login</h1>
                     <form className="authentication-form" id="login-form" onSubmit={handleSubmit}>
-                        <TextField type="text" label="Username" value={username} onChange={setUsername} />
-                        <TextField type="password" label="Password" value={password} onChange={setPassword} />
+                        <TextField className="txt_field" type="text" label="Username" value={username} onChange={setUsername} />
+                        <TextField className="txt_field" type="password" label="Password" value={password} onChange={setPassword} />
                         <span className="error_message">{nonFieldError}</span>
                         <div className="pass">Forgot Password?</div>
                         <input type="submit" value="Login" />

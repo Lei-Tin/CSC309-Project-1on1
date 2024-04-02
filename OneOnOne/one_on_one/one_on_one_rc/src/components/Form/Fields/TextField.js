@@ -1,12 +1,21 @@
-function TextField({ type, label, value, onChange, errorMessage})
+export function TextField({ className, type, label, value, onChange, errorMessage})
 {
     return (
-        <div className="txt_field">
-            <input type={type} required value={value} onChange={(e) => onChange(e.target.value)} />
+        <div className={className}>
+            <input type={type} id={label} required value={value} onChange={(e) => onChange(e.target.value)} />
             <span className="error_message">{errorMessage}</span>
-            <label>{label}</label>
+            <label htmlFor={label}>{label}</label>
         </div>
     );
 }
 
-export default TextField;
+export function TextFieldProfile({ className, type, label, value, onChange, errorMessage})
+{
+    return (
+        <div className={className}>
+            <label htmlFor={label}>{label}:</label>
+            <input type={type} id={label} required value={value} onChange={(e) => onChange(e.target.value)} />
+            {errorMessage && <span className="error_message">{errorMessage}</span>}
+        </div>
+    );
+}
