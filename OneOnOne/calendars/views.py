@@ -455,7 +455,7 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         calendar_id = self.kwargs.get('calendar_id')
         calendar = get_object_or_404(Calendar, pk=calendar_id)
-        return self.queryset.filter(calendar=calendar)
+        return self.queryset.filter(user=self.request.user, calendar=calendar)
 
     def perform_create(self, serializer):
         # Extract `calendar_id` from the URL
@@ -474,8 +474,11 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
         self.check_object_permissions(self.request, obj)
         return obj
 
-    # TODO: non creators of an availability may be able to delete others
-    # How to modify so that there are method specific permissions
+    @action(detail=False, methods=['delete'], url_path='bulk-delete')
+    def bulk_delete(self, request, calendar_id=None):
+        calendar = get_object_or_404(Calendar, pk=calendar_id)
+        Availability.objects.filter(calendar=calendar, user=request.user).delete()
+        return Response(status=status.HTTP_200_OK)
 
 
 class ScheduleViewSet(viewsets.ModelViewSet):
