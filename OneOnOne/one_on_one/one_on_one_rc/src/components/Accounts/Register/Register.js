@@ -46,8 +46,25 @@ function Register() {
                 setErrorMessage(error.response.data);
             }
         });
-
     };
+
+    // On load, check if the user is already logged in
+    // If logged in, then redirect to the profile page
+    if (localStorage.getItem('token') !== null) {
+        // Use axios to verify if the token is valid
+        axios.get(`${ACCOUNTS_API_URL}/profile/`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        }).then(() => {
+            // TODO: Redirect to calendar page
+            navigate('/accounts/profile/');
+        }).catch(() => {
+            // This is when we failed to verify the token
+            // Probably because the token timed out
+            localStorage.removeItem('token');
+        });
+    }
 
     return (
         <main>
@@ -55,12 +72,12 @@ function Register() {
                 <div className="form-container">
                     <h1 className="display-4">Register</h1>
                     <form className="authentication-form" id="register-form" onSubmit={handleSubmit}>
-                        <TextField type="text" label="Username" value={username} onChange={setUsername} errorMessage={errorMessage.username} />
-                        <TextField type="text" label="First Name" value={firstName} onChange={setFirstName} errorMessage={errorMessage.first_name} />
-                        <TextField type="text" label="Last Name" value={lastName} onChange={setLastName} errorMessage={errorMessage.last_name} />
-                        <TextField type="email" label="Email" value={email} onChange={setEmail} errorMessage={errorMessage.email} />
-                        <TextField type="password" label="Password" value={password} onChange={setPassword} errorMessage={errorMessage.password} />
-                        <TextField type="password" label="Confirm Password" value={confirmPassword} onChange={setConfirmPassword} errorMessage={errorMessage.non_field_errors} />
+                        <TextField className="txt_field" type="text" label="Username" value={username} onChange={setUsername} errorMessage={errorMessage.username} />
+                        <TextField className="txt_field" type="text" label="First Name" value={firstName} onChange={setFirstName} errorMessage={errorMessage.first_name} />
+                        <TextField className="txt_field" type="text" label="Last Name" value={lastName} onChange={setLastName} errorMessage={errorMessage.last_name} />
+                        <TextField className="txt_field" type="email" label="Email" value={email} onChange={setEmail} errorMessage={errorMessage.email} />
+                        <TextField className="txt_field" type="password" label="Password" value={password} onChange={setPassword} errorMessage={errorMessage.password} />
+                        <TextField className="txt_field" type="password" label="Confirm Password" value={confirmPassword} onChange={setConfirmPassword} errorMessage={errorMessage.non_field_errors} />
                         <div className="form-check">
                             <label htmlFor="consent">I agree to the terms and conditions</label>
                             <input type="checkbox" id="consent" checked={consent} onChange={(e) => setConsent(e.target.checked)} />

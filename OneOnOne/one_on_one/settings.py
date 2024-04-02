@@ -93,7 +93,7 @@ ROOT_URLCONF = 'one_on_one.urls'
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
-MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media/')
+MEDIA_ROOT = os.path.join(PROJECT_PATH, 'one_on_one_rc/public/media/')
 
 TEMPLATE_DIRS = [
     os.path.join(PROJECT_PATH, 'templates'),
