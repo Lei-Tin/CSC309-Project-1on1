@@ -10,7 +10,7 @@
     width: 60%;
     display: flex;
     position: relative;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     box-sizing: border-box;
     background-color: #fff;
@@ -22,6 +22,11 @@
 
 .contacts-invite-button {
     max-width: 12rem;
+}
+
+.inactive {
+    background-color: rgba(0,0,0,.6);
+
 }
 
 .contacts-profile-picture {

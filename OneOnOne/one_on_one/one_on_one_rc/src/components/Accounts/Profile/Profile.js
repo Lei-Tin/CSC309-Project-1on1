@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
-import { ACCOUNTS_API_URL } from "constants";
+import { ACCOUNTS_API_URL, DEFAULT_PROFILE_PIC } from "constants";
 
 import './profile.css';
 
@@ -116,7 +116,7 @@ const Profile = () => {
                 <div className="profile-container">
                     <div className="center">
                         <img src={profile.profile_picture !== null ?
-                            `/media${profile.profile_picture}` : '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
+                            `/media${profile.profile_picture}` : DEFAULT_PROFILE_PIC} alt="User profile" id="profile_pic" />
                         <div className="d-flex justify-content-center">
                             <label htmlFor="profile-upload" id="upload-profile-pic" className="btn btn-outline-info btn-sm">Upload Profile Picture</label>
                             <input id="profile-upload" type="file" accept="image/*"
