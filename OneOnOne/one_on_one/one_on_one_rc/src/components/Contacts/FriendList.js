@@ -4,8 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { DEFAULT_PROFILE_PIC } from 'constants';
 
+import DeletePanel from './ConfimModal';
+
+
 export default function FriendList({ friendList }) {
     const [visiblePanel, setVisiblePanel] = useState({});
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [deleteFriendUsername, setDeleteFriendUsername] = useState('');
 
     // Function to toggle the visibility of the setting panel for a specific friend.
     const toggleVisibility = (username) => {
@@ -18,13 +23,23 @@ export default function FriendList({ friendList }) {
         }));
     };
 
+    const handleDelete = (username) => {
+        setDeleteFriendUsername(username);
+        toggleDelete();
+        console.log(username);
+    }
+
+    const toggleDelete = () => {
+        setIsDeleteOpen(!isDeleteOpen);
+    }
+
     return (
         <>
             {friendList.map((friend, index) => (
                 <div className="contacts-profile">
                     <div key={index} className="profile-description">
                         <div className="contacts-profile-picture">
-                            <img src={friend.profile_picture !== "" ? friend.profile_picture : DEFAULT_PROFILE_PIC} alt={`${friend.first_name}'s profile`} />
+                            <img src={friend.profile_picture !== "" ? `/media/${friend.profile_picture}` : DEFAULT_PROFILE_PIC} alt={`${friend.first_name}'s profile`} />
                         </div>
                         <h2>{friend.username}</h2>
                         <p>First Name:{`${friend.first_name}`}</p>
@@ -40,13 +55,14 @@ export default function FriendList({ friendList }) {
                         </button>
                         {visiblePanel[friend.username] && (
                             <div className="setting-panel">
-                                <a className="dropdown-item text-danger">Delete</a>
+                                <button className="dropdown-item text-danger" onClick={()=>handleDelete(friend.username)}>Delete</button>
                             </div>
                         )}
 
                     </div>
                 </div>
             ))}
+            {isDeleteOpen && <DeletePanel toggleModal={toggleDelete} username={deleteFriendUsername} />}
         </>
     );
 }
