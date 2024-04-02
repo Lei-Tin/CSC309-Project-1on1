@@ -40,11 +40,11 @@ const PopupModal = ({ isOpen, onClose, onSubmit }) => {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="start-date">Start Date</label>
-                                    <input type="date" id="start-date" className="form-control" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                                    <input type="date" min="1970-1-1" max="9999-12-31" id="start-date" className="form-control" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="end-date">End Date</label>
-                                    <input type="date" id="end-date" className="form-control" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+                                    <input type="date" min="1970-1-1" max="9999-12-31" id="end-date" className="form-control" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
                                 </div>
                                 <button className="btn btn-primary form-submit-button" type="submit">Create</button>
                             </div>
