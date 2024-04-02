@@ -47,6 +47,9 @@ invitee_detail = InviteeViewSet.as_view({
     'put': 'update',
     'delete': 'destroy'
 })
+invitee_not = InviteeViewSet.as_view({
+    'get': 'uninvited'
+})
 
 availability_list = AvailabilityViewSet.as_view({
     'get': 'list',
@@ -79,6 +82,7 @@ urlpatterns = [
     path('owned', owned_calendars, name='owned-calendars'),
     path('invited', invited_calendars, name='invited-calendars'),
     path('<int:calendar_id>/invitee/', invitee_list, name='invitee-list'),
+    path('<int:calendar_id>/invitee/uninvited', invitee_not, name='uninvited'),
     path('<int:calendar_id>/invitee/<int:pk>', invitee_detail, name='invitee-detail'),
     path('<int:calendar_id>/availabilities/', availability_list, name='availability-list'),
     path('<int:calendar_id>/availabilities/<int:pk>/', availability_detail, name='availability-detail'),

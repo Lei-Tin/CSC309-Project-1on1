@@ -1,4 +1,5 @@
 from django.db import transaction, IntegrityError
+from django.db.models import Q
 from rest_framework.decorators import action
 from rest_framework.exceptions import *
 from rest_framework.generics import get_object_or_404
@@ -9,6 +10,7 @@ from rest_framework import status, viewsets
 
 from .permissions import *
 from .serializers import *
+from accounts.serializers import UserSerializer
 from contacts.models import Contacts
 
 
@@ -287,6 +289,26 @@ class InviteeViewSet(viewsets.ModelViewSet):
         calendar_id = self.kwargs.get('calendar_id')
         calendar = get_object_or_404(Calendar, pk=calendar_id)
         return self.queryset.filter(calendar=calendar)
+    
+    @action(detail=True, methods=['get'], url_path='uninvited')
+    def uninvited(self, request, calendar_id=None):
+        calendar = get_object_or_404(Calendar, pk=calendar_id)
+        contacts = User.objects.filter(
+            Q(request_sent__requested=calendar.owner, request_sent__accepted=True) | 
+            Q(request_received__requester=calendar.owner, request_received__accepted=True)
+        ).distinct()
+
+        # Get all users already invited to the calendar
+        invited_users = User.objects.filter(
+            invitee__calendar=calendar
+        )
+
+        # Filter out contacts who are already invited
+        uninvited_contacts = contacts.exclude(id__in=invited_users)
+
+        # Serialize and return the queryset of uninvited contacts
+        serializer = UserSerializer(uninvited_contacts, many=True, context={'request': request})
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         calendar_id = self.kwargs.get('calendar_id')

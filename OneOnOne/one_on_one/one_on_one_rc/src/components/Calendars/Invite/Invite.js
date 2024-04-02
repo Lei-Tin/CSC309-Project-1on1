@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { CALENDARS_API_URL, CONTACTS_API_URL } from 'constants';
+import { CALENDARS_API_URL } from 'constants';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -8,6 +8,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 function InviteeListPopup({ calendarId, isOpen, onClose }) {
     const [invitees, setInvitees] = useState([]);
+    const [uninvited, setUninvited] = useState([]);
 
     useEffect(() => {
         const fetchInviteeData = async () => {
@@ -20,9 +21,16 @@ function InviteeListPopup({ calendarId, isOpen, onClose }) {
                     },
                 });
                 const inviteesData = inviteesResponse.data;
-                console.log(inviteesData)
                 setInvitees(inviteesData);
-                console.log("fetched data");
+
+                const uninvitedResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/invitee/uninvited`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+                const uninvitedData = uninvitedResponse.data;
+                console.log(uninvitedData);
+                setUninvited(uninvitedData);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -31,15 +39,15 @@ function InviteeListPopup({ calendarId, isOpen, onClose }) {
         fetchInviteeData(); // Call the function to fetch data
     }, [isOpen, calendarId]);
 
-    // const handleInvite = async (contactId) => {
-    //     try {
-    //         // Implement logic to invite the contact using the contactId
-    //         console.log(`Inviting contact ${contactId}`);
-    //         // Example: Redirect to sending an email to the contact
-    //     } catch (error) {
-    //         console.error("Error inviting contact:", error);
-    //     }
-    // };
+    const handleInvite = async (contactId) => {
+        try {
+            // Implement logic to invite the contact using the contactId
+            console.log(`Inviting contact ${contactId}`);
+            // Example: Redirect to sending an email to the contact
+        } catch (error) {
+            console.error("Error inviting contact:", error);
+        }
+    };
 
     return (
         <div id="overlay">
@@ -49,11 +57,22 @@ function InviteeListPopup({ calendarId, isOpen, onClose }) {
                 </button>
                 <div className="popup-modal">
                     <div className="invitee-list">
-                        <h4>Participants</h4>
+                        <h5>Participants</h5>
                         <ul>
                             {invitees.map(invitee => (
                                 <li key={invitee.id}>
-                                    {invitee.name} - {invitee.has_availability ? "Accepted" : "Invited"}
+                                    {invitee.invitee} ({invitee.has_availability ? "Accepted" : "Invited"})
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="uninvited-list">
+                        <h5>Not invited</h5>
+                        <ul>
+                            {uninvited.map(contact => (
+                                <li key={contact.id}>
+                                    {contact.username}
+                                    <button onClick={() => handleInvite(contact.id)} className="btn">Invite</button>
                                 </li>
                             ))}
                         </ul>
