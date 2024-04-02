@@ -10,32 +10,32 @@ function InviteeListPopup({ calendarId, isOpen, onClose }) {
     const [invitees, setInvitees] = useState([]);
     const [uninvited, setUninvited] = useState([]);
 
+    const fetchInviteeData = async () => {
+        if (!isOpen) return; // Only fetch data if the popup is open
+        try {
+            // Fetch invitees data
+            const inviteesResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/invitee`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            const inviteesData = inviteesResponse.data;
+            setInvitees(inviteesData);
+
+            const uninvitedResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/invitee/uninvited`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            const uninvitedData = uninvitedResponse.data;
+            console.log(uninvitedData);
+            setUninvited(uninvitedData);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+    
     useEffect(() => {
-        const fetchInviteeData = async () => {
-            if (!isOpen) return; // Only fetch data if the popup is open
-            try {
-                // Fetch invitees data
-                const inviteesResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/invitee`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-                const inviteesData = inviteesResponse.data;
-                setInvitees(inviteesData);
-
-                const uninvitedResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/invitee/uninvited`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-                const uninvitedData = uninvitedResponse.data;
-                console.log(uninvitedData);
-                setUninvited(uninvitedData);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-
         fetchInviteeData(); // Call the function to fetch data
     }, [isOpen, calendarId]);
 
@@ -44,6 +44,15 @@ function InviteeListPopup({ calendarId, isOpen, onClose }) {
             // Implement logic to invite the contact using the contactId
             console.log(`Inviting contact ${contactId}`);
             // Example: Redirect to sending an email to the contact
+            axios.post(`${CALENDARS_API_URL}/${calendarId}/invitee/`, { invitee: contactId },{
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            })
+            .then(() => {
+                // Refresh the invitee list
+                fetchInviteeData();
+            });
         } catch (error) {
             console.error("Error inviting contact:", error);
         }

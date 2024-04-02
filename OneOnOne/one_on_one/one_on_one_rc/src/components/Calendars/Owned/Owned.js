@@ -6,6 +6,9 @@ import PopupModal from 'components/Calendars/Create/Create';
 import InviteeListPopup from 'components/Calendars/Invite/Invite';
 import { CALENDARS_API_URL } from 'constants';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
+
 
 const CalendarList = () => {
     const navigate = useNavigate();
@@ -13,11 +16,16 @@ const CalendarList = () => {
     const [isInviteOpen, setInviteOpen] = useState(false);
     const [calendars, setCalendars] = useState([]);
     const [selectedCalendarId, setSelectedCalendarId] = useState(null);
+    const [showSettings, setShowSettings] = useState({});
 
     const handleModalOpen = () => setModalOpen(true);
     const handleModalClose = () => setModalOpen(false);
     const handleInviteOpen = () => setInviteOpen(true);
     const handleInviteClose = () => setInviteOpen(false);
+
+    const toggleSettings = (id) => {
+        setShowSettings(prev => ({ ...prev, [id]: !prev[id] }));
+    };
 
     const fetchCalendars = async () => {
         try {
@@ -114,15 +122,25 @@ const CalendarList = () => {
                     {calendars.map((calendar) => (
                         <div key={calendar.id} className="calendar-brief rounded">
                             <div className="calendar-meeting-details">
-                            <h4>{calendar.name} ({formatDate(calendar.start_date)} - {formatDate(calendar.end_date)})</h4>
-                            <button className="btn btn-info" onClick={() => handleInviteButtonClick(calendar.id)}>View Participants</button>
-                            {isInviteOpen && selectedCalendarId === calendar.id && (
-                                <InviteeListPopup calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
-                            )}
+                                <h4>{calendar.name}</h4>
+                                <h6>{formatDate(calendar.start_date)} - {formatDate(calendar.end_date)}</h6>
+                                <button className="btn btn-info" onClick={() => handleInviteButtonClick(calendar.id)}>View Participants</button>
+                                    {isInviteOpen && selectedCalendarId === calendar.id && (
+                                        <InviteeListPopup calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
+                                    )}
                             </div>
                             <div className="calendar-btn">
-                            <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Calendar</button>
+                                <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Calendar</button>
                             </div>
+                            <button onClick={() => toggleSettings(calendar.id)} className="btn settings-button">
+                                <FontAwesomeIcon icon={faCog} />
+                            </button>
+                            {showSettings[calendar.id] && (
+                                <div className="calendar-settings-menu">
+                                    <button className="btn btn-secondary">Edit</button>
+                                    <button onClick={() => handleDelete(calendar.id)} className="btn btn-danger">Delete</button>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

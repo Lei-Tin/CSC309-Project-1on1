@@ -44,7 +44,6 @@ invitee_list = InviteeViewSet.as_view({
 })
 invitee_detail = InviteeViewSet.as_view({
     'get': 'retrieve',
-    'put': 'update',
     'delete': 'destroy'
 })
 invitee_not = InviteeViewSet.as_view({
