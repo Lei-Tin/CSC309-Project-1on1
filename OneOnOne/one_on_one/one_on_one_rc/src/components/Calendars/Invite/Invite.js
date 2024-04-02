@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CALENDARS_API_URL, CONTACTS_API_URL } from 'constants';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+
 
 function InviteeListPopup({ calendarId, isOpen, onClose }) {
     const [invitees, setInvitees] = useState([]);
@@ -41,7 +44,9 @@ function InviteeListPopup({ calendarId, isOpen, onClose }) {
     return (
         <div id="overlay">
             <div className="popup-window">
-                <button onClick={onClose} className="close-button">X</button>
+                <button onClick={onClose} className="btn close-button">
+                    <FontAwesomeIcon icon={faXmark}></FontAwesomeIcon>
+                </button>
                 <div className="popup-modal">
                     <div className="invitee-list">
                         <h4>Participants</h4>

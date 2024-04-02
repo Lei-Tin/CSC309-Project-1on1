@@ -33,19 +33,21 @@ const PopupModal = ({ isOpen, onClose, onSubmit }) => {
 
                     <div className="form-content">
                         <form id="create-calendar-form" onSubmit={handleSubmit}>
-                            <div className="form-group">
-                                <label htmlFor="name">Name your event</label>
-                                <input type="text" id="name" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
+                            <div className="form-drop-down">
+                                <div className="form-group">
+                                    <label htmlFor="name">Name your event</label>
+                                    <input type="text" id="name" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="start-date">Start Date</label>
+                                    <input type="date" id="start-date" className="form-control" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="end-date">End Date</label>
+                                    <input type="date" id="end-date" className="form-control" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+                                </div>
+                                <button className="btn btn-primary form-submit-button" type="submit">Create</button>
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="start-date">Start Date</label>
-                                <input type="date" id="start-date" className="form-control" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="end-date">End Date</label>
-                                <input type="date" id="end-date" className="form-control" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-                            </div>
-                            <button className="btn btn-primary form-submit-button" type="submit">Create</button>
                         </form>
                     </div>
                 </div>

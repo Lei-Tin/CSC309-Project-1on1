@@ -272,6 +272,10 @@ p, h1, h2, h3, h4, h5, h6 {
     align-items: center;
 }
 
+.form-group {
+    width: 100%;
+}
+
 .form-drop-down > label {
     margin: 0.25rem 0rem;
     margin-right: auto;
