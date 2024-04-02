@@ -78,7 +78,7 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 .setting-button {
-    position:  absolute;
+    position: absolute;
     top: 0;
     right: 0;
     margin: 0.5rem;
@@ -97,7 +97,7 @@ p, h1, h2, h3, h4, h5, h6 {
     margin: 10px;
 }
 
-.setting-panel > a {
+.setting-panel > button {
     padding: 5px 10px;
     border-radius: 10%;
 }

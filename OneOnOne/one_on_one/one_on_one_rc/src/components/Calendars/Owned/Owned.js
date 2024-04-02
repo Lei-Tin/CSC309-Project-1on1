@@ -114,33 +114,36 @@ const CalendarList = () => {
 
     return (
         <main>
-            <PopupModal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleCreateCalendar} />
             <div className="jumbotron calendar-list">
                 <h1 className="display-4">My Calendars</h1>
                 <button onClick={handleModalOpen} className="btn btn-primary btn-lg">Create a new calendar</button>
+                {/* Render the popup modal for calendar creation on top */}
+                <PopupModal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleCreateCalendar} />
                 <div className="main-content-container">
                     {calendars.map((calendar) => (
                         <div key={calendar.id} className="calendar-brief rounded">
+                            {/* Show invite overlay on top */}
+                            {isInviteOpen && selectedCalendarId === calendar.id && (
+                                        <InviteeListPopup calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
+                                )}
+                            {/* Settings modal is also shown on top */}
+                            {showSettings[calendar.id] && (
+                            <div className="setting-panel">
+                                <button className="dropdown-item">Edit</button>
+                                <button onClick={() => handleDelete(calendar.id)} className="dropdown-item text-danger">Delete</button>
+                            </div>
+                            )}
                             <div className="calendar-meeting-details">
                                 <h4>{calendar.name}</h4>
                                 <h6>{formatDate(calendar.start_date)} - {formatDate(calendar.end_date)}</h6>
                                 <button className="btn btn-info" onClick={() => handleInviteButtonClick(calendar.id)}>View Participants</button>
-                                    {isInviteOpen && selectedCalendarId === calendar.id && (
-                                        <InviteeListPopup calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
-                                    )}
                             </div>
                             <div className="calendar-btn">
                                 <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Calendar</button>
                             </div>
-                            <button onClick={() => toggleSettings(calendar.id)} className="btn settings-button">
+                            <button onClick={() => toggleSettings(calendar.id)} className="btn setting-button">
                                 <FontAwesomeIcon icon={faCog} />
                             </button>
-                            {showSettings[calendar.id] && (
-                                <div className="calendar-settings-menu">
-                                    <button className="btn btn-secondary">Edit</button>
-                                    <button onClick={() => handleDelete(calendar.id)} className="btn btn-danger">Delete</button>
-                                </div>
-                            )}
                         </div>
                     ))}
                 </div>
