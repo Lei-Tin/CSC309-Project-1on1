@@ -12,7 +12,7 @@ const generateWeekDays = (weekStartDate) => {
     return dates;
 };
 
-const CalendarTable = ({ weekStartDate, weekEndDate, actualStartDate, actualEndDate, preference }) => {
+const CalendarTable = ({ weekStartDate, actualStartDate, actualEndDate, preference }) => {
     const weekDays = generateWeekDays(weekStartDate);
     const [selectedSlots, setSelectedSlots] = useState(new Map());
 
@@ -20,7 +20,7 @@ const CalendarTable = ({ weekStartDate, weekEndDate, actualStartDate, actualEndD
     const isDateOutOfRange = (date) => {
         return date < actualStartDate || date > actualEndDate;
     };
-    
+
     // Helper function to format a slot's key
     const formatSlotKey = (date, hour) => `${date.toLocaleDateString()}-${hour}`
 
@@ -28,7 +28,7 @@ const CalendarTable = ({ weekStartDate, weekEndDate, actualStartDate, actualEndD
     const toggleSlotSelection = (slotKey) => {
         setSelectedSlots((prevSelectedSlots) => {
             const newSelectedSlots = new Map(prevSelectedSlots);
-            
+
             if (newSelectedSlots.has(slotKey)) {
                 newSelectedSlots.delete(slotKey);
             } else {
@@ -74,27 +74,26 @@ const CalendarTable = ({ weekStartDate, weekEndDate, actualStartDate, actualEndD
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Monday</th>
-                        <th>Tuesday</th>
-                        <th>Wednesday</th>
-                        <th>Thursday</th>
-                        <th>Friday</th>
-                        <th>Saturday</th>
-                        <th>Sunday</th>
+                        {weekDays.map((date, index) => (
+                            <th key={index} className={isDateOutOfRange(date) ? 'calendar-day-not-available' : '' }>
+                                {date.toLocaleDateString("en-US", { weekday: 'long' })}
+                            </th>
+                        ))}
                     </tr>
                 </thead>
+
                 <tbody>
                     {Array.from({ length: 13 }, (_, i) => 9 + i).map((hour, index) => (
                         <tr key={index}>
-                            <td>{hour % 24}:00 {hour < 12 || hour === 24 ? 'AM' : 'PM'}</td>
+                            <td>{`${hour <= 12 ? hour : hour - 12}:00 ${hour < 12 ? 'AM' : 'PM'}`}</td>
                             {weekDays.map((date, index) => {
                                 const slotKey = formatSlotKey(date, hour);
                                 const isOutsideRange = isDateOutOfRange(date);
                                 return (
-                                    <td 
-                                        key={index} 
+                                    <td
+                                        key={index}
                                         className={getSlotClass(slotKey, isOutsideRange)}
-                                        style={{cursor: isOutsideRange ? 'not-allowed' : 'pointer'}} 
+                                        style={{ cursor: isOutsideRange ? 'not-allowed' : 'pointer' }}
                                         onClick={() => !isOutsideRange && toggleSlotSelection(slotKey)}
                                     ></td>
                                 );
