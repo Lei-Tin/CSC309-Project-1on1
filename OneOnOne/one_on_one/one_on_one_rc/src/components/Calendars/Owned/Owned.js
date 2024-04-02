@@ -111,7 +111,9 @@ const CalendarList = () => {
                               <div className="calendar-meeting-details">
                                 <h4>{calendar.name}</h4>
                                 <button className="btn btn-info" onClick={() => handleInviteButtonClick(calendar.id)}>View Participants</button>
-                                <InviteeListPopup calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
+                                {isInviteOpen && selectedCalendarId === calendar.id && (
+                                    <InviteeListPopup calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
+                                )}
                               </div>
                               <div className="calendar-btn">
                                 <button onClick={() => {}} className="btn btn-success">Enter Calendar</button>
