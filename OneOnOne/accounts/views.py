@@ -248,12 +248,10 @@ class ProfileSearchView(APIView):
     """
     @staticmethod
     def get(request, username):
-        if username:
-            user = User.objects.filter(username=username)
-            if user:
-                profile = Profile.objects.get_or_create(user=user)
-                serializer = ProfileSerializer(profile)
-                return Response(serializer.data)
-            return Response({'user': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-        return Response({'username': 'This field is required'}, status=status.HTTP_400_BAD_REQUEST)
+        user = User.objects.filter(username=username).first()
+        if user:
+            profile, created = Profile.objects.get_or_create(user=user)
+            serializer = ProfileSerializer(profile)
+            return Response(serializer.data)
+        return Response({'user': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 

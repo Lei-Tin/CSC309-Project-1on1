@@ -24,10 +24,6 @@
     max-width: 12rem;
 }
 
-.inactive {
-    background-color: rgba(0,0,0,.6);
-
-}
 
 .contacts-profile-picture {
     width: 25%;
