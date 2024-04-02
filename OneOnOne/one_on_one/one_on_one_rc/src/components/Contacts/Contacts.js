@@ -36,20 +36,27 @@ function Contacts() {
   };
 
   return (
-      <div className={`jumbotron contacts-list ${isAddFriend? 'inactive':''}` }>
-        <div className="display-4">
-          My Contacts
-        </div>
-        <button className="btn btn-primary btn-lg btn-sm" onClick={toggleAddFriend}>Add new contact</button>
-        {isAddFriend && <AddFriendPanel toggleAddFriend={toggleAddFriend} />}
+    <div className={`jumbotron contacts-list ${isAddFriend ? 'inactive' : ''}`}>
+      <div className="display-4">
+        My Contacts
+      </div>
+      <button className="btn btn-primary btn-lg btn-sm" onClick={toggleAddFriend}>Add new contact</button>
+      {isAddFriend && <AddFriendPanel toggleAddFriend={toggleAddFriend} />}
 
-        <div className="main-content-container">
+      <div className="main-content-container">
 
-          <div className="contacts-profile">
+        <div className="contacts-profile">
+          {contacts.length === 0 ?
+            <div>
+              <h2>No contacts yet</h2>
+              <p>Click on the button above to add a new contact</p>
+            </div>
+            :
             <FriendList friendList={contacts} />
-          </div>
+          }
         </div>
       </div>
+    </div>
   );
 }
 
