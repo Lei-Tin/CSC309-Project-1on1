@@ -72,7 +72,7 @@ export default function NavBar() {
             <span className="username">{username}</span>
             <div className="mini-profile">
               {/* For those without a profile a picture, assign default to it */}
-              <img src={profilePic !== '' ? `/media${profilePic}` : '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
+              <img src={profilePic !== null ? `/media${profilePic}` : '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
             </div>
           </div>
           <div className={`dropdown-menu dropdown-menu-right user-dropdown-menu ${isProfileDropdownOpen ? 'show' : ''}`}>
