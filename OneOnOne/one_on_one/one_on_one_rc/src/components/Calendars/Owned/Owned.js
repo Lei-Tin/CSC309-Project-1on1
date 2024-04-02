@@ -3,15 +3,20 @@ import 'components/Calendars/calendar.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import PopupModal from 'components/Calendars/Create/Create';
+import InviteeListPopup from 'components/Calendars/Invite/Invite';
 import { CALENDARS_API_URL } from 'constants';
 
 
 const CalendarList = () => {
     const [isModalOpen, setModalOpen] = useState(false);
+    const [isInviteOpen, setInviteOpen] = useState(false);
     const [calendars, setCalendars] = useState([]);
+    const [selectedCalendarId, setSelectedCalendarId] = useState(null);
 
     const handleModalOpen = () => setModalOpen(true);
     const handleModalClose = () => setModalOpen(false);
+    const handleInviteOpen = () => setInviteOpen(true);
+    const handleInviteClose = () => setInviteOpen(false);
 
     const fetchCalendars = async () => {
         try {
@@ -56,6 +61,12 @@ const CalendarList = () => {
         .catch(error => console.error('Error creating calendar', error));
     };
 
+    const handleInviteButtonClick = (calendarId) => {
+        console.log("Invite button clicked for calendar", calendarId);
+        setSelectedCalendarId(calendarId);
+        setInviteOpen(true);
+    };
+
 //    const handleEdit = (calendar) => {
 //        setEditingId(calendar.id);
 //        setEditValue(calendar.name); // Pre-populate the input with the current name
@@ -96,18 +107,16 @@ const CalendarList = () => {
                 <div className="main-content-container">
                     {calendars.map((calendar) => (
                         <div key={calendar.id} className="calendar-brief rounded">
-                          <div className="calendar-meeting-details">
+                            <div className="calendar-meeting-details">
                             <h4>{calendar.name}</h4>
-                            <h6>Participants</h6>
-                            <ul>
-                              {calendar.invitees.map((invitee) => (
-                                <li key={invitee.id}>{`${invitee.first_name} ${invitee.last_name}`}</li>
-                              ))}
-                            </ul>
-                          </div>
-                          <div className="calendar-btn">
+                            <button className="btn btn-info" onClick={() => handleInviteButtonClick(calendar.id)}>View Participants</button>
+                            {isInviteOpen && selectedCalendarId === calendar.id && (
+                                <InviteeListPopup calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
+                            )}
+                            </div>
+                            <div className="calendar-btn">
                             <button onClick={() => {}} className="btn btn-success">Enter Calendar</button>
-                          </div>
+                            </div>
                         </div>
                     ))}
                 </div>
