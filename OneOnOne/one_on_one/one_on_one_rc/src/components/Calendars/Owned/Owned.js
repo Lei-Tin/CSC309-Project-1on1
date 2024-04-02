@@ -99,6 +99,11 @@ const CalendarList = () => {
         }
     };
 
+    function formatDate(dateString) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Intl.DateTimeFormat('en-US', options).format(new Date(dateString));
+    }
+
     return (
         <main>
             <PopupModal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleCreateCalendar} />
@@ -109,7 +114,7 @@ const CalendarList = () => {
                     {calendars.map((calendar) => (
                         <div key={calendar.id} className="calendar-brief rounded">
                             <div className="calendar-meeting-details">
-                            <h4>{calendar.name}</h4>
+                            <h4>{calendar.name} ({formatDate(calendar.start_date)} - {formatDate(calendar.end_date)})</h4>
                             <button className="btn btn-info" onClick={() => handleInviteButtonClick(calendar.id)}>View Participants</button>
                             {isInviteOpen && selectedCalendarId === calendar.id && (
                                 <InviteeListPopup calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
