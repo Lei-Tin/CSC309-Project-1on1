@@ -6,6 +6,8 @@ import Login from 'components/Accounts/Login';
 import Register from 'components/Accounts/Register';
 import Profile from 'components/Accounts/Profile';
 
+import Owned from 'components/Calendars/Owned';
+
 import CustomNavbar from 'components/Layout/Navbar/CustomNavbar';
 import CustomNavbarLogged from 'components/Layout/Navbar/CustomNavbarLogged';
 
@@ -30,6 +32,8 @@ function App() {
             <Route path=":calendarID" element={<CalendarsDetail/>} />
           </Route>
         </Route> */}
+
+        <Route path="calendars/owned" element={<Owned />} />
       </Routes>
       <Footer />
     </BrowserRouter>
