@@ -89,10 +89,10 @@ const CalendarList = () => {
 
     return (
         <main>
+            <PopupModal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleCreateCalendar} />
             <div className="jumbotron calendar-list">
                 <h1 className="display-4">My Calendars</h1>
                 <button onClick={handleModalOpen} className="btn btn-primary btn-lg">Create a new calendar</button>
-                <PopupModal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleCreateCalendar} />
                 <div className="main-content-container">
                     {calendars.map((calendar) => (
                         <div key={calendar.id} className="calendar-brief rounded">

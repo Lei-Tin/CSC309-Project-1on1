@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import 'components/Calendars/calendar.css';
 import axios from 'axios';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+
 const PopupModal = ({ isOpen, onClose, onSubmit }) => {
     const [name, setName] = useState('');
     const [startDate, setStartDate] = useState('');
@@ -20,7 +23,9 @@ const PopupModal = ({ isOpen, onClose, onSubmit }) => {
     return (
         <div id="overlay">
             <div className="popup-window">
-                <button onClick={onClose} className="close-button">X</button>
+                <button onClick={onClose} className="btn close-button">
+                    <FontAwesomeIcon icon={faXmark}></FontAwesomeIcon>
+                </button>
                 <div className="popup-modal">
                     <div className="heading">
                         <h2>Create a new calendar</h2>
