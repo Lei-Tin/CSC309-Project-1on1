@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from rest_framework.views import APIView, status
 from rest_framework.response import Response
-
+from accounts.models import Profile
 from .models import Contacts
 from .serializers import ContactSerializer, ContactRequestSerializer, ContactDeleteSerializer, FriendRequestListSerializer
 
@@ -31,7 +31,20 @@ class contactListView(APIView):
         friends_as_requested = Contacts.objects.filter(requested=user, accepted=True).values_list('requester', flat=True)
         friends_id = set(friends_as_requester) | set(friends_as_requested)
         friend_usernames = User.objects.filter(id__in=friends_id).values_list('username', flat=True)
-        return Response({"friends": friend_usernames})
+        friend_first_names = User.objects.filter(id__in=friends_id).values_list('first_name', flat=True)
+        friend_last_names = User.objects.filter(id__in=friends_id).values_list('last_name', flat=True)
+        friend_emails = User.objects.filter(id__in=friends_id).values_list('email', flat=True)
+        friend_profile_pics = Profile.objects.filter(user__id__in=friends_id).values_list('profile_picture', flat=True)
+        friends_info = []
+        for i in range(len(friend_usernames)):
+            friends_info.append({
+                "username": friend_usernames[i],
+                "first_name": friend_first_names[i],
+                "last_name": friend_last_names[i],
+                "email": friend_emails[i],
+                "profile_picture": friend_profile_pics[i]
+            })
+        return Response({"friends": friends_info})
 
 
 class friendRequestsView(APIView):
