@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import RegisterView, LoginView, ProfileView
+from .views import RegisterView, LoginView, ProfileView, ProfileSearchView
 
 app_name = 'accounts'
 
@@ -25,6 +25,7 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
     path('profile/', ProfileView.as_view(), name='profile'),
+    path('profile/<str:username>/', ProfileSearchView.as_view(), name='profile-search')
 
     # The following are API Calls
 ]
