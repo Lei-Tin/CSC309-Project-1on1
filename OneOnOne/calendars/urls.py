@@ -52,12 +52,14 @@ invitee_not = InviteeViewSet.as_view({
 
 availability_list = AvailabilityViewSet.as_view({
     'get': 'list',
-    'post': 'create'
+    'post': 'create',
 })
 availability_detail = AvailabilityViewSet.as_view({
     'get': 'retrieve',
     'put': 'update',
-    'delete': 'destroy'
+})
+availability_delete = AvailabilityViewSet.as_view({
+    'delete': 'bulk_delete'
 })
 
 schedule_ops = ScheduleViewSet.as_view({
@@ -84,6 +86,7 @@ urlpatterns = [
     path('<int:calendar_id>/invitee/uninvited', invitee_not, name='uninvited'),
     path('<int:calendar_id>/invitee/<int:pk>', invitee_detail, name='invitee-detail'),
     path('<int:calendar_id>/availabilities/', availability_list, name='availability-list'),
+    path('<int:calendar_id>/availabilities/bulk-delete/', availability_delete, name='availability-delete'),
     path('<int:calendar_id>/availabilities/<int:pk>/', availability_detail, name='availability-detail'),
     path('<int:calendar_id>/schedule/', schedule_ops, name='schedule-ops'),
     path('<int:calendar_id>/schedule/<int:pk>/', schedule_detail, name='schedule-detail'),
