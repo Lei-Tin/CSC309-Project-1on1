@@ -34,6 +34,7 @@ function App() {
             <Route path="/" element={<CustomNavbarLogged />}>
               <Route path="accounts/profile" element={<Profile />} />
               <Route path="contacts" index element={<Contacts />} />
+              <Route path="calendars/owned" element={<Owned />} />
 
               {/* <Route path="calendars">
               <Route index element={<Calendars />} />
@@ -54,7 +55,6 @@ function App() {
           </>
         )
       }
-      <Route path="calendars/owned" element={<Owned />} />
     </Routes>
     <Footer/>
     </BrowserRouter>
