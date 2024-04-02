@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import 'components/Calendars/calendar.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -8,6 +8,7 @@ import { CALENDARS_API_URL } from 'constants';
 
 
 const CalendarList = () => {
+    const navigate = useNavigate();
     const [isModalOpen, setModalOpen] = useState(false);
     const [isInviteOpen, setInviteOpen] = useState(false);
     const [calendars, setCalendars] = useState([]);
@@ -116,7 +117,7 @@ const CalendarList = () => {
                                 )}
                               </div>
                               <div className="calendar-btn">
-                                <button onClick={() => {}} className="btn btn-success">Enter Calendar</button>
+                                <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Calendar</button>
                               </div>
                             </div>
                         ))}
