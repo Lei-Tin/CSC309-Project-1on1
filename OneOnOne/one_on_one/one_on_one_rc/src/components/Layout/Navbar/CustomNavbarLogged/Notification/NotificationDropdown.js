@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell } from '@fortawesome/free-solid-svg-icons';
+import { faBell as faBellSolid } from '@fortawesome/free-solid-svg-icons';
+import { faBell } from '@fortawesome/free-regular-svg-icons';
 import axios from 'axios';
 import {  CONTACTS_API_URL } from 'constants';
 import { FriendNotificationItem } from './NotificationItem';
@@ -55,7 +56,7 @@ const NotificationDropdown = () => {
         aria-haspopup="true"
         aria-expanded={isNotifOpen}
         onClick={toggleNotificationDropdown}>
-        <FontAwesomeIcon icon={faBell} className="icon" />
+        <FontAwesomeIcon icon={isMoreFriendReq ? faBellSolid : faBell} className="icon" />
       </button>
       <div className={`dropdown-menu dropdown-menu-right ${isNotifOpen ? 'show' : ''}`}
         aria-labelledby="dropdownMenuLink"

@@ -42,12 +42,11 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 
 class InviteeSerializer(serializers.ModelSerializer):
     invitee = serializers.CharField(help_text="The user id of the invited user to the calendar")
-    deadline = serializers.CharField(help_text="The last time that the invitee can add an availability")
     has_availability = serializers.SerializerMethodField()
 
     class Meta:
         model = Invitee
-        fields = ['id', 'calendar', 'invitee', 'deadline', 'has_availability']
+        fields = ['id', 'calendar', 'invitee', 'has_availability']
         read_only_fields = ['calendar']
 
     def get_has_availability(self, obj):
@@ -56,16 +55,16 @@ class InviteeSerializer(serializers.ModelSerializer):
         has_availability = Availability.objects.filter(calendar=calendar, user=obj.invitee).exists()
         return has_availability
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        request = self.context.get('request') if self.context else None
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     request = self.context.get('request') if self.context else None
 
-        if request and request.method in ['PUT', 'PATCH']:
-            # Restrict fields to 'name' only for update operations
-            allowed = {'deadline'}
-            existing = set(self.fields)
-            for field_name in existing - allowed:
-                self.fields.pop(field_name)
+    #     if request and request.method in ['PUT', 'PATCH']:
+    #         # Restrict fields to 'name' only for update operations
+    #         allowed = {'deadline'}
+    #         existing = set(self.fields)
+    #         for field_name in existing - allowed:
+    #             self.fields.pop(field_name)
 
 
 class ScheduleSerializer(serializers.ModelSerializer):

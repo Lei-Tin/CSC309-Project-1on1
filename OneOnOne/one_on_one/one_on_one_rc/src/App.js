@@ -8,7 +8,6 @@ import Profile from 'components/Accounts/Profile';
 import Contacts from 'components/Contacts/';
 
 import Owned from 'components/Calendars/Owned';
-
 import SelectAvailability from 'components/Calendars/Availability/SelectAvailability';
 
 import CustomNavbar from 'components/Layout/Navbar/CustomNavbar';
