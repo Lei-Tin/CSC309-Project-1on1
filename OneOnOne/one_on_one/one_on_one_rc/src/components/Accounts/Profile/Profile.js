@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
-import { ACCOUNTS_API_URL } from "constants";
+import { ACCOUNTS_API_URL, DEFAULT_PROFILE_PIC } from "constants";
 
 import './profile.css';
 
@@ -31,9 +31,9 @@ const Profile = () => {
     useEffect(() => {
         axios.get(`${ACCOUNTS_API_URL}/profile/`, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`
+                Authorization: `Bearer ${localStorage.getItem('token')}`
             }
-          })
+        })
             .then((response) => {
                 setProfile(response.data);
             })
@@ -69,9 +69,9 @@ const Profile = () => {
 
         axios.put(`${ACCOUNTS_API_URL}/profile/`, payload, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`
+                Authorization: `Bearer ${localStorage.getItem('token')}`
             }
-          })
+        })
             .then((response) => {
                 setProfile(response.data);
                 setIsEditing(false);
@@ -82,7 +82,6 @@ const Profile = () => {
             })
             .catch((error) => {
                 if (error.response) {
-                    console.log(error.response.data);
                     setErrorMessage(error.response.data);
                 }
             }
@@ -96,9 +95,9 @@ const Profile = () => {
 
         axios.put(`${ACCOUNTS_API_URL}/profile/`, formData, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`
+                Authorization: `Bearer ${localStorage.getItem('token')}`
             }
-          })
+        })
             .then((response) => {
                 // Force a component refresh
                 setProfile(response.data);
@@ -107,7 +106,7 @@ const Profile = () => {
             .catch((error) => {
                 console.log(error);
             }
-        );
+            );
     }
 
     return (
@@ -115,14 +114,19 @@ const Profile = () => {
             <div id="content-wrap">
                 <div className="profile-container">
                     <div className="center">
-                        <img src={profile.profile_picture !== '' ? `/media${profile.profile_picture}` : '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
+                        <img src={profile.profile_picture !== null ?
+                            `/media${profile.profile_picture}` : DEFAULT_PROFILE_PIC} alt="User profile" id="profile_pic" />
                         <div className="d-flex justify-content-center">
                             <label htmlFor="profile-upload" id="upload-profile-pic" className="btn btn-outline-info btn-sm">Upload Profile Picture</label>
                             <input id="profile-upload" type="file" accept="image/*"
                                 onChange={(event) => {
                                     // Make the API call to the backend to upload the image
+                                    if (event.target.files[0].size > 2097152) {
+                                        alert("File is too big! Please upload a file less than 2MB.");
+                                        return;
+                                    }
                                     updateProfilePic(event.target.files[0]);
-                            }} />
+                                }} />
                         </div>
                     </div>
                     <div>

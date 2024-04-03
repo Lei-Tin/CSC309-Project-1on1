@@ -212,4 +212,4 @@ function SelectSchedule() {
     );
 }
 
-export default SelectSchedule;
+export default SelectAvailability;

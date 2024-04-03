@@ -15,6 +15,10 @@ p, h1, h2, h3, h4, h5, h6 {
     margin: 1rem;
 }
 
+.error {
+    color: red;
+}
+
 #home-page {
     display: flex;
     flex-direction: column;
@@ -52,6 +56,7 @@ p, h1, h2, h3, h4, h5, h6 {
 
 .dropdown-menu {
     width: 500px;
+    z-index: 1;
 }
 
 .user-dropdown-menu {
@@ -78,7 +83,7 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 .setting-button {
-    position:  absolute;
+    position: absolute;
     top: 0;
     right: 0;
     margin: 0.5rem;
@@ -97,7 +102,7 @@ p, h1, h2, h3, h4, h5, h6 {
     margin: 10px;
 }
 
-.setting-panel > a {
+.setting-panel > button {
     padding: 5px 10px;
     border-radius: 10%;
 }
@@ -120,6 +125,10 @@ p, h1, h2, h3, h4, h5, h6 {
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: start;
+}
+
+.dropdown-item:focus {
+    outline: 0 !important;
 }
 
 .dropdown-item-content {
@@ -293,6 +302,15 @@ p, h1, h2, h3, h4, h5, h6 {
 
 /* Search related */
 
+.form-outline {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+}
+
 .search-input-bar {
     width: 100%;
 }
@@ -312,7 +330,7 @@ p, h1, h2, h3, h4, h5, h6 {
 .search-result-profile {
     display: flex;
     flex-direction: row;
-    height: 10vh;
+    height: 100%;
     align-items: center;
     padding: 1rem;
 }
@@ -323,5 +341,54 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 .form-submit-button {
+    margin: 1rem;
+}
+
+/* Invited list related */
+.invited-list, .uninvited-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
+    width: 100%;
+}
+
+.uninvited-list ul {
+    list-style: none;
+    padding: 5px;
+}
+
+.participants-list {
+    width: 75%;
+    margin: 1rem;
+}
+
+.uninvited-list .participants-list ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.uninvited-list .participants-list ul li {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
+    text-align: center;
+    justify-content: center;
+}
+
+.uninvited-list .participants-list ul li button {
+    margin-left: auto;
+}
+
+.uninvited-list .participants-list > li {
+    margin-right: auto;
+}
+
+.tab-container {
     margin: 1rem;
 }

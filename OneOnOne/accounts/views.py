@@ -214,3 +214,44 @@ class ProfileView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class ProfileSearchView(APIView):
+    """
+    get:
+    Get Profile information of the given username
+
+    ### Input Format
+    ```
+    {
+        "username": <username>
+    }
+    ```
+    ### Responses
+    #### `200` OK - Successful retrieval of profile
+    #### `400` Bad Request - Any field is missing or invalid
+    #### `404` Not Found - User not found
+
+    ### Output Format when successful
+    ```
+    {
+        "user": {
+            "id": <user-id>,
+            "username": <username>,
+            "first_name": <first-name>,
+            "last_name": <last-name>,
+            "email": <email>
+        },
+        "profile_picture": <profile-picture-path>,
+    }
+    ``` 
+    """
+    @staticmethod
+    def get(request, username):
+        user = User.objects.filter(username=username).first()
+        if user:
+            profile, created = Profile.objects.get_or_create(user=user)
+            serializer = ProfileSerializer(profile)
+            return Response(serializer.data)
+        return Response({'user': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+

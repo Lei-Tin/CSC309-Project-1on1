@@ -26,8 +26,8 @@ function Login() {
         .then((response) => {
             const token = response.data.token;
             login(token);
-            // TODO: Redirect to calendar page
-            navigate('/accounts/profile/');
+            
+            navigate('/calendars');
         })
         .catch((error) => {
             if (error.response) {
@@ -47,8 +47,7 @@ function Login() {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         }).then(() => {
-            // TODO: Redirect to calendar page
-            navigate('/accounts/profile/');
+            navigate('/calendars/');
         }).catch(() => {
             // This is when we failed to verify the token
             // Probably because the token timed out

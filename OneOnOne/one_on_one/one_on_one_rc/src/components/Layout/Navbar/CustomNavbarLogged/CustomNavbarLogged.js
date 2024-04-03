@@ -5,7 +5,7 @@ import { faCalendar, faAddressBook } from '@fortawesome/free-regular-svg-icons';
 import { faCalendar as faCalendarSolid, faAddressBook as faAddressBookSolid } from '@fortawesome/free-solid-svg-icons';
 import './navbar.css';
 import axios from 'axios';
-import { ACCOUNTS_API_URL } from 'constants';
+import { ACCOUNTS_API_URL, DEFAULT_PROFILE_PIC} from 'constants';
 import { useLocation } from 'react-router-dom';
 import NotificationDropdown from './Notification/NotificationDropdown';
 import { Outlet } from 'react-router-dom';
@@ -49,10 +49,9 @@ export default function NavBar() {
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        {/* TODO: Redirect to the calendars page */}
         <Link className="navbar-brand" to="/">1on1</Link>
         <div className="icon-container">
-          <Link to="/calendars/owned" title="Calendar">
+          <Link to="/calendars" title="Calendar">
             <FontAwesomeIcon icon={isActive('/calendars') ? faCalendarSolid : faCalendar} className={'icon ' + (isActive('/calendars') ? 'active' : '')} />
           </Link>
           <Link to="/contacts" title="Contacts">
@@ -72,7 +71,7 @@ export default function NavBar() {
             <span className="username">{username}</span>
             <div className="mini-profile">
               {/* For those without a profile a picture, assign default to it */}
-              <img src={profilePic !== '' ? `/media${profilePic}` : '/assets/default_profile_pic.png'} alt="User profile" id="profile_pic" />
+              <img src={profilePic !== null ? `/media${profilePic}` : DEFAULT_PROFILE_PIC} alt="User profile" id="profile_pic" />
             </div>
           </div>
           <div className={`dropdown-menu dropdown-menu-right user-dropdown-menu ${isProfileDropdownOpen ? 'show' : ''}`}>
