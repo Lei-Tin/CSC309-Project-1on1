@@ -77,7 +77,7 @@ const FormatAvailabilities = (selectedSlots) =>{
     }
 }
 
-function SelectSchedule() {
+function SelectAvailability() {
     const meetingName = "Meeting Name"; // Change this to the actual meeting name
     const actualStartDate = '2024-04-03T00:00:00'; // Change this to the actual start date
     const actualEndDate = '2024-04-25T00:00:00'; // Change this to the actual end date
@@ -136,4 +136,4 @@ function SelectSchedule() {
     );
 }
 
-export default SelectSchedule;
+export default SelectAvailability;

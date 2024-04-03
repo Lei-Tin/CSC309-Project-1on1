@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import 'components/Calendars/calendar.css';
-import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
-const PopupModal = ({ isOpen, onClose, onSubmit }) => {
+const CreateModal = ({ isOpen, onClose, onSubmit }) => {
     const [name, setName] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -56,4 +54,4 @@ const PopupModal = ({ isOpen, onClose, onSubmit }) => {
     );
 };
 
-export default PopupModal;
+export default CreateModal;

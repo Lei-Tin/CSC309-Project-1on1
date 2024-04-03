@@ -26,8 +26,8 @@ function Login() {
         .then((response) => {
             const token = response.data.token;
             login(token);
-            // TODO: Redirect to calendar page
-            navigate('/accounts/profile/');
+            
+            navigate('/calendars');
         })
         .catch((error) => {
             if (error.response) {
