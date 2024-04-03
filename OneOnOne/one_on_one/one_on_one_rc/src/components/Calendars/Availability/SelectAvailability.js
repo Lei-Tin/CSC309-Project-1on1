@@ -53,9 +53,28 @@ function convertToDateTime(dateTimeStr) {
     const hour = parseInt(parts[3], 10);
 
     // Create a Date object
-    const date = new Date(year, month, day, hour);
+    return new Date(Date.UTC(year, month, day, hour));
+}
 
-    return date;
+// Helper function to convert Availability data to a Map
+function convertAvailabilityDataToMap(availabilityData) {
+    let availabilityMap = new Map();
+
+    availabilityData.forEach((availability) => {
+        const date = new Date(availability.start_period);
+        const preference = availability.preference;
+
+        const year = date.getUTCFullYear();
+        const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+        const day = date.getUTCDate().toString().padStart(2, '0');
+        const hour = date.getUTCHours().toString();
+
+        const startTime = `${year}-${month}-${day}-${hour}`;
+
+        availabilityMap.set(startTime, preference.toString());
+    });
+
+    return availabilityMap;
 }
 
 function SelectSchedule() {
@@ -75,24 +94,38 @@ function SelectSchedule() {
         finalized: false,
     });
 
+    const [availabilityData, setAvailabilityData] = useState();
+
     useEffect(() => {
         setIsLoading(true);
-        axios.get(`${CALENDARS_API_URL}/${calendar_id}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-            .then((response) => {
-                setCalendarDetails(response.data);
-                setIsLoading(false); // Data is loaded
-            })
-            .catch((error) => {
-                setIsLoading(false);
-                if (error.response && error.response.status === 401) {
-                    navigate('/unauthorized');
+
+        Promise.all([
+            axios.get(`${CALENDARS_API_URL}/${calendar_id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
-            });
-    }, [calendar_id, navigate]);
+            }),
+            axios.get(`${CALENDARS_API_URL}/${calendar_id}/availabilities`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+        ]).then(([calendarResponse, availabilityResponse]) => {
+            setCalendarDetails(calendarResponse.data);
+            setAvailabilityData(availabilityResponse.data);
+            setIsLoading(false); // Data from both requests is loaded
+
+            if (availabilityResponse.data) {
+                const initialSelectedSlots = convertAvailabilityDataToMap(availabilityResponse.data);
+                setSelectedSlots(initialSelectedSlots);
+            }
+        }).catch((error) => {
+            setIsLoading(false);
+            if (error.response && error.response.status === 401) {
+                navigate('/unauthorized');
+            }
+        });
+    }, []);
 
     const handleSubmit = () => {
         // Check if selecteSlots is empty
@@ -100,38 +133,56 @@ function SelectSchedule() {
             alert("Please select at least one availability");
             return;
         } else {
-            for (let [availability, preference] of selectedSlots) {
-                const startDate = convertToDateTime(availability);
-                const endDate = new Date(startDate);
-                endDate.setMinutes(endDate.getMinutes() + 59);
-
-                var payload = {
-                    start_period: startDate,
-                    end_period: endDate,
-                    preference: parseInt(preference),
-                };
-
-                axios.post(`${CALENDARS_API_URL}/${calendar_id}/availabilities/`, payload, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
+            // Remove all the current availabilities for this calendar of the user
+            axios.delete(`${CALENDARS_API_URL}/${calendar_id}/availabilities/bulk-delete`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+                .then((response) => {
+                    console.log(response);
+                    
+                    for (let [availability, preference] of selectedSlots) {
+                        const startDate = convertToDateTime(availability);
+                        const endDate = new Date(startDate);
+                        endDate.setMinutes(endDate.getMinutes() + 59);
+        
+                        var payload = {
+                            start_period: startDate,
+                            end_period: endDate,
+                            preference: parseInt(preference),
+                        };
+        
+                        axios.post(`${CALENDARS_API_URL}/${calendar_id}/availabilities/`, payload, {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem('token')}`
+                            }
+                        })
+                            .then((response) => {
+                                console.log(response);
+                            })
+                            .catch((error) => {
+                                if (error.response && error.response.status === 401) {
+                                    navigate('/unauthorized');
+                                }
+                            });
                     }
+                    navigate('/calendars/owned');
                 })
-                    .then((response) => {
-                        console.log(response);
-                    })
-                    .catch((error) => {
-                        if (error.response && error.response.status === 401) {
-                            navigate('/unauthorized');
-                        }
-                    });
-            }
-            navigate('/calendars/owned');
+                .catch((error) => {
+                    if (error.response && error.response.status === 401) {
+                        navigate('/unauthorized');
+                    }
+                });
         }
     };
 
     if (isLoading) {
-        return <p>Loading...</p>;
+        return;
     }
+
+    console.log(selectedSlots)
+    console.log(availabilityData);
 
     // Initialize the needed calendar details
     const meetingName = calendarDetails.name;
