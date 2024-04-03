@@ -47,8 +47,7 @@ function Login() {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         }).then(() => {
-            // TODO: Redirect to calendar page
-            navigate('/accounts/profile/');
+            navigate('/calendars/');
         }).catch(() => {
             // This is when we failed to verify the token
             // Probably because the token timed out

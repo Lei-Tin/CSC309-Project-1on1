@@ -13,6 +13,10 @@ from .serializers import *
 from accounts.serializers import UserSerializer
 from contacts.models import Contacts
 
+# Including email features
+from django.core.mail import EmailMessage, get_connection
+from django.conf import settings
+
 
 # Create your views here.
 class CalendarViewSet(viewsets.ModelViewSet):
@@ -182,15 +186,41 @@ class CalendarViewSet(viewsets.ModelViewSet):
 
         return Response({'detail': 'Calendar has been successfully finalized.'}, status=status.HTTP_200_OK)
     
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], url_path='send-email')
     def send_email(self, request, pk=None, username=None):
-        calendar_id = self.kwargs.get('pk')
+        calendar_id = pk
         user = get_object_or_404(User, username=username)
 
-        email = user.email
-        return Response({'detail': 'Email sent to ' + email}, status=status.HTTP_200_OK)
-        # TODO: Send emali
-        pass
+        # Obtain calendar details
+        calendar = get_object_or_404(Calendar, pk=calendar_id)
+
+        # Look up owner of calendar and details about the owner
+        owner = calendar.owner
+
+        email_addr = user.email
+
+        # TODO: Send email
+        with get_connection(
+                host=settings.EMAIL_HOST, 
+                port=settings.EMAIL_PORT,  
+                username=settings.EMAIL_HOST_USER, 
+                password=settings.EMAIL_HOST_PASSWORD, 
+                use_tls=settings.EMAIL_USE_TLS  
+            ) as connection:  
+                subject = f'OneOnOne Calendar Availability Request to "{calendar.name}"'
+
+                email_from = settings.EMAIL_HOST_USER
+
+                recipient_list = [email_addr]
+                message = f'''
+You have been requested to fill in your availabilities to the calendar named "{calendar.name}" by "{owner.first_name} {owner.last_name} ({owner.username})".
+
+Please log in to your OneOnOne account to view the calendar and provide your availabilities. 
+                '''
+
+                EmailMessage(subject, message, email_from, recipient_list, connection=connection).send()
+
+        return Response({'detail': 'Email sent successfully.'}, status=status.HTTP_200_OK)
 
 
 class InviteeViewSet(viewsets.ModelViewSet):

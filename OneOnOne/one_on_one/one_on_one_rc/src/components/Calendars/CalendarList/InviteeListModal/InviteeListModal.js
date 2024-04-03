@@ -61,12 +61,13 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
         try {
             // Implement logic to send an email to the invitee using the inviteeId
             console.log(`Sending email to invitee ${inviteeId}`);
+        
             // Example: Redirect to sending an email to the invitee
             axios.post(`${CALENDARS_API_URL}/${calendarId}/email/${inviteeId}/`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
-            })
+            });
         } catch (error) {
             console.error("Error sending email to invitee:", error);
         }
