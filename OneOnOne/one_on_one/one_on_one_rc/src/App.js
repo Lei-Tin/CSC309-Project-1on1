@@ -7,10 +7,7 @@ import Register from 'components/Accounts/Register';
 import Profile from 'components/Accounts/Profile';
 import Contacts from 'components/Contacts/';
 
-import { SelectAvailability } from 'components/Calendars/Availability';
-
 import CalendarList from 'components/Calendars/CalendarList';
-import Owned from 'components/Calendars/Owned';
 import SelectAvailability from 'components/Calendars/Availability/SelectAvailability';
 
 import CustomNavbar from 'components/Layout/Navbar/CustomNavbar';

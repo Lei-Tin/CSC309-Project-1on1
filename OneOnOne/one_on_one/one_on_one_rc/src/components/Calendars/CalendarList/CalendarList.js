@@ -120,9 +120,9 @@ const CalendarList = () => {
     };
 
     function formatDate(dateString) {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
         return new Intl.DateTimeFormat('en-US', options).format(new Date(dateString));
-    }
+    }    
 
     return (
         <main>

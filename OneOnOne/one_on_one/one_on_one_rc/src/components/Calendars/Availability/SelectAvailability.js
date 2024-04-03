@@ -57,7 +57,7 @@ function convertAvailabilityDataToMap(availabilityData) {
     return availabilityMap;
 }
 
-function SelectSchedule() {
+function SelectAvailability() {
     // Initialize the useState hooks
     const [selectedPreference, setSelectedPreference] = useState("3");
     const [selectedDateIndex, setSelectedDateIndex] = useState(0);
