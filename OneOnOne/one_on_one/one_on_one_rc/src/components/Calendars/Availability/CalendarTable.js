@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "components/Calendars/calendar.css";
 
 // Helper function that generates dates for a week given a start date

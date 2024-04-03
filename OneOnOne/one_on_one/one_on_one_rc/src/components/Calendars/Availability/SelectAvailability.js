@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import { CALENDARS_API_URL, ACCOUNTS_API_URL } from 'constants';
+import { CALENDARS_API_URL } from 'constants';
 import CalendarTable from "./CalendarTable";
 import "components/Calendars/calendar.css";
 
@@ -75,35 +75,23 @@ function SelectSchedule() {
         finalized: false,
     });
 
-    const [selectedProfile, setSelectedProfile] = useState({
-        user: { id: '', username: '', first_name: '', last_name: '', email: '' },
-        profile_picture: '',
-    });
-
     useEffect(() => {
         setIsLoading(true);
-        Promise.all([
-            axios.get(`${CALENDARS_API_URL}/${calendar_id}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            }),
-            axios.get(`${ACCOUNTS_API_URL}/profile`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-        ]).then(([calendarResponse, profileResponse]) => {
-            setCalendarDetails(calendarResponse.data);
-            setSelectedProfile(profileResponse.data);
-            setIsLoading(false); // Data from both requests is loaded
-        }).catch((error) => {
-            setIsLoading(false);
-            // Handle error more specifically if needed
-            if (error.response && error.response.status === 401) {
-                navigate('/unauthorized');
+        axios.get(`${CALENDARS_API_URL}/${calendar_id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
             }
-        });
+        })
+            .then((response) => {
+                setCalendarDetails(response.data);
+                setIsLoading(false); // Data is loaded
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                if (error.response && error.response.status === 401) {
+                    navigate('/unauthorized');
+                }
+            });
     }, [calendar_id, navigate]);
 
     const handleSubmit = () => {
@@ -118,18 +106,24 @@ function SelectSchedule() {
                 endDate.setMinutes(endDate.getMinutes() + 59);
 
                 var payload = {
-                    calendar: calendar_id,
-                    user: user_id,
-                    start_date: startDate,
-                    end_date: endDate,
+                    start_period: startDate,
+                    end_period: endDate,
                     preference: parseInt(preference),
                 };
 
-                axios.put(`${CALENDARS_API_URL}/${calendar_id}/availabilities/`, payload, {
+                axios.post(`${CALENDARS_API_URL}/${calendar_id}/availabilities/`, payload, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
                 })
+                    .then((response) => {
+                        console.log(response);
+                    })
+                    .catch((error) => {
+                        if (error.response && error.response.status === 401) {
+                            navigate('/unauthorized');
+                        }
+                    });
             }
             navigate('/calendars/owned');
         }
@@ -143,9 +137,6 @@ function SelectSchedule() {
     const meetingName = calendarDetails.name;
     const actualStartDate = `${calendarDetails.start_date}T00:00:00`;
     const actualEndDate = `${calendarDetails.end_date}T00:00:00`;
-
-    // Get the user id from the selected profile
-    const user_id = selectedProfile.user.id;
 
     // Calculate the date ranges for the weeks between the start and end dates
     const dateRanges = calculateWeekRanges(actualStartDate, actualEndDate);
@@ -190,7 +181,7 @@ function SelectSchedule() {
 
             <CalendarTable selectedSlots={selectedSlots} setSelectedSlots={setSelectedSlots} weekStartDate={selectedDate[0]} actualStartDate={new Date(actualStartDate)} actualEndDate={new Date(actualEndDate)} preference={selectedPreference} />
 
-            <a className="btn btn-primary" onClick={handleSubmit}>Confirm</a>
+            <button className="btn btn-primary" onClick={handleSubmit}>Confirm</button>
         </section>
     );
 }
