@@ -8,17 +8,18 @@ import { CALENDARS_API_URL } from 'constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
-const PopupModal = ({ toggleModal, username }) => {
+const PopupModal = ({ toggleModal, username, userId }) => {
     const [selectMeetingId, setSelectMeetingId] = useState('');
     const [ownedMeetings, setOwnedMeetings] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const [ddlDate, setDdlDate] = useState('');
+    // const [ddlDate, setDdlDate] = useState('');
     function handleSubmit(event) {
         event.preventDefault();
+        setErrorMessage('');
         axios.post(`${CALENDARS_API_URL}/${selectMeetingId}/invitee/`,
             {
-                invitee: username,
-                deadline: ddlDate
+                invitee: userId,
             },
             {
                 headers: {
@@ -31,7 +32,8 @@ const PopupModal = ({ toggleModal, username }) => {
                 console.log(response.data);
             })
             .catch((error) => {
-                console.log(error);
+                setErrorMessage(error.response.data);
+                console.log(error.response.data);
             });
     }
 
@@ -43,7 +45,6 @@ const PopupModal = ({ toggleModal, username }) => {
         })
             .then((response) => {
                 setOwnedMeetings(response.data);
-                console.log(response.data);
                 // Set the first meeting as the default selected meeting
                 if (response.data.length !== 0) {
                     setSelectMeetingId(response.data[0].id);
@@ -82,10 +83,11 @@ const PopupModal = ({ toggleModal, username }) => {
                                             ))}
                                         </select>
                                     </div>
-                                    <div className="form-group">
+                                    {/* <div className="form-group">
                                         <label htmlFor="deadline">Select the response deadline</label>
                                         <input type="date" id="deadline" className="form-control" value={ddlDate} onChange={(e) => setDdlDate(e.target.value)} />
-                                    </div>
+                                    </div> */}
+                                    {errorMessage && <p className="error">{errorMessage}</p>}
                                     <button className="btn btn-primary form-submit-button" type="submit">Invite</button>
                                 </form>
                             </div>

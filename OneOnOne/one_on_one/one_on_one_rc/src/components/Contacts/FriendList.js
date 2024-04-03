@@ -11,8 +11,10 @@ import InvitePanel from './InvitePanel';
 export default function FriendList({ friendList }) {
     const [visiblePanel, setVisiblePanel] = useState({});
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-    const [selectUsername, setSelectUsername] = useState('');
     const [isInviteOpen, setIsInviteOpen] = useState(false);
+    
+    const [selectUsername, setSelectUsername] = useState('');
+    const [selectUserId, setSelectUserId] = useState('');
 
     // Function to toggle the visibility of the setting panel for a specific friend.
     const toggleVisibility = (username) => {
@@ -34,11 +36,14 @@ export default function FriendList({ friendList }) {
         setIsDeleteOpen(!isDeleteOpen);
     }
 
-    const handleInvite = (username) => {
+    const handleInvite = (username, userId) => {
         setSelectUsername(username);
+        console.log(userId);
+        setSelectUserId(userId)
         toggleInvite();
     }
 
+    console.log(friendList);
 
     const toggleInvite = () => {
         setIsInviteOpen(!isInviteOpen);
@@ -56,7 +61,7 @@ export default function FriendList({ friendList }) {
                         <p>First Name:{`${friend.first_name}`}</p>
                         <p>Last Name:{`${friend.last_name}`}</p>
                         <p>Email: {friend.email}</p>
-                        <button className="btn btn-success btn-sm contacts-invite-button" onClick={()=> handleInvite(friend.username)}>Invite to meeting</button>
+                        <button className="btn btn-success btn-sm contacts-invite-button" onClick={()=> handleInvite(friend.username, friend.id)}>Invite to meeting</button>
                         <button
                             type="button"
                             className="btn setting-button"
@@ -74,7 +79,7 @@ export default function FriendList({ friendList }) {
                 </div>
             ))}
             {isDeleteOpen && <DeletePanel toggleModal={toggleDelete} username={selectUsername} />}
-            {isInviteOpen && <InvitePanel toggleModal={toggleInvite} username={selectUsername} />}
+            {isInviteOpen && <InvitePanel toggleModal={toggleInvite} username={selectUsername} userId={selectUserId} />}
         </>
     );
 }
