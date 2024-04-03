@@ -15,8 +15,11 @@ const CalendarList = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [isInviteOpen, setInviteOpen] = useState(false);
     const [calendars, setCalendars] = useState([]);
+    const [invitedCalendars, setInvitedCalendars] = useState([]);
     const [selectedCalendarId, setSelectedCalendarId] = useState(null);
     const [showSettings, setShowSettings] = useState({});
+    const [tabSelected, setTabSelected] = useState('owned');
+
 
     const handleModalOpen = () => setModalOpen(true);
     const handleModalClose = () => setModalOpen(false);
@@ -35,24 +38,31 @@ const CalendarList = () => {
                 },
             });
             const ownedCalendars = response.data;
-
-            const calendarInvitees = await Promise.all(ownedCalendars.map(async (calendar) => {
-                const invitees = await axios.get(`${CALENDARS_API_URL}/${calendar.id}/invitee`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-                return { ...calendar, invitees: invitees.data };
-            }));
-
-            setCalendars(calendarInvitees);
+            setCalendars(ownedCalendars);
         } catch (error) {
             console.error(error);
         }
     };
 
+    const fetchInvitedCalendars = async () => {
+        try {
+            const response = await axios.get(`${CALENDARS_API_URL}/invited`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            const invitedCalendars = response.data;
+            setInvitedCalendars(invitedCalendars);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    
+
     useEffect(() => {
         fetchCalendars();
+        fetchInvitedCalendars();
     }, []);
 
     const handleCreateCalendar = (calendarData) => {
@@ -118,31 +128,53 @@ const CalendarList = () => {
             <div className="jumbotron calendar-list">
                 <h1 className="display-4">My Calendars</h1>
                 <button onClick={handleModalOpen} className="btn btn-primary btn-lg">Create a new calendar</button>
+                <div className="tab-container">
+                    <button onClick={() => setTabSelected('owned')} className={`tab ${tabSelected === 'owned' ? 'active' : ''}`}>Owned</button>
+                    <button onClick={() => setTabSelected('invited')} className={`tab ${tabSelected === 'invited' ? 'active' : ''}`}>Invited</button>
+                </div>
                 <div className="main-content-container">
-                    {calendars.map((calendar) => (
-                        <div key={calendar.id} className="calendar-brief rounded">
-                            <div className="calendar-meeting-details">
-                                <h4>{calendar.name}</h4>
-                                <h6>{formatDate(calendar.start_date)} - {formatDate(calendar.end_date)}</h6>
-                                <button className="btn btn-info" onClick={() => handleInviteButtonClick(calendar.id)}>View Participants</button>
-                                    {isInviteOpen && selectedCalendarId === calendar.id && (
-                                        <InviteeListPopup calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
-                                    )}
-                            </div>
-                            <div className="calendar-btn">
-                                <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Calendar</button>
-                            </div>
-                            <button onClick={() => toggleSettings(calendar.id)} className="btn settings-button">
-                                <FontAwesomeIcon icon={faCog} />
-                            </button>
-                            {showSettings[calendar.id] && (
-                                <div className="calendar-settings-menu">
-                                    <button className="btn btn-secondary">Edit</button>
-                                    <button onClick={() => handleDelete(calendar.id)} className="btn btn-danger">Delete</button>
+                    {tabSelected === 'owned'
+                        ?
+                        calendars.map((calendar) => (
+                            <div key={calendar.id} className="calendar-brief rounded">
+                                <div className="calendar-meeting-details">
+                                    <h4>{calendar.name}</h4>
+                                    <h6>{formatDate(calendar.start_date)} - {formatDate(calendar.end_date)}</h6>
+                                    <button className="btn btn-info" onClick={() => handleInviteButtonClick(calendar.id)}>View Participants</button>
+                                        {isInviteOpen && selectedCalendarId === calendar.id && (
+                                            <InviteeListPopup calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
+                                        )}
                                 </div>
-                            )}
-                        </div>
-                    ))}
+                                <div className="calendar-btn">
+                                    <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Calendar</button>
+                                </div>
+                                <button onClick={() => toggleSettings(calendar.id)} className="btn settings-button">
+                                    <FontAwesomeIcon icon={faCog} />
+                                </button>
+                                {showSettings[calendar.id] && (
+                                    <div className="calendar-settings-menu">
+                                        <button className="btn btn-secondary">Edit</button>
+                                        <button onClick={() => handleDelete(calendar.id)} className="btn btn-danger">Delete</button>
+                                    </div>
+                                )}
+                            </div>
+                        ))
+                        :
+                        invitedCalendars.map((calendar) => (
+                            <div key={calendar.id} className="calendar-brief rounded">
+                                <div className="calendar-meeting-details">
+                                    <h4>{calendar.name}</h4>
+                                    <h6>{formatDate(calendar.start_date)} - {formatDate(calendar.end_date)}</h6>
+                                </div>
+                                <div className="calendar-btn">
+                                    <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Availability</button>
+                                </div>
+                                <button onClick={() => toggleSettings(calendar.id)} className="btn settings-button">
+                                    <FontAwesomeIcon icon={faCog} />
+                                </button>
+                            </div>
+                        ))
+                    }
                 </div>
             </div>
         </main>
