@@ -38,12 +38,9 @@ export default function FriendList({ friendList }) {
 
     const handleInvite = (username, userId) => {
         setSelectUsername(username);
-        console.log(userId);
         setSelectUserId(userId)
         toggleInvite();
     }
-
-    console.log(friendList);
 
     const toggleInvite = () => {
         setIsInviteOpen(!isInviteOpen);

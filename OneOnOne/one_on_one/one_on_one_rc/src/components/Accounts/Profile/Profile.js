@@ -82,7 +82,6 @@ const Profile = () => {
             })
             .catch((error) => {
                 if (error.response) {
-                    console.log(error.response.data);
                     setErrorMessage(error.response.data);
                 }
             }
