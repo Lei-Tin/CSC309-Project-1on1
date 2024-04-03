@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import axios from 'axios';
 import { ACCOUNTS_API_URL, CONTACTS_API_URL, DEFAULT_PROFILE_PIC } from "constants";
@@ -53,9 +53,9 @@ export default function AddFriendPanel({ toggleAddFriend }) {
         <>
             <div id="overlay">
                 <div className="popup-window">
-                    <a type="button" className="btn close-button" onClick={toggleAddFriend}>
+                    <button className="btn close-button" onClick={toggleAddFriend}>
                         <FontAwesomeIcon icon={faTimes} />
-                    </a>
+                    </button>
 
                     <div className="popup-modal">
                         <div className="heading">
@@ -71,11 +71,11 @@ export default function AddFriendPanel({ toggleAddFriend }) {
                         <span className="error">{errorMessage}</span>
                         <div className="card search-results">
                             {searchResult !== ""?
-                                <a className="dropdown-item search-result-profile" onClick={addFriend}>
+                                <button className="dropdown-item search-result-profile" onClick={addFriend}>
                                     <img className="search-result-profile-pic" src={searchResult.profile_picture !== null ?
                                         `/media${searchResult.profile_picture}` : DEFAULT_PROFILE_PIC} alt="User profile" id="profile_pic" />
                                     <div className="search-result-name">{searchResult.user.username}</div>
-                                </a>: null
+                                </button>: null
                             }
                         </div>
                     </div>
