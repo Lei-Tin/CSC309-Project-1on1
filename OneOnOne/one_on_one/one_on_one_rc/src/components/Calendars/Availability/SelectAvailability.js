@@ -181,9 +181,6 @@ function SelectSchedule() {
         return;
     }
 
-    console.log(selectedSlots)
-    console.log(availabilityData);
-
     // Initialize the needed calendar details
     const meetingName = calendarDetails.name;
     const actualStartDate = `${calendarDetails.start_date}T00:00:00`;
