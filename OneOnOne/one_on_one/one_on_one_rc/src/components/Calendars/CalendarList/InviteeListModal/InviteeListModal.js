@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { CALENDARS_API_URL } from 'constants';
 
@@ -6,11 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 
-function InviteeListPopup({ calendarId, isOpen, onClose }) {
+function InviteeListModal({ calendarId, isOpen, onClose }) {
     const [invitees, setInvitees] = useState([]);
     const [uninvited, setUninvited] = useState([]);
 
-    const fetchInviteeData = async () => {
+    const fetchInviteeData = useCallback(async () => {
         if (!isOpen) return; // Only fetch data if the popup is open
         try {
             // Fetch invitees data
@@ -28,16 +28,15 @@ function InviteeListPopup({ calendarId, isOpen, onClose }) {
                 },
             });
             const uninvitedData = uninvitedResponse.data;
-            console.log(uninvitedData);
             setUninvited(uninvitedData);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
-    };
+    }, [calendarId, isOpen]);
     
     useEffect(() => {
         fetchInviteeData(); // Call the function to fetch data
-    }, [isOpen, calendarId]);
+    }, [isOpen, calendarId, fetchInviteeData]);
 
     const handleInvite = async (contactId) => {
         try {
@@ -65,26 +64,35 @@ function InviteeListPopup({ calendarId, isOpen, onClose }) {
                     <FontAwesomeIcon icon={faXmark}></FontAwesomeIcon>
                 </button>
                 <div className="popup-modal">
-                    <div className="invitee-list">
-                        <h5>Participants</h5>
-                        <ul>
-                            {invitees.map(invitee => (
-                                <li key={invitee.id}>
-                                    {invitee.invitee} ({invitee.has_availability ? "Accepted" : "Invited"})
-                                </li>
-                            ))}
-                        </ul>
+                    <div className="heading">
+                        <h2>Participants</h2>
                     </div>
-                    <div className="uninvited-list">
-                        <h5>Not invited</h5>
-                        <ul>
-                            {uninvited.map(contact => (
-                                <li key={contact.id}>
-                                    {contact.username}
-                                    <button onClick={() => handleInvite(contact.id)} className="btn">Invite</button>
-                                </li>
-                            ))}
-                        </ul>
+                    <div className="invited-list">
+                        <h3>Invited</h3>
+                        <div className="participants-list">
+                            <ul>
+                                {invitees.length === 0 ? <li>No invited contacts yet</li> : invitees.map(invitee => (
+                                    <li key={invitee.id}>
+                                        {invitee.invitee} ({invitee.has_availability ? "Accepted" : "Invited"})
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="invite-contacts-block">
+                        <h3>Invite more participants below?</h3>
+                    </div>
+                    <div className="card uninvited-list">
+                        <div className="participants-list">
+                            <ul>
+                                {uninvited.length === 0 ? <li>No uninvited contacts available</li> : uninvited.map(contact => (
+                                    <li key={contact.id}>
+                                        <span>{contact.username}</span>
+                                        <button onClick={() => handleInvite(contact.id)} className="btn btn-primary">Invite</button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -92,4 +100,4 @@ function InviteeListPopup({ calendarId, isOpen, onClose }) {
     );
 }
 
-export default InviteeListPopup;
+export default InviteeListModal;

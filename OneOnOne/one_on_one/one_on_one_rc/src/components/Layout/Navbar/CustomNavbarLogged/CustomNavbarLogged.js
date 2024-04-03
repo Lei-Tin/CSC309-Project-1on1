@@ -52,7 +52,7 @@ export default function NavBar() {
         {/* TODO: Redirect to the calendars page */}
         <Link className="navbar-brand" to="/">1on1</Link>
         <div className="icon-container">
-          <Link to="/calendars/owned" title="Calendar">
+          <Link to="/calendars" title="Calendar">
             <FontAwesomeIcon icon={isActive('/calendars') ? faCalendarSolid : faCalendar} className={'icon ' + (isActive('/calendars') ? 'active' : '')} />
           </Link>
           <Link to="/contacts" title="Contacts">
