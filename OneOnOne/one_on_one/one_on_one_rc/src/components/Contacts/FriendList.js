@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
+import { faGears } from '@fortawesome/free-solid-svg-icons';
+
 import { DEFAULT_PROFILE_PIC } from 'constants';
 
 import DeletePanel from './ConfimModal';
@@ -64,7 +66,7 @@ export default function FriendList({ friendList }) {
                             className="btn setting-button"
                             onClick={() => toggleVisibility(friend.username)}
                         >
-                            <FontAwesomeIcon icon={faGear} />
+                            {visiblePanel[friend.username] ? <FontAwesomeIcon icon={faGears} /> : <FontAwesomeIcon icon={faGear} />}
                         </button>
                         {visiblePanel[friend.username] && (
                             <div className="setting-panel">
