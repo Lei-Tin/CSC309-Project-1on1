@@ -32,10 +32,13 @@ export default function ConfirmModal({ toggleModal, username }) {
                 <a type="button" className="btn close-button" onClick={toggleModal}>
                     <FontAwesomeIcon icon={faTimes} />
                 </a>
-                <div className="modal-content">
-                    <div className="box">
+                <div className="popup-modal">
+                    <div className="heading">
+                        <h2>Are you sure?</h2>
+                    </div>
+                    <div>
                         <p>Are you sure you want to delete "{username}" from your friend list? </p>
-                        <div className="buttons">
+                        <div className="d-flex justify-content-center">
                             <button className="btn btn-danger" onClick={() => deleteFriend(username)}>Yes</button>
                         </div>
                     </div>
