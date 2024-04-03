@@ -124,8 +124,8 @@ const CalendarList = () => {
                         <div key={calendar.id} className="calendar-brief rounded">
                             {/* Show invite overlay on top */}
                             {isInviteOpen && selectedCalendarId === calendar.id && (
-                                        <InviteeListPopup calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
-                                )}
+                                <InviteeListPopup calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
+                            )}
                             {/* Settings modal is also shown on top */}
                             {showSettings[calendar.id] && (
                             <div className="setting-panel">
