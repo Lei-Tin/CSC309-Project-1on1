@@ -21,7 +21,10 @@ const CalendarTable = ({ selectedSlots, setSelectedSlots, weekStartDate, actualS
     };
 
     // Helper function to format a slot's key
-    const formatSlotKey = (date, hour) => `${date.toLocaleDateString()}-${hour}`
+    function formatSlotKey(date, hour) {
+        date.setHours(hour);
+        return date.toISOString();
+    }
 
     // Helper function to toggle a slot's selection
     const toggleSlotSelection = (slotKey) => {

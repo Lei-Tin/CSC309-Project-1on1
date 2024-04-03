@@ -43,35 +43,15 @@ function calculateWeekRanges(startDate, endDate) {
     return weekRanges;
 }
 
-// Helper function to convert a date-time string to a Date object
-function convertToDateTime(dateTimeStr) {
-    // Assuming the format is "YYYY-MM-DD-HH"
-    const parts = dateTimeStr.split("-");
-    const year = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const day = parseInt(parts[2], 10);
-    const hour = parseInt(parts[3], 10);
-
-    // Create a Date object
-    return new Date(Date.UTC(year, month, day, hour));
-}
-
 // Helper function to convert Availability data to a Map
 function convertAvailabilityDataToMap(availabilityData) {
     let availabilityMap = new Map();
 
     availabilityData.forEach((availability) => {
-        const date = new Date(availability.start_period);
+        const startTime = new Date(availability.start_period);
         const preference = availability.preference;
 
-        const year = date.getUTCFullYear();
-        const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-        const day = date.getUTCDate().toString().padStart(2, '0');
-        const hour = date.getUTCHours().toString();
-
-        const startTime = `${year}-${month}-${day}-${hour}`;
-
-        availabilityMap.set(startTime, preference.toString());
+        availabilityMap.set(startTime.toISOString(), preference.toString());
     });
 
     return availabilityMap;
@@ -94,8 +74,6 @@ function SelectSchedule() {
         finalized: false,
     });
 
-    const [availabilityData, setAvailabilityData] = useState();
-
     useEffect(() => {
         setIsLoading(true);
 
@@ -112,7 +90,6 @@ function SelectSchedule() {
             })
         ]).then(([calendarResponse, availabilityResponse]) => {
             setCalendarDetails(calendarResponse.data);
-            setAvailabilityData(availabilityResponse.data);
             setIsLoading(false); // Data from both requests is loaded
 
             if (availabilityResponse.data) {
@@ -141,9 +118,8 @@ function SelectSchedule() {
             })
                 .then((response) => {
                     console.log(response);
-                    
                     for (let [availability, preference] of selectedSlots) {
-                        const startDate = convertToDateTime(availability);
+                        const startDate = new Date(availability);
                         const endDate = new Date(startDate);
                         endDate.setMinutes(endDate.getMinutes() + 59);
         
@@ -152,6 +128,8 @@ function SelectSchedule() {
                             end_period: endDate,
                             preference: parseInt(preference),
                         };
+
+                        console.log(payload)
         
                         axios.post(`${CALENDARS_API_URL}/${calendar_id}/availabilities/`, payload, {
                             headers: {
