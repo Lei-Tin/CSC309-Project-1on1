@@ -119,3 +119,12 @@ th, td {
     background-position: right 10px center; /* Positions the arrow to the far right */
     background-size: 24px;
 }
+
+.editable {
+    background-color: #f0f0f0; /* Light grey background */
+    padding: 4px;
+    border-radius: 4px;
+    border: 1px solid #ccc; /* Light grey border */
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    min-height: 24px; /* Ensure it looks like an input field */
+}

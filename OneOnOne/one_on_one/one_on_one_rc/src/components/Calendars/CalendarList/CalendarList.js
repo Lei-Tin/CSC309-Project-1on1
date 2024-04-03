@@ -21,6 +21,8 @@ const CalendarList = () => {
     const [invitedCalendars, setInvitedCalendars] = useState([]);
     const [selectedCalendarId, setSelectedCalendarId] = useState(null);
     const [showSettings, setShowSettings] = useState({});
+    const [editCalendarId, setEditCalendarId] = useState(null);
+    const [editedName, setEditedName] = useState("");
     const [tabSelected, setTabSelected] = useState('owned');
 
 
@@ -88,22 +90,33 @@ const CalendarList = () => {
         setInviteOpen(true);
     };
 
-//    const handleEdit = (calendar) => {
-//        setEditingId(calendar.id);
-//        setEditValue(calendar.name); // Pre-populate the input with the current name
-//    };
-//
-//    const handleNameChange = (e) => {
-//        setEditValue(e.target.value);
-//    };
-//
-//    const handleKeyPress = (e, calendarId) => {
-//        if (e.key === 'Enter') {
-//            e.preventDefault(); // Prevent form submission or any default action
-//            onUpdate(calendarId, editValue); // Assuming onUpdate is a prop method to update the calendar
-//            setEditingId(null); // Exit editing mode
-//        }
-//    };
+    const handleEditClick = (calendar, event) => {
+        event.stopPropagation(); // Prevent event propagation
+
+        if (editCalendarId === calendar.id) {
+            // If currently in edit mode and "Save" is clicked
+            updateCalendarName(calendar.id, editedName);
+            setEditCalendarId(null); // Exit edit mode immediately
+        } else {
+            // If "Edit" is clicked
+            setEditCalendarId(calendar.id);
+            setEditedName(calendar.name);
+        }
+    };
+
+    const handleNameChange = (event) => {
+        setEditedName(event.target.innerText);
+    };
+
+    const updateCalendarName = (id, name) => {
+        axios.put(`${CALENDARS_API_URL}/${id}`, { name }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        })
+        .then(() => fetchCalendars()) // Refresh the list of calendars
+        .catch(error => console.error('Error updating calendar name', error));
+    };  
 
     const handleDelete = (calendarId) => {
         if (window.confirm('Are you sure you want to delete this calendar?')) {
@@ -143,7 +156,14 @@ const CalendarList = () => {
                         calendars.map((calendar) => (
                             <div key={calendar.id} className="calendar-brief rounded">
                                 <div className="calendar-meeting-details">
-                                    <h4>{calendar.name}</h4>
+                                <h4
+                                    contentEditable={editCalendarId === calendar.id}
+                                    onInput={handleNameChange}
+                                    suppressContentEditableWarning={true}
+                                    className={editCalendarId === calendar.id ? 'editable' : ''}
+                                >
+                                    {calendar.name}
+                                </h4>
                                     <h6>{formatDate(calendar.start_date)} - {formatDate(calendar.end_date)}</h6>
                                     <button className="btn btn-info" onClick={() => handleInviteButtonClick(calendar.id)}>View Participants</button>
                                         {/* Invited users popup */}
@@ -159,7 +179,11 @@ const CalendarList = () => {
                                 </button>
                                 {showSettings[calendar.id] && (
                                     <div className="setting-panel">
-                                        <button className="dropdown-item">Edit</button>
+                                        <button 
+                                            className="btn btn-primary" 
+                                            onClick={(e) => handleEditClick(calendar, e)}>
+                                                {editCalendarId === calendar.id ? 'Save' : 'Edit'}
+                                        </button>
                                         <button onClick={() => handleDelete(calendar.id)} className="dropdown-item text-danger">Delete</button>
                                     </div>
                                 )}
