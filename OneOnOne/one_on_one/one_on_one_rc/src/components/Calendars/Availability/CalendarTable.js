@@ -41,11 +41,11 @@ const CalendarTable = ({ selectedSlots, setSelectedSlots, weekStartDate, actualS
     const getSlotClass = (slotKey, isOutsideRange) => {
         if (isOutsideRange) {
             return 'calendar-day-not-available';
-        } else if (selectedSlots.get(slotKey) === 'high') {
+        } else if (selectedSlots.get(slotKey) === '3') {
             return 'calendar-high-preference';
-        } else if (selectedSlots.get(slotKey) === 'medium') {
+        } else if (selectedSlots.get(slotKey) === '2') {
             return 'calendar-medium-preference';
-        } else if (selectedSlots.get(slotKey) === 'low') {
+        } else if (selectedSlots.get(slotKey) === '1') {
             return 'calendar-low-preference';
         }
         return '';
