@@ -37,6 +37,9 @@ owned_calendars = CalendarViewSet.as_view({
 invited_calendars = CalendarViewSet.as_view({
     'get': 'invited_calendars'
 })
+send_email = CalendarViewSet.as_view({
+    'post': 'send_email'
+})
 
 invitee_list = InviteeViewSet.as_view({
     'get': 'list',
@@ -80,6 +83,7 @@ urlpatterns = [
     path('', calendar_list, name='calendar-list'),
     path('<int:pk>', calendar_detail, name='calendar-detail'),
     path('<int:pk>/finalize/', calendar_finalize, name='finalize'),
+    path('<int:pk>/email/<str:username>/', send_email, name='send-email'),
     path('owned', owned_calendars, name='owned-calendars'),
     path('invited', invited_calendars, name='invited-calendars'),
     path('<int:calendar_id>/invitee/', invitee_list, name='invitee-list'),

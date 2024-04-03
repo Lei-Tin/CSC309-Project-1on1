@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { CALENDARS_API_URL } from 'constants';
+import { CALENDARS_API_URL, ACCOUNTS_API_URL } from 'constants';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -57,6 +57,21 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
         }
     };
 
+    const sendEmail = async (calendarId, inviteeId) => {
+        try {
+            // Implement logic to send an email to the invitee using the inviteeId
+            console.log(`Sending email to invitee ${inviteeId}`);
+            // Example: Redirect to sending an email to the invitee
+            axios.post(`${CALENDARS_API_URL}/${calendarId}/email/${inviteeId}/`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            })
+        } catch (error) {
+            console.error("Error sending email to invitee:", error);
+        }
+    }
+
     return (
         <div id="overlay">
             <div className="popup-window">
@@ -74,6 +89,9 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
                                 {invitees.length === 0 ? <li>No invited contacts yet</li> : invitees.map(invitee => (
                                     <li key={invitee.id}>
                                         {invitee.invitee} ({invitee.has_availability ? "Accepted" : "Invited"})
+                                        {!invitee.has_availability && (
+                                            <button onClick={() => sendEmail(invitee.calendar, invitee.invitee)}>Send Email</button>
+                                        )}
                                     </li>
                                 ))}
                             </ul>

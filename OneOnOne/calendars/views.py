@@ -181,6 +181,16 @@ class CalendarViewSet(viewsets.ModelViewSet):
             calendar.save()
 
         return Response({'detail': 'Calendar has been successfully finalized.'}, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['post'])
+    def send_email(self, request, pk=None, username=None):
+        calendar_id = self.kwargs.get('pk')
+        user = get_object_or_404(User, username=username)
+
+        email = user.email
+        return Response({'detail': 'Email sent to ' + email}, status=status.HTTP_200_OK)
+        # TODO: Send emali
+        pass
 
 
 class InviteeViewSet(viewsets.ModelViewSet):
