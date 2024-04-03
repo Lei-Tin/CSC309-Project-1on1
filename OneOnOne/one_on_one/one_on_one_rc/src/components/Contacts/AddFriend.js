@@ -9,7 +9,6 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 export default function AddFriendPanel({ toggleAddFriend }) {
     const [searchUsername, setSearchUsername] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-    const [selectUser, setSelectUser] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
     const searchUser = () => {
