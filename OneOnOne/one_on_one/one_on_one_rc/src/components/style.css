@@ -214,11 +214,9 @@ p, h1, h2, h3, h4, h5, h6 {
 
 #overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    
+    top: 0%;
+    left: 0%;
+
     width: 100vw;
     height: 100vh;
 
@@ -237,6 +235,7 @@ p, h1, h2, h3, h4, h5, h6 {
     padding: 0;
     margin: 0.5rem;
     padding: 0.2rem;
+    font-size: 14pt;
 }
 
 .popup-window {
@@ -275,6 +274,10 @@ p, h1, h2, h3, h4, h5, h6 {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.form-group {
+    width: 100%;
 }
 
 .form-drop-down > label {

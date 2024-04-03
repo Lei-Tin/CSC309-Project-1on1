@@ -30,6 +30,7 @@ class contactListView(APIView):
         friends_as_requester = Contacts.objects.filter(requester=user, accepted=True).values_list('requested', flat=True)
         friends_as_requested = Contacts.objects.filter(requested=user, accepted=True).values_list('requester', flat=True)
         friends_id = set(friends_as_requester) | set(friends_as_requested)
+        friends_id_list = list(friends_id)
         friend_usernames = User.objects.filter(id__in=friends_id).values_list('username', flat=True)
         friend_first_names = User.objects.filter(id__in=friends_id).values_list('first_name', flat=True)
         friend_last_names = User.objects.filter(id__in=friends_id).values_list('last_name', flat=True)
@@ -38,6 +39,7 @@ class contactListView(APIView):
         friends_info = []
         for i in range(len(friend_usernames)):
             friends_info.append({
+                "id": friends_id_list[i],
                 "username": friend_usernames[i],
                 "first_name": friend_first_names[i],
                 "last_name": friend_last_names[i],
