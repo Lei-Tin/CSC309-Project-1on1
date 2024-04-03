@@ -162,7 +162,7 @@ function SelectSchedule() {
     // Initialize the needed calendar details
     const meetingName = calendarDetails.name;
     const actualStartDate = `${calendarDetails.start_date}T00:00:00`;
-    const actualEndDate = `${calendarDetails.end_date}T00:00:00`;
+    const actualEndDate = `${calendarDetails.end_date}T23:00:00`; // Set it to 11 clock to avoid comparison issues
 
     // Calculate the date ranges for the weeks between the start and end dates
     const dateRanges = calculateWeekRanges(actualStartDate, actualEndDate);
