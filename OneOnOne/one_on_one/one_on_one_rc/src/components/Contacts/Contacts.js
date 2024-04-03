@@ -23,7 +23,6 @@ function Contacts() {
       }
     })
       .then((response) => {
-        console.log(response.data);
         setContacts(response.data.friends);
       })
       .catch((error) => {
