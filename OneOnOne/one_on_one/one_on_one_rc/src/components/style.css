@@ -330,7 +330,7 @@ p, h1, h2, h3, h4, h5, h6 {
 .search-result-profile {
     display: flex;
     flex-direction: row;
-    height: 10vh;
+    height: 100%;
     align-items: center;
     padding: 1rem;
 }
