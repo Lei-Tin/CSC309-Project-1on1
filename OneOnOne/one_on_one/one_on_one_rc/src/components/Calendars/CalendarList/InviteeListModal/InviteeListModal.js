@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { CALENDARS_API_URL, ACCOUNTS_API_URL } from 'constants';
+import { CALENDARS_API_URL } from 'constants';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -62,8 +62,10 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
             // Implement logic to send an email to the invitee using the inviteeId
             console.log(`Sending email to invitee ${inviteeId}`);
         
+            alert('Email sent to invitee!');
+
             // Example: Redirect to sending an email to the invitee
-            axios.post(`${CALENDARS_API_URL}/${calendarId}/email/${inviteeId}/`, {
+            axios.post(`${CALENDARS_API_URL}/${calendarId}/email/${inviteeId}/`, {}, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
@@ -83,15 +85,15 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
                     <div className="heading">
                         <h2>Participants</h2>
                     </div>
-                    <div className="invited-list">
-                        <h3>Invited</h3>
+                    <h3>Invited</h3>
+                    <div className="card uninvited-list">
                         <div className="participants-list">
                             <ul>
                                 {invitees.length === 0 ? <li>No invited contacts yet</li> : invitees.map(invitee => (
                                     <li key={invitee.id}>
                                         {invitee.invitee} ({invitee.has_availability ? "Accepted" : "Invited"})
                                         {!invitee.has_availability && (
-                                            <button onClick={() => sendEmail(invitee.calendar, invitee.invitee)}>Send Email</button>
+                                            <button className="btn btn-outline-primary" onClick={() => sendEmail(invitee.calendar, invitee.invitee)}>Send Email</button>
                                         )}
                                     </li>
                                 ))}
