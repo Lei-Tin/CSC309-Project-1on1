@@ -55,7 +55,7 @@ export default function FriendList({ friendList }) {
                 <div key={index} className="contacts-profile">
                     <div className="profile-description">
                         <div className="contacts-profile-picture">
-                            <img src={friend.profile_picture !== "" ? `/media/${friend.profile_picture}` : DEFAULT_PROFILE_PIC} alt={`${friend.first_name}'s profile`} />
+                            <img src={friend.profile_picture !== null ? `/media/${friend.profile_picture}` : DEFAULT_PROFILE_PIC} alt={`${friend.first_name}'s profile`} />
                         </div>
                         <h2>{friend.username}</h2>
                         <p>First Name:{`${friend.first_name}`}</p>

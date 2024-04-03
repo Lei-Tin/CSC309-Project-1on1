@@ -30,23 +30,44 @@ class contactListView(APIView):
         friends_as_requester = Contacts.objects.filter(requester=user, accepted=True).values_list('requested', flat=True)
         friends_as_requested = Contacts.objects.filter(requested=user, accepted=True).values_list('requester', flat=True)
         friends_id = set(friends_as_requester) | set(friends_as_requested)
-        friends_id_list = list(friends_id)
-        friend_usernames = User.objects.filter(id__in=friends_id).values_list('username', flat=True)
-        friend_first_names = User.objects.filter(id__in=friends_id).values_list('first_name', flat=True)
-        friend_last_names = User.objects.filter(id__in=friends_id).values_list('last_name', flat=True)
-        friend_emails = User.objects.filter(id__in=friends_id).values_list('email', flat=True)
-        friend_profile_pics = Profile.objects.filter(user__id__in=friends_id).values_list('profile_picture', flat=True)
+
         friends_info = []
-        for i in range(len(friend_usernames)):
-            friends_info.append({
-                "id": friends_id_list[i],
-                "username": friend_usernames[i],
-                "first_name": friend_first_names[i],
-                "last_name": friend_last_names[i],
-                "email": friend_emails[i],
-                "profile_picture": friend_profile_pics[i]
-            })
+        for friend_id in friends_id:
+            # Fetching user info
+            user_info = User.objects.filter(id=friend_id).values('id', 'username', 'first_name', 'last_name', 'email').first()
+            
+            if user_info:
+                # Attempt to fetch the profile picture
+                profile_picture = Profile.objects.filter(user__id=friend_id).values_list('profile_picture', flat=True).first()
+                
+                # Append the friend info to the list, use profile picture if available, else None
+                friends_info.append({
+                    "id": user_info['id'],
+                    "username": user_info['username'],
+                    "first_name": user_info['first_name'],
+                    "last_name": user_info['last_name'],
+                    "email": user_info['email'],
+                    "profile_picture": profile_picture if profile_picture else None
+                })
+        
         return Response({"friends": friends_info})
+        # friends_id_list = list(friends_id)
+        # friend_usernames = User.objects.filter(id__in=friends_id).values_list('username', flat=True)
+        # friend_first_names = User.objects.filter(id__in=friends_id).values_list('first_name', flat=True)
+        # friend_last_names = User.objects.filter(id__in=friends_id).values_list('last_name', flat=True)
+        # friend_emails = User.objects.filter(id__in=friends_id).values_list('email', flat=True)
+        # friend_profile_pics = Profile.objects.filter(user__id__in=friends_id).values_list('profile_picture', flat=True)
+        # friends_info = []
+        # for i in range(len(friend_usernames)):
+        #     friends_info.append({
+        #         "id": friends_id_list[i],
+        #         "username": friend_usernames[i],
+        #         "first_name": friend_first_names[i],
+        #         "last_name": friend_last_names[i],
+        #         "email": friend_emails[i],
+        #         "profile_picture": friend_profile_pics[i]
+        #     })
+        # return Response({"friends": friends_info})
 
 
 class friendRequestsView(APIView):
