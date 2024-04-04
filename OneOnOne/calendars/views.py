@@ -164,6 +164,13 @@ class CalendarViewSet(viewsets.ModelViewSet):
         # queryset = Calendar.objects.filter(id__in=calendar_id)
         serializer = self.get_serializer(calendar_id, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'], url_path='status')
+    def status(self, request):
+        invitees = Invitee.objects.filter(invitee=request.user)
+        calendar_id = [invitee.calendar for invitee in invitees if not Availability.objects.filter(calendar=invitee.calendar, user=invitee.invitee).exists()]
+        serializer = self.get_serializer(calendar_id, many=True)
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user, finalized=False)
@@ -323,7 +330,16 @@ class InviteeViewSet(viewsets.ModelViewSet):
     """
     queryset = Invitee.objects.all()
     serializer_class = InviteeSerializer
-    permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action == 'remove_invitation':
+            permission_classes = [IsAuthenticated, IsOwnerOrInvitee, IsNotFinalized]
+        else:
+            permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
+
+        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         calendar_id = self.kwargs.get('calendar_id')
@@ -369,6 +385,13 @@ class InviteeViewSet(viewsets.ModelViewSet):
             # If an IntegrityError is caught, raise a ValidationError
             # DRF will handle this exception and return a 400 Bad Request response
             raise ValidationError("An invitee with these details already exists.")
+    
+    @action(detail=False, methods=['delete'], url_path='remove-invitation')
+    def remove_invitation(self, request, calendar_id=None):
+        calendar = get_object_or_404(Calendar, pk=calendar_id)
+        invitee = request.user
+        Invitee.objects.filter(calendar=calendar, invitee=invitee).delete()
+        return Response(status=status.HTTP_200_OK)
 
 
 class AvailabilityViewSet(viewsets.ModelViewSet):
