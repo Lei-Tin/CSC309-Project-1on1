@@ -20,11 +20,11 @@ export const FriendNotificationItem = ({ username, onAccept, onDecline }) => {
   );
 };
 
-export const InviteNotificationItem = ({ inviter, calendar, dueDate, onAccept, onDecline }) => {
+export const InviteNotificationItem = ({ inviter, calendar, onAccept, onDecline }) => {
   return (
     <div className="dropdown-item">
       <div className="dropdown-item-content">
-        <p>{inviter} has invited you to {calendar} due on {dueDate}</p>
+        <p>{inviter} has invited you to {calendar}</p>
       </div>
       <div className="dropdown-item-actions">
         <button className="accept" onClick={() => onAccept(inviter, calendar)}>

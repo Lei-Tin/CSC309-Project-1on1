@@ -24,6 +24,8 @@ const CalendarList = () => {
     const [editCalendarId, setEditCalendarId] = useState(null);
     const [editedName, setEditedName] = useState("");
     const [tabSelected, setTabSelected] = useState('owned');
+    const [keyForReRender, setKeyForReRender] = useState(0);
+
 
 
     const handleModalOpen = () => setModalOpen(true);
@@ -95,8 +97,15 @@ const CalendarList = () => {
 
         if (editCalendarId === calendar.id) {
             // If currently in edit mode and "Save" is clicked
-            updateCalendarName(calendar.id, editedName);
-            setEditCalendarId(null); // Exit edit mode immediately
+            if (editedName.trim() !== "") {
+                // If name is not empty, update the name
+                updateCalendarName(calendar.id, editedName);
+            } else {
+                // If name is empty, revert to the original name and potentially notify the user
+                setEditedName(calendar.name); // Reset editedName to original name
+                setKeyForReRender(prevKey => prevKey + 1);
+            }
+            setEditCalendarId(null);
         } else {
             // If "Edit" is clicked
             setEditCalendarId(calendar.id);
@@ -161,6 +170,7 @@ const CalendarList = () => {
                                     onInput={handleNameChange}
                                     suppressContentEditableWarning={true}
                                     className={editCalendarId === calendar.id ? 'editable' : ''}
+                                    key={keyForReRender}
                                 >
                                     {calendar.name}
                                 </h4>
