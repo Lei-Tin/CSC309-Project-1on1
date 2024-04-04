@@ -29,9 +29,9 @@ export default function ConfirmModal({ toggleModal, username }) {
     return (
         <div id="overlay">
             <div className={"popup-window"}>
-                <a type="button" className="btn close-button" onClick={toggleModal}>
+                <button className="btn close-button" onClick={toggleModal}>
                     <FontAwesomeIcon icon={faTimes} />
-                </a>
+                </button>
                 <div className="popup-modal">
                     <div className="heading">
                         <h2>Are you sure?</h2>
