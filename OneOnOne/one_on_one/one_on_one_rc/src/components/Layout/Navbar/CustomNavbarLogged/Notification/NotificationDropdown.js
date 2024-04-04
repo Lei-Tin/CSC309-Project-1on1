@@ -58,7 +58,6 @@ const NotificationDropdown = () => {
     })
       .then((response) => {
         const invitations = response.data;
-        console.log(invitations);
         setInvitations(invitations);
       })
       .catch((error) => {
@@ -91,7 +90,7 @@ const NotificationDropdown = () => {
         aria-haspopup="true"
         aria-expanded={isNotifOpen}
         onClick={toggleNotificationDropdown}>
-        <FontAwesomeIcon icon={isMoreFriendReq ? faBellSolid : faBell} className="icon" />
+        <FontAwesomeIcon icon={isMoreFriendReq || invitations.length > 0 ? faBellSolid : faBell} className="icon" />
       </button>
       <div className={`dropdown-menu dropdown-menu-right ${isNotifOpen ? 'show' : ''}`}
         aria-labelledby="dropdownMenuLink"
@@ -115,9 +114,9 @@ const NotificationDropdown = () => {
               onDecline={() => handleFriendSubmit(username, false)}
             />
           ))
-        ) : (
-          <p className="dropdown-item">You're done with all the notifications!</p>
-        )}
+        ) : <></>}
+
+        {invitations.length === 0 && !isMoreFriendReq ? <p className="dropdown-item">No new notifications</p> : <></>}
       </div>
     </div>
   );

@@ -180,7 +180,7 @@ const CalendarList = () => {
                                 {showSettings[calendar.id] && (
                                     <div className="setting-panel">
                                         <button 
-                                            className="btn btn-primary" 
+                                            className="dropdown-item" 
                                             onClick={(e) => handleEditClick(calendar, e)}>
                                                 {editCalendarId === calendar.id ? 'Save' : 'Edit'}
                                         </button>
