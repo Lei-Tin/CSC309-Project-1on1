@@ -16,7 +16,7 @@ import { faGears } from '@fortawesome/free-solid-svg-icons';
 const CalendarList = () => {
     const navigate = useNavigate();
     const [isModalOpen, setModalOpen] = useState(false);
-    const [isInviteOpen, setInviteOpen] = useState(false);
+    const [isParticipantsListOpen, setParticipantsListOpen] = useState(false);
     const [calendars, setCalendars] = useState([]);
     const [invitedCalendars, setInvitedCalendars] = useState([]);
     const [selectedCalendarId, setSelectedCalendarId] = useState(null);
@@ -28,7 +28,7 @@ const CalendarList = () => {
 
     const handleModalOpen = () => setModalOpen(true);
     const handleModalClose = () => setModalOpen(false);
-    const handleInviteClose = () => setInviteOpen(false);
+    const handleParticipantsListClose = () => setParticipantsListOpen(false);
 
     const toggleSettings = (id) => {
         setShowSettings(prev => ({ ...prev, [id]: !prev[id] }));
@@ -85,9 +85,8 @@ const CalendarList = () => {
     };
 
     const handleInviteButtonClick = (calendarId) => {
-        console.log("Invite button clicked for calendar", calendarId);
         setSelectedCalendarId(calendarId);
-        setInviteOpen(true);
+        setParticipantsListOpen(true);
     };
 
     const handleEditClick = (calendar, event) => {
@@ -167,8 +166,8 @@ const CalendarList = () => {
                                     <h6>{formatDate(calendar.start_date)} - {formatDate(calendar.end_date)}</h6>
                                     <button className="btn btn-info" onClick={() => handleInviteButtonClick(calendar.id)}>View Participants</button>
                                         {/* Invited users popup */}
-                                        {isInviteOpen && selectedCalendarId === calendar.id && (
-                                            <InviteeListModal calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
+                                        {isParticipantsListOpen && selectedCalendarId === calendar.id && (
+                                            <InviteeListModal calendarId={selectedCalendarId} isOpen={isParticipantsListOpen} onClose={handleParticipantsListClose} />
                                         )}
                                 </div>
                                 <div className="calendar-btn">
@@ -199,9 +198,6 @@ const CalendarList = () => {
                                 <div className="calendar-btn">
                                     <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Availability</button>
                                 </div>
-                                <button onClick={() => toggleSettings(calendar.id)} className="btn settings-button">
-                                    <FontAwesomeIcon icon={faCog} />
-                                </button>
                             </div>
                         ))
                     }
