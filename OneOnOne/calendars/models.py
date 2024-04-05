@@ -47,12 +47,10 @@ class Invitee(models.Model):
     """
     Calendar (Calendar) - a foreign key of the calendar table
     Invitee (user) - a foreign key of the user table, users that are invited to the calendar by the owner
-    Deadline (DateTime) - the last date and time that a user can add an availability for the calendar
     """
     # Note, we need to enforce that the invitee is in the contacts list of the calendar owner in python (not in models)
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
     invitee = models.ForeignKey("auth.user", on_delete=models.CASCADE)
-    deadline = models.DateTimeField(blank=False, null=False)
 
     # We denote an invitee as accepted if they have provided at least one availability
 
