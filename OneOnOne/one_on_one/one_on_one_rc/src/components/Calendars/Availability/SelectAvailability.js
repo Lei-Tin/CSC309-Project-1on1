@@ -159,11 +159,13 @@ function SelectSchedule() {
         return;
     }
 
+  
+function SelectAvailability() {
     // Initialize the needed calendar details
     const meetingName = calendarDetails.name;
     const actualStartDate = `${calendarDetails.start_date}T00:00:00`;
     const actualEndDate = `${calendarDetails.end_date}T00:00:00`;
-
+  
     // Calculate the date ranges for the weeks between the start and end dates
     const dateRanges = calculateWeekRanges(actualStartDate, actualEndDate);
 
@@ -212,4 +214,4 @@ function SelectSchedule() {
     );
 }
 
-export default SelectSchedule;
+export default SelectAvailability;

@@ -2,12 +2,15 @@ import { useNavigate } from 'react-router-dom';
 import 'components/Calendars/calendar.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import PopupModal from 'components/Calendars/Create/Create';
-import InviteeListPopup from 'components/Calendars/Invite/Invite';
+
+import CreateModal from 'components/Calendars/CalendarList/CreateModal';
+import InviteeListModal from 'components/Calendars/CalendarList/InviteeListModal';
+
 import { CALENDARS_API_URL } from 'constants';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
+import { faGears } from '@fortawesome/free-solid-svg-icons';
 
 
 const CalendarList = () => {
@@ -23,7 +26,6 @@ const CalendarList = () => {
 
     const handleModalOpen = () => setModalOpen(true);
     const handleModalClose = () => setModalOpen(false);
-    const handleInviteOpen = () => setInviteOpen(true);
     const handleInviteClose = () => setInviteOpen(false);
 
     const toggleSettings = (id) => {
@@ -124,14 +126,17 @@ const CalendarList = () => {
 
     return (
         <main>
-            <PopupModal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleCreateCalendar} />
             <div className="jumbotron calendar-list">
                 <h1 className="display-4">My Calendars</h1>
                 <button onClick={handleModalOpen} className="btn btn-primary btn-lg">Create a new calendar</button>
-                <div className="tab-container">
-                    <button onClick={() => setTabSelected('owned')} className={`tab ${tabSelected === 'owned' ? 'active' : ''}`}>Owned</button>
-                    <button onClick={() => setTabSelected('invited')} className={`tab ${tabSelected === 'invited' ? 'active' : ''}`}>Invited</button>
+                {/* Create popup modal for create a calendar */}
+                <CreateModal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleCreateCalendar} />
+
+                <div className="btn-group me-2 tab-container">
+                    <button onClick={() => setTabSelected('owned')} className={`btn btn-outline-secondary tab ${tabSelected === 'owned' ? 'active' : ''}`}>Owned</button>
+                    <button onClick={() => setTabSelected('invited')} className={`btn btn-outline-secondary tab ${tabSelected === 'invited' ? 'active' : ''}`}>Invited</button>
                 </div>
+
                 <div className="main-content-container">
                     {tabSelected === 'owned'
                         ?
@@ -141,20 +146,21 @@ const CalendarList = () => {
                                     <h4>{calendar.name}</h4>
                                     <h6>{formatDate(calendar.start_date)} - {formatDate(calendar.end_date)}</h6>
                                     <button className="btn btn-info" onClick={() => handleInviteButtonClick(calendar.id)}>View Participants</button>
+                                        {/* Invited users popup */}
                                         {isInviteOpen && selectedCalendarId === calendar.id && (
-                                            <InviteeListPopup calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
+                                            <InviteeListModal calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
                                         )}
                                 </div>
                                 <div className="calendar-btn">
                                     <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Calendar</button>
                                 </div>
-                                <button onClick={() => toggleSettings(calendar.id)} className="btn settings-button">
-                                    <FontAwesomeIcon icon={faCog} />
+                                <button onClick={() => {toggleSettings(calendar.id)}} className="btn setting-button">
+                                    {showSettings[calendar.id] ? <FontAwesomeIcon icon={faGears} /> : <FontAwesomeIcon icon={faCog} />}
                                 </button>
                                 {showSettings[calendar.id] && (
-                                    <div className="calendar-settings-menu">
-                                        <button className="btn btn-secondary">Edit</button>
-                                        <button onClick={() => handleDelete(calendar.id)} className="btn btn-danger">Delete</button>
+                                    <div className="setting-panel">
+                                        <button className="dropdown-item">Edit</button>
+                                        <button onClick={() => handleDelete(calendar.id)} className="dropdown-item text-danger">Delete</button>
                                     </div>
                                 )}
                             </div>

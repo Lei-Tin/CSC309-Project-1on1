@@ -9,6 +9,7 @@ import Contacts from 'components/Contacts/';
 
 import Owned from 'components/Calendars/Owned';
 import SelectAvailability from 'components/Calendars/Availability/SelectAvailability';
+import CalendarList from 'components/Calendars/CalendarList';
 
 import CustomNavbar from 'components/Layout/Navbar/CustomNavbar';
 import CustomNavbarLogged from 'components/Layout/Navbar/CustomNavbarLogged';
@@ -35,7 +36,7 @@ function App() {
             <Route path="/" element={<CustomNavbarLogged />}>
               <Route path="accounts/profile" element={<Profile />} />
               <Route path="contacts" index element={<Contacts />} />
-              <Route path="calendars/owned" element={<Owned />} />
+              <Route path="calendars" element={<CalendarList />} />
 
               {/* <Route path="calendars">
               <Route index element={<Calendars />} />
