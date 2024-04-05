@@ -102,7 +102,7 @@ function SelectAvailability() {
                 navigate('/unauthorized');
             }
         });
-    }, []);
+    }, [calendar_id, navigate]);
 
     const handleSubmit = () => {
         // Check if selecteSlots is empty
