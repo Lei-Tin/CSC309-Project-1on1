@@ -145,7 +145,7 @@ function SelectAvailability() {
                                 }
                             });
                     }
-                    navigate('/calendars/owned');
+                    navigate('/calendars');
                 })
                 .catch((error) => {
                     if (error.response && error.response.status === 401) {
