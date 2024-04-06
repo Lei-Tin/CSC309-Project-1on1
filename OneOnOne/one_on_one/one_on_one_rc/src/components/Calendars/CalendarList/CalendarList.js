@@ -16,17 +16,21 @@ import { faGears } from '@fortawesome/free-solid-svg-icons';
 const CalendarList = () => {
     const navigate = useNavigate();
     const [isModalOpen, setModalOpen] = useState(false);
-    const [isInviteOpen, setInviteOpen] = useState(false);
+    const [isParticipantsListOpen, setParticipantsListOpen] = useState(false);
     const [calendars, setCalendars] = useState([]);
     const [invitedCalendars, setInvitedCalendars] = useState([]);
     const [selectedCalendarId, setSelectedCalendarId] = useState(null);
     const [showSettings, setShowSettings] = useState({});
+    const [editCalendarId, setEditCalendarId] = useState(null);
+    const [editedName, setEditedName] = useState("");
     const [tabSelected, setTabSelected] = useState('owned');
+    const [keyForReRender, setKeyForReRender] = useState(0);
+
 
 
     const handleModalOpen = () => setModalOpen(true);
     const handleModalClose = () => setModalOpen(false);
-    const handleInviteClose = () => setInviteOpen(false);
+    const handleParticipantsListClose = () => setParticipantsListOpen(false);
 
     const toggleSettings = (id) => {
         setShowSettings(prev => ({ ...prev, [id]: !prev[id] }));
@@ -83,27 +87,44 @@ const CalendarList = () => {
     };
 
     const handleInviteButtonClick = (calendarId) => {
-        console.log("Invite button clicked for calendar", calendarId);
         setSelectedCalendarId(calendarId);
-        setInviteOpen(true);
+        setParticipantsListOpen(true);
     };
 
-//    const handleEdit = (calendar) => {
-//        setEditingId(calendar.id);
-//        setEditValue(calendar.name); // Pre-populate the input with the current name
-//    };
-//
-//    const handleNameChange = (e) => {
-//        setEditValue(e.target.value);
-//    };
-//
-//    const handleKeyPress = (e, calendarId) => {
-//        if (e.key === 'Enter') {
-//            e.preventDefault(); // Prevent form submission or any default action
-//            onUpdate(calendarId, editValue); // Assuming onUpdate is a prop method to update the calendar
-//            setEditingId(null); // Exit editing mode
-//        }
-//    };
+    const handleEditClick = (calendar, event) => {
+        event.stopPropagation(); // Prevent event propagation
+
+        if (editCalendarId === calendar.id) {
+            // If currently in edit mode and "Save" is clicked
+            if (editedName.trim() !== "") {
+                // If name is not empty, update the name
+                updateCalendarName(calendar.id, editedName);
+            } else {
+                // If name is empty, revert to the original name and potentially notify the user
+                setEditedName(calendar.name); // Reset editedName to original name
+                setKeyForReRender(prevKey => prevKey + 1);
+            }
+            setEditCalendarId(null);
+        } else {
+            // If "Edit" is clicked
+            setEditCalendarId(calendar.id);
+            setEditedName(calendar.name);
+        }
+    };
+
+    const handleNameChange = (event) => {
+        setEditedName(event.target.innerText);
+    };
+
+    const updateCalendarName = (id, name) => {
+        axios.put(`${CALENDARS_API_URL}/${id}`, { name }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        })
+        .then(() => fetchCalendars()) // Refresh the list of calendars
+        .catch(error => console.error('Error updating calendar name', error));
+    };  
 
     const handleDelete = (calendarId) => {
         if (window.confirm('Are you sure you want to delete this calendar?')) {
@@ -143,12 +164,20 @@ const CalendarList = () => {
                         calendars.map((calendar) => (
                             <div key={calendar.id} className="calendar-brief rounded">
                                 <div className="calendar-meeting-details">
-                                    <h4>{calendar.name}</h4>
+                                <h4
+                                    contentEditable={editCalendarId === calendar.id}
+                                    onInput={handleNameChange}
+                                    suppressContentEditableWarning={true}
+                                    className={editCalendarId === calendar.id ? 'editable' : ''}
+                                    key={keyForReRender}
+                                >
+                                    {calendar.name}
+                                </h4>
                                     <h6>{formatDate(calendar.start_date)} - {formatDate(calendar.end_date)}</h6>
                                     <button className="btn btn-info" onClick={() => handleInviteButtonClick(calendar.id)}>View Participants</button>
                                         {/* Invited users popup */}
-                                        {isInviteOpen && selectedCalendarId === calendar.id && (
-                                            <InviteeListModal calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
+                                        {isParticipantsListOpen && selectedCalendarId === calendar.id && (
+                                            <InviteeListModal calendarId={selectedCalendarId} isOpen={isParticipantsListOpen} onClose={handleParticipantsListClose} />
                                         )}
                                 </div>
                                 <div className="calendar-btn">
@@ -159,7 +188,11 @@ const CalendarList = () => {
                                 </button>
                                 {showSettings[calendar.id] && (
                                     <div className="setting-panel">
-                                        <button className="dropdown-item">Edit</button>
+                                        <button 
+                                            className="dropdown-item" 
+                                            onClick={(e) => handleEditClick(calendar, e)}>
+                                                {editCalendarId === calendar.id ? 'Save' : 'Edit'}
+                                        </button>
                                         <button onClick={() => handleDelete(calendar.id)} className="dropdown-item text-danger">Delete</button>
                                     </div>
                                 )}
@@ -175,9 +208,6 @@ const CalendarList = () => {
                                 <div className="calendar-btn">
                                     <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Availability</button>
                                 </div>
-                                <button onClick={() => toggleSettings(calendar.id)} className="btn settings-button">
-                                    <FontAwesomeIcon icon={faCog} />
-                                </button>
                             </div>
                         ))
                     }
