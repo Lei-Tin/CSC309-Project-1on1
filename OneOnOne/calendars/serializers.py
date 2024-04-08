@@ -11,11 +11,15 @@ class CalendarSerializer(serializers.ModelSerializer):
     name = serializers.CharField(help_text="A name for the calendar")
     start_date = serializers.CharField(help_text="The starting date for the calendar")
     end_date = serializers.CharField(help_text="The ending date for the calendar")
+    username = serializers.SerializerMethodField()
 
     class Meta:
         model = Calendar
-        fields = '__all__'
-        read_only_fields = ['owner', 'finalized']
+        fields = ['id', 'owner', 'name', 'start_date', 'end_date', 'finalized', 'username']
+        read_only_fields = ['owner', 'finalized', 'username']
+
+    def get_username(self, obj):
+        return obj.owner.username if obj.owner else None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

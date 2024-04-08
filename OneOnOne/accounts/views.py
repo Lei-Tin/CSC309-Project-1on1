@@ -254,6 +254,15 @@ class ProfileSearchView(APIView):
             serializer = ProfileSerializer(profile)
             return Response(serializer.data)
         return Response({'user': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    @staticmethod
+    def get_id(request, user_id):
+        user = User.objects.filter(id=user_id).first()
+        if user:
+            profile, created = Profile.objects.get_or_create(user=user)
+            serializer = ProfileSerializer(profile)
+            return Response(serializer.data)
+        return Response({'user': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
 

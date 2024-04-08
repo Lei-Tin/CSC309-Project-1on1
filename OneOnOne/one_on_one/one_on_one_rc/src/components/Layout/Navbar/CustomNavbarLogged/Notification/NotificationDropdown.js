@@ -98,7 +98,7 @@ const NotificationDropdown = () => {
         {invitations.map((invitation, index) => (
           <InviteNotificationItem
             key={index}
-            inviter={invitation.owner}
+            inviter={invitation.username}
             calendar={invitation.name}
             onAccept={() => handleInvite(invitation.id, true)}
             onDecline={() => handleInvite(invitation.id, false)}

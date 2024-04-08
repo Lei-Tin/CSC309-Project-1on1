@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import CreateModal from 'components/Calendars/CalendarList/CreateModal';
 import InviteeListModal from 'components/Calendars/CalendarList/InviteeListModal';
+import DeletePanel from 'components/Calendars/CalendarList/ConfimModal';
 
 import { CALENDARS_API_URL } from 'constants';
 
@@ -16,6 +17,7 @@ import { faGears } from '@fortawesome/free-solid-svg-icons';
 const CalendarList = () => {
     const navigate = useNavigate();
     const [isModalOpen, setModalOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [isParticipantsListOpen, setParticipantsListOpen] = useState(false);
     const [calendars, setCalendars] = useState([]);
     const [invitedCalendars, setInvitedCalendars] = useState([]);
@@ -23,6 +25,7 @@ const CalendarList = () => {
     const [showSettings, setShowSettings] = useState({});
     const [editCalendarId, setEditCalendarId] = useState(null);
     const [editedName, setEditedName] = useState("");
+    const [calendarId, setSelectCalendarId] = useState('');
     const [tabSelected, setTabSelected] = useState('owned');
     const [keyForReRender, setKeyForReRender] = useState(0);
 
@@ -127,18 +130,14 @@ const CalendarList = () => {
     };  
 
     const handleDelete = (calendarId) => {
-        if (window.confirm('Are you sure you want to delete this calendar?')) {
-            console.log('Delete calendar', calendarId);
-            // Make a DELETE request to your endpoint
-            axios.delete(`${CALENDARS_API_URL}/${calendarId}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            })
-            .then(() => fetchCalendars()) // Refresh the list of calendars
-            .catch(error => console.error('Error deleting calendar', error));
-        }
-    };
+        setSelectCalendarId(calendarId);
+        toggleDelete();
+    }
+
+    const toggleDelete = () => {
+        setIsDeleteOpen(!isDeleteOpen);
+    }
+
 
     function formatDate(dateString) {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -162,7 +161,7 @@ const CalendarList = () => {
                     {tabSelected === 'owned'
                         ?
                         calendars.map((calendar) => (
-                            <div key={calendar.id} className="calendar-brief rounded">
+                            <div className="calendar-brief rounded">
                                 <div className="calendar-meeting-details">
                                 <h4
                                     contentEditable={editCalendarId === calendar.id}
@@ -193,7 +192,7 @@ const CalendarList = () => {
                                             onClick={(e) => handleEditClick(calendar, e)}>
                                                 {editCalendarId === calendar.id ? 'Save' : 'Edit'}
                                         </button>
-                                        <button onClick={() => handleDelete(calendar.id)} className="dropdown-item text-danger">Delete</button>
+                                        <button className="dropdown-item text-danger" onClick={()=>handleDelete(calendar.id)}>Delete</button>
                                     </div>
                                 )}
                             </div>
@@ -211,6 +210,7 @@ const CalendarList = () => {
                             </div>
                         ))
                     }
+                    {isDeleteOpen && <DeletePanel toggleModal={toggleDelete} calendarId={calendarId} />}
                 </div>
             </div>
         </main>
