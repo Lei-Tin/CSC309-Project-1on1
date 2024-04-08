@@ -330,12 +330,15 @@ class InviteeViewSet(viewsets.ModelViewSet):
     """
     queryset = Invitee.objects.all()
     serializer_class = InviteeSerializer
+    
     def get_permissions(self):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
         if self.action == 'remove_invitation':
             permission_classes = [IsAuthenticated, IsOwnerOrInvitee, IsNotFinalized]
+        elif self.action in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated, IsOwner]
         else:
             permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
 
@@ -513,7 +516,17 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
     """
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrInvitee, IsNotFinalized]
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated, IsOwnerOrInvitee]
+        else:
+            permission_classes = [IsAuthenticated, IsOwnerOrInvitee, IsNotFinalized]
+
+        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         calendar_id = self.kwargs.get('calendar_id')
@@ -580,7 +593,16 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     """
     queryset = Meets.objects.all()
     serializer_class = ScheduleSerializer
-    permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated, IsOwner]
+        else:
+            permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
+
+        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         calendar_id = self.kwargs.get('calendar_id')
