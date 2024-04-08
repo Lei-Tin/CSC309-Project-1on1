@@ -29,13 +29,16 @@ export default function ConfirmModal({ toggleModal, username }) {
     return (
         <div id="overlay">
             <div className={"popup-window"}>
-                <a type="button" className="btn close-button" onClick={toggleModal}>
+                <button className="btn close-button" onClick={toggleModal}>
                     <FontAwesomeIcon icon={faTimes} />
-                </a>
-                <div className="modal-content">
-                    <div className="box">
-                        <p>Are you sure you want to delete "{username}" from your friend list? </p>
-                        <div className="buttons">
+                </button>
+                <div className="popup-modal">
+                    <div className="heading">
+                        <h2>Are you sure?</h2>
+                    </div>
+                    <div>
+                        <p>Are you sure you want to delete <span className="font-weight-bold">{username}</span> from your friend list? </p>
+                        <div className="d-flex justify-content-center">
                             <button className="btn btn-danger" onClick={() => deleteFriend(username)}>Yes</button>
                         </div>
                     </div>

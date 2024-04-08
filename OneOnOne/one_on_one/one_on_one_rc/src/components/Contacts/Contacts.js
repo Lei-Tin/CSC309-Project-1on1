@@ -39,7 +39,7 @@ function Contacts() {
       <div className="display-4">
         My Contacts
       </div>
-      <button className="btn btn-primary btn-lg btn-sm" onClick={toggleAddFriend}>Add new contact</button>
+      <button className="btn btn-primary btn-lg btn-lg" onClick={toggleAddFriend}>Add new contact</button>
       {isAddFriend && <AddFriendPanel toggleAddFriend={toggleAddFriend} />}
 
       <div className="main-content-container">

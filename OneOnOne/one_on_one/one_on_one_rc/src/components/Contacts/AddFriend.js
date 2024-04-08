@@ -8,7 +8,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 export default function AddFriendPanel({ toggleAddFriend }) {
     const [searchUsername, setSearchUsername] = useState('');
-    const [searchResult, setSearchResult] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
 
     const searchUser = () => {
@@ -17,26 +17,26 @@ export default function AddFriendPanel({ toggleAddFriend }) {
             setErrorMessage('Please enter a username');
             return;
         }
-        axios.get(`${ACCOUNTS_API_URL}/profile/${searchUsername}/`, {
+        axios.get(`${ACCOUNTS_API_URL}/profile/partial/${searchUsername}/`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         })
             .then((response) => {
-                setSearchResult(response.data);
+                setSearchResults(response.data);
             })
             .catch((error) => {
                 if (error.response.status === 404) {
-                    setSearchResult("");
+                    setSearchResults([]);
                     setErrorMessage('User not found');
                     return;
                 }
             });
     }
-    
-    const addFriend = () => {
+
+    const addFriend = (username) => {
         axios.post(`${CONTACTS_API_URL}/friendRequests/user/`, {
-            requested: searchResult.user.username
+            requested: username
         }, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -70,12 +70,19 @@ export default function AddFriendPanel({ toggleAddFriend }) {
                         </div>
                         <span className="error">{errorMessage}</span>
                         <div className="card search-results">
-                            {searchResult !== ""?
-                                <button className="dropdown-item search-result-profile" onClick={addFriend}>
-                                    <img className="search-result-profile-pic" src={searchResult.profile_picture !== null ?
-                                        `/media${searchResult.profile_picture}` : DEFAULT_PROFILE_PIC} alt="User profile" id="profile_pic" />
-                                    <div className="search-result-name">{searchResult.user.username}</div>
-                                </button>: null
+                            {searchResults !== [] ?
+                                (searchResults.map((searchResult, index) =>
+                                    <div key={index}>
+                                        <button className="dropdown-item search-result-profile" onClick={() => {
+                                            addFriend(searchResult.user.username);
+                                        }}>
+                                            <img className="search-result-profile-pic" src={searchResult.profile_picture !== null ?
+                                                `/media${searchResult.profile_picture}` : DEFAULT_PROFILE_PIC} alt="User profile" id="profile_pic" />
+                                            <div className="search-result-name">{searchResult.user.username}</div>
+                                        </button>
+                                    </div>
+                                ))
+                                : null
                             }
                         </div>
                     </div>
