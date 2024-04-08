@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CALENDARS_API_URL } from 'constants';
 
@@ -9,6 +10,8 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 function InviteeListModal({ calendarId, isOpen, onClose }) {
     const [invitees, setInvitees] = useState([]);
     const [uninvited, setUninvited] = useState([]);
+    const [allAccepted, setAllAccepted] = useState(false);
+    const navigate = useNavigate();
 
     const fetchInviteeData = useCallback(async () => {
         if (!isOpen) return; // Only fetch data if the popup is open
@@ -21,6 +24,7 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
             });
             const inviteesData = inviteesResponse.data;
             setInvitees(inviteesData);
+            setAllAccepted(inviteesData.length > 0 && inviteesData.every(invitee => invitee.has_availability));
 
             const uninvitedResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/invitee/uninvited`, {
                 headers: {
@@ -75,6 +79,29 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
         }
     }
 
+    const finalizeEvent = () => {
+        Promise.all([
+            axios.put(`${CALENDARS_API_URL}/${calendarId}/finalize/`, {}, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'content-Type': 'application/json',
+                }
+            }),
+            axios.post(`${CALENDARS_API_URL}/${calendarId}/schedule/`, {}, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+        ]).then((response) => {
+            console.log(response);
+            navigate(`${calendarId}/finalize/`);
+        }).catch((error) => {
+            if (error.response && error.response.status === 401) {
+                navigate('/unauthorized');
+            }
+        });
+    };
+
     return (
         <div id="overlay">
             <div className="popup-window">
@@ -100,6 +127,9 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
                             </ul>
                         </div>
                     </div>
+                    {allAccepted && (
+                        <button onClick={finalizeEvent} className="btn btn-success">Finalize</button>
+                    )}
                     <div id="invite-contacts-block">
                         <h3>Invite more participants below?</h3>
                     </div>

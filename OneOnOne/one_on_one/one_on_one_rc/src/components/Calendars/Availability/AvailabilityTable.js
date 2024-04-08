@@ -1,13 +1,47 @@
 import React from "react";
-import { generateWeekDays } from "components/Calendars/Availability/HelperFunctions";
+import { generateWeekDays } from "components/Calendars/HelperFunctions";
 import "components/Calendars/calendar.css";
 
-const CalendarTable = ({ weekStartDate, actualStartDate, actualEndDate }) => {
+const AvailabilityTable = ({ selectedSlots, setSelectedSlots, weekStartDate, actualStartDate, actualEndDate, preference }) => {
     const weekDays = generateWeekDays(weekStartDate);
 
     // Helper function to determine if a date should be greyed out
     const isDateOutOfRange = (date) => {
         return date < actualStartDate || date > actualEndDate;
+    };
+
+    // Helper function to format a slot's key
+    function formatSlotKey(date, hour) {
+        date.setHours(hour);
+        return date.toISOString();
+    }
+
+    // Helper function to toggle a slot's selection
+    const toggleSlotSelection = (slotKey) => {
+        setSelectedSlots((prevSelectedSlots) => {
+            const newSelectedSlots = new Map(prevSelectedSlots);
+
+            if (newSelectedSlots.has(slotKey)) {
+                newSelectedSlots.delete(slotKey);
+            } else {
+                newSelectedSlots.set(slotKey, preference);
+            }
+            return newSelectedSlots;
+        });
+    };
+
+    // Helper function to determine slot's class based on preference
+    const getSlotClass = (slotKey, isOutsideRange) => {
+        if (isOutsideRange) {
+            return 'calendar-day-not-available';
+        } else if (selectedSlots.get(slotKey) === '3') {
+            return 'calendar-high-preference';
+        } else if (selectedSlots.get(slotKey) === '2') {
+            return 'calendar-medium-preference';
+        } else if (selectedSlots.get(slotKey) === '1') {
+            return 'calendar-low-preference';
+        }
+        return '';
     };
 
     return (
@@ -45,13 +79,14 @@ const CalendarTable = ({ weekStartDate, actualStartDate, actualEndDate }) => {
                         <tr key={index}>
                             <td>{`${hour <= 12 ? hour : hour - 12}:00 ${hour < 12 ? 'AM' : 'PM'}`}</td>
                             {weekDays.map((date, index) => {
+                                const slotKey = formatSlotKey(date, hour);
                                 const isOutsideRange = isDateOutOfRange(date);
-                                console.log(date, isOutsideRange);
                                 return (
                                     <td
                                         key={index}
-                                        className={isOutsideRange ? 'calendar-day-not-available' : '' }
+                                        className={getSlotClass(slotKey, isOutsideRange)}
                                         style={{ cursor: isOutsideRange ? 'not-allowed' : 'pointer' }}
+                                        onClick={() => !isOutsideRange && toggleSlotSelection(slotKey)}
                                     ></td>
                                 );
                             })}
@@ -63,4 +98,4 @@ const CalendarTable = ({ weekStartDate, actualStartDate, actualEndDate }) => {
     );
 };
 
-export default CalendarTable;
+export default AvailabilityTable;

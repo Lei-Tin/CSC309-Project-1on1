@@ -1,5 +1,5 @@
 import React from "react";
-import { generateWeekDays } from "components/Calendars/Availability/HelperFunctions";
+import { generateWeekDays } from "components/Calendars/HelperFunctions";
 import "components/Calendars/calendar.css";
 
 const CalendarTable = ({ weekStartDate, actualStartDate, actualEndDate }) => {

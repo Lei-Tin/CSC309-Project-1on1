@@ -1,4 +1,3 @@
-import CalendarTable from "./CalendarTable";
 import SelectAvailability from "./SelectAvailability";
 
-export { CalendarTable, SelectAvailability };
+export default SelectAvailability;

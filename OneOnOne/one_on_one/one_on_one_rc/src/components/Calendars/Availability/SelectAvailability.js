@@ -3,59 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { CALENDARS_API_URL } from 'constants';
-import CalendarTable from "./CalendarTable";
+import AvailabilityTable from "./AvailabilityTable";
 import "components/Calendars/calendar.css";
-
-// Helper function to get the date ranges for the weeks between the start and end dates
-function calculateWeekRanges(startDate, endDate) {
-    let start = new Date(startDate);
-    let end = new Date(endDate);
-
-    // Adjust the start date to the previous Monday, unless it's already a Monday
-    if (start.getDay() !== 1) {
-        start.setDate(start.getDate() - (start.getDay() ? start.getDay() - 1 : 6));
-    }
-
-    // Adjust the end date to the following Sunday, unless it's already a Sunday
-    if (end.getDay() !== 0) {
-        end.setDate(end.getDate() + (7 - end.getDay()));
-    }
-
-    // Initialize the array to hold all week ranges
-    let weekRanges = [];
-
-    while (start <= end) {
-        // Calculate the end of the week from the current start date
-        let endOfWeek = new Date(start);
-        endOfWeek.setDate(start.getDate() + 6);
-
-        if (endOfWeek > end) {
-            endOfWeek = end; // Ensure the end of the last week does not exceed the end date
-        }
-
-        // Add the week range to the array as Date objects
-        weekRanges.push([new Date(start), new Date(endOfWeek)]);
-
-        // Move to the next week
-        start.setDate(start.getDate() + 7);
-    }
-
-    return weekRanges;
-}
-
-// Helper function to convert Availability data to a Map
-function convertAvailabilityDataToMap(availabilityData) {
-    let availabilityMap = new Map();
-
-    availabilityData.forEach((availability) => {
-        const startTime = new Date(availability.start_period);
-        const preference = availability.preference;
-
-        availabilityMap.set(startTime.toISOString(), preference.toString());
-    });
-
-    return availabilityMap;
-}
+import { calculateWeekRanges, convertAvailabilityDataToMap } from "components/Calendars/HelperFunctions";
 
 function SelectAvailability() {
     // Initialize the useState hooks
@@ -138,6 +88,7 @@ function SelectAvailability() {
                         })
                             .then((response) => {
                                 console.log(response);
+                                navigate('/calendars');
                             })
                             .catch((error) => {
                                 if (error.response && error.response.status === 401) {
@@ -145,7 +96,6 @@ function SelectAvailability() {
                                 }
                             });
                     }
-                    navigate('/calendars');
                 })
                 .catch((error) => {
                     if (error.response && error.response.status === 401) {
@@ -205,7 +155,7 @@ function SelectAvailability() {
                 </select>
             </div>
 
-            <CalendarTable selectedSlots={selectedSlots} setSelectedSlots={setSelectedSlots} weekStartDate={selectedDate[0]} actualStartDate={new Date(actualStartDate)} actualEndDate={new Date(actualEndDate)} preference={selectedPreference} />
+            <AvailabilityTable selectedSlots={selectedSlots} setSelectedSlots={setSelectedSlots} weekStartDate={selectedDate[0]} actualStartDate={new Date(actualStartDate)} actualEndDate={new Date(actualEndDate)} preference={selectedPreference} />
 
             <button className="btn btn-primary" onClick={handleSubmit}>Confirm</button>
         </section>
