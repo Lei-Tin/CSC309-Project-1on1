@@ -160,8 +160,8 @@ const CalendarList = () => {
                 <div className="main-content-container">
                     {tabSelected === 'owned'
                         ?
-                        calendars.map((calendar) => (
-                            <div className="calendar-brief rounded">
+                        calendars.map((calendar, index) => (
+                            <div key ={index} className="calendar-brief rounded">
                                 <div className="calendar-meeting-details">
                                 <h4
                                     contentEditable={editCalendarId === calendar.id}

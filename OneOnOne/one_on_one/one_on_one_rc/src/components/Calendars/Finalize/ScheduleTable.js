@@ -1,5 +1,5 @@
 import React from "react";
-import { generateWeekDays } from "components/Calendars/Availability/HelperFunctions";
+import { generateWeekDays } from "components/Calendars/HelperFunctions";
 import "components/Calendars/calendar.css";
 
 const CalendarTable = ({ weekStartDate, actualStartDate, actualEndDate }) => {
@@ -46,7 +46,6 @@ const CalendarTable = ({ weekStartDate, actualStartDate, actualEndDate }) => {
                             <td>{`${hour <= 12 ? hour : hour - 12}:00 ${hour < 12 ? 'AM' : 'PM'}`}</td>
                             {weekDays.map((date, index) => {
                                 const isOutsideRange = isDateOutOfRange(date);
-                                console.log(date, isOutsideRange);
                                 return (
                                     <td
                                         key={index}

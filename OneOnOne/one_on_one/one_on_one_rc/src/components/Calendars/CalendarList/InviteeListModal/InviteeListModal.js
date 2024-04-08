@@ -10,12 +10,22 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 function InviteeListModal({ calendarId, isOpen, onClose }) {
     const [invitees, setInvitees] = useState([]);
     const [uninvited, setUninvited] = useState([]);
-    const [allAccepted, setAllAccepted] = useState(false);
+    const [canFinaliize, setCanFinalize] = useState(false);
+    const [isFinalized, setIsFinalized] = useState(false);
     const navigate = useNavigate();
 
     const fetchInviteeData = useCallback(async () => {
         if (!isOpen) return; // Only fetch data if the popup is open
         try {
+            // Fetch calendar details
+            const calendarDetailResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            const calendarDetail = calendarDetailResponse.data;
+            setIsFinalized(calendarDetail.finalized);
+
             // Fetch invitees data
             const inviteesResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/invitee`, {
                 headers: {
@@ -24,17 +34,21 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
             });
             const inviteesData = inviteesResponse.data;
             setInvitees(inviteesData);
-            setAllAccepted(inviteesData.length > 0 && inviteesData.every(invitee => invitee.has_availability));
+            setCanFinalize(inviteesData.length > 0 && inviteesData.every(invitee => invitee.has_availability));
 
-            const uninvitedResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/invitee/uninvited`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-            const uninvitedData = uninvitedResponse.data;
-            setUninvited(uninvitedData);
+            // Fetch uninvited contacts
+            if (!calendarDetailResponse.data.finalized) {
+                const uninvitedResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/invitee/uninvited`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+                const uninvitedData = uninvitedResponse.data;
+                setUninvited(uninvitedData);
+            }
+
         } catch (error) {
-            console.error("Error fetching data:", error);
+            console.error("Error fetching data:", error.response.data);
         }
     }, [calendarId, isOpen]);
     
@@ -81,20 +95,20 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
 
     const finalizeEvent = () => {
         Promise.all([
+            axios.post(`${CALENDARS_API_URL}/${calendarId}/schedule/`, {}, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            }),
             axios.put(`${CALENDARS_API_URL}/${calendarId}/finalize/`, {}, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                     'content-Type': 'application/json',
                 }
-            }),
-            axios.post(`${CALENDARS_API_URL}/${calendarId}/schedule/`, {}, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
             })
-        ]).then((response) => {
-            console.log(response);
-            navigate(`${calendarId}/finalize/`);
+        ]).then(([finalizeResponse, scheduleResponse]) => {
+            console.log(finalizeResponse, scheduleResponse);
+            navigate(`${calendarId}/schedule/`);
         }).catch((error) => {
             if (error.response && error.response.status === 401) {
                 navigate('/unauthorized');
@@ -127,24 +141,28 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
                             </ul>
                         </div>
                     </div>
-                    {allAccepted && (
+                    {(canFinaliize && !isFinalized) && (
                         <button onClick={finalizeEvent} className="btn btn-success">Finalize</button>
                     )}
-                    <div id="invite-contacts-block">
-                        <h3>Invite more participants below?</h3>
-                    </div>
-                    <div className="card uninvited-list">
-                        <div className="participants-list">
-                            <ul>
-                                {uninvited.length === 0 ? <li>No uninvited contacts available</li> : uninvited.map(contact => (
-                                    <li key={contact.id}>
-                                        <span>{contact.username}</span>
-                                        <button onClick={() => handleInvite(contact.id)} className="btn btn-primary">Invite</button>
-                                    </li>
-                                ))}
-                            </ul>
+                    {!isFinalized && (
+                        <>
+                        <div id="invite-contacts-block">
+                            <h3>Invite more participants below?</h3>
                         </div>
-                    </div>
+                        <div className="card uninvited-list">
+                            <div className="participants-list">
+                                <ul>
+                                    {uninvited.length === 0 ? <li>No uninvited contacts available</li> : uninvited.map(contact => (
+                                        <li key={contact.id}>
+                                            <span>{contact.username}</span>
+                                            <button onClick={() => handleInvite(contact.id)} className="btn btn-primary">Invite</button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                        </>
+                    )}
                 </div>
             </div>
         </div>

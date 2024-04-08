@@ -1,3 +1,3 @@
-import FinalizeCalendar from "./FinalizeCalendar";
+import FinalizeSchedule from "./FinalizedSchedule";
 
-export default FinalizeCalendar;
+export default FinalizeSchedule;

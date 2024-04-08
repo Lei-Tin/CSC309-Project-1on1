@@ -3,11 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { CALENDARS_API_URL } from 'constants';
-import CalendarTable from "./CalendarTable";
+import CalendarTable from "./ScheduleTable";
 import "components/Calendars/calendar.css";
 import { calculateWeekRanges } from "components/Calendars/HelperFunctions";
 
-function FinalizeCalendar() {
+function FinalizeSchedule() {
     // Initialize the useState hooks
     const [selectedDateIndex, setSelectedDateIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
@@ -66,6 +66,7 @@ function FinalizeCalendar() {
     const actualStartDate = `${calendarDetails.start_date}T00:00:00`;
     const actualEndDate = `${calendarDetails.end_date}T23:00:00`; // Set it to 11 clock to avoid comparison issues
 
+    console.log(schedule)
     // Calculate the date ranges for the weeks between the start and end dates
     const dateRanges = calculateWeekRanges(actualStartDate, actualEndDate);
 
@@ -101,5 +102,5 @@ function FinalizeCalendar() {
     );
 }
 
-export default FinalizeCalendar;
+export default FinalizeSchedule;
 

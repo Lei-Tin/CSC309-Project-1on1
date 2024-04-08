@@ -341,7 +341,6 @@ class InviteeViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAuthenticated, IsOwner]
         else:
             permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
-
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):

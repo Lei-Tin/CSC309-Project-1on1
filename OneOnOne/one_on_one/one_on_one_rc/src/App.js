@@ -9,7 +9,7 @@ import Contacts from 'components/Contacts/';
 
 import CalendarList from 'components/Calendars/CalendarList';
 import SelectAvailability from 'components/Calendars/Availability/SelectAvailability';
-import FinalizeCalendar from 'components/Calendars/Finalize/FinalizeCalendar';
+import FinalizeSchedule from 'components/Calendars/Finalize/FinalizedSchedule';
 
 import CustomNavbar from 'components/Layout/Navbar/CustomNavbar';
 import CustomNavbarLogged from 'components/Layout/Navbar/CustomNavbarLogged';
@@ -43,7 +43,7 @@ function App() {
               <Route path=":calendarID" element={<CalendarsDetail/>} */}
 
               <Route path="calendars/:calendar_id/availabilities" element={<SelectAvailability />} />
-              <Route path="calendars/:calendar_id/finalize" element={<FinalizeCalendar />} />
+              <Route path="calendars/:calendar_id/schedule" element={<FinalizeSchedule />} />
 
               <Route path="unauthorized" element={<Unauthorized />}></Route>
               <Route path='*' element={<NotFound />}></Route>
