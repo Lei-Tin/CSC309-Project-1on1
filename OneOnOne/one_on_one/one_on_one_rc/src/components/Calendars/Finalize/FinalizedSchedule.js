@@ -108,7 +108,7 @@ function FinalizeSchedule() {
                 </select>
             </div>
 
-            <CalendarTable weekStartDate={selectedDate[0]} actualStartDate={actualStartDate} actualEndDate={actualEndDate} meetersAndTimes={meetersAndTimes} />
+            <CalendarTable weekStartDate={selectedDate[0]} actualStartDate={new Date(actualStartDate)} actualEndDate={new Date(actualEndDate)} meetersAndTimes={meetersAndTimes} />
 
             <button className="btn btn-primary">Return</button>
         </section>

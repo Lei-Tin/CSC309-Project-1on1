@@ -20,7 +20,6 @@ const CalendarTable = ({ weekStartDate, actualStartDate, actualEndDate, meetersA
     const isMeetingSlot = (slotKey) => {
         const formatedSlotKey = slotKey.replace(/\.\d{3}/, "");
         if (meetersAndTimes.has(formatedSlotKey)) {
-            console.log(slotKey)
             return { isMeeting: true, name: meetersAndTimes.get(formatedSlotKey)};
         } else {
             return { isMeeting: false, name: ''};
