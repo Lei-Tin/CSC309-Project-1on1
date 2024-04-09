@@ -13,6 +13,8 @@ function FinalizeSchedule() {
     // Initialize the useState hooks
     const [selectedDateIndex, setSelectedDateIndex] = useState(0);
     const [meetersAndTimes, setMeetersAndTimes] = useState(new Map());
+    const [schedule, setSchedule] = useState([]);
+    const [isFinalized, setIsFinalized] = useState(false);
     const [calendarDetails, setCalendarDetails] = useState({
         owner: '',
         name: '',
@@ -40,7 +42,8 @@ function FinalizeSchedule() {
             })
         ]).then(async ([calendarResponse, scheduleResponse]) => {
             setCalendarDetails(calendarResponse.data);
-            
+            setSchedule(scheduleResponse.data);
+
             // New Map to accumulate meeting times
             const newMeetersAndTimes = new Map();
 
@@ -94,6 +97,32 @@ function FinalizeSchedule() {
         return `${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
     };
 
+    const handleButtonClick = () => {
+        if (isFinalized) {
+            navigate('/calendars');
+        } else {
+            finalizeSchedule();
+        }
+    };
+
+    const finalizeSchedule = async () => {
+        if (schedule.length === 0) {
+            console.error('No schedule to finalize');
+            return;
+        } else {
+            try {
+                await axios.put(`${CALENDARS_API_URL}/${calendar_id}/finalize/`, {}, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                setIsFinalized(true);
+            } catch (error) {
+                console.error('Error finalizing schedule:', error);
+            }
+        };
+    };
+
     return (
         <section className="jumbotron calendar-table-list">
             <h1 className="display-4 text-center">{meetingName}</h1>
@@ -110,7 +139,9 @@ function FinalizeSchedule() {
 
             <CalendarTable weekStartDate={selectedDate[0]} actualStartDate={new Date(actualStartDate)} actualEndDate={new Date(actualEndDate)} meetersAndTimes={meetersAndTimes} />
 
-            <button className="btn btn-primary">Return</button>
+            <button onClick={handleButtonClick} className="btn btn-primary">
+                {isFinalized ? 'Return' : 'Finalize'}
+            </button>
         </section>
     );
 }

@@ -10,7 +10,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 function InviteeListModal({ calendarId, isOpen, onClose }) {
     const [invitees, setInvitees] = useState([]);
     const [uninvited, setUninvited] = useState([]);
-    const [canFinaliize, setCanFinalize] = useState(false);
+    const [canSchedule, setCanSchedule] = useState(false);
     const [isFinalized, setIsFinalized] = useState(false);
     const navigate = useNavigate();
 
@@ -44,7 +44,7 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
             setInvitees(inviteesData);
 
             // Check if the event can be finalized
-            setCanFinalize(inviteesData.length > 0 && inviteesData.every(invitee => invitee.has_availability) && ownerData.length > 0);
+            setCanSchedule(inviteesData.length > 0 && inviteesData.every(invitee => invitee.has_availability) && ownerData.length > 0);
 
             // Fetch uninvited contacts
             if (!calendarDetailResponse.data.finalized) {
@@ -103,23 +103,17 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
         }
     }
 
-    const finalizeEvent = () => {
-        Promise.all([
-            axios.post(`${CALENDARS_API_URL}/${calendarId}/schedule/`, {}, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            }),
-            axios.put(`${CALENDARS_API_URL}/${calendarId}/finalize/`, {}, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    'content-Type': 'application/json',
-                }
-            })
-        ]).then(([finalizeResponse, scheduleResponse]) => {
-            console.log(finalizeResponse, scheduleResponse);
+    const scheduleEvent = () => {
+        axios.post(`${CALENDARS_API_URL}/${calendarId}/schedule/`, {}, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        .then((response) => {
+            console.log(response);
             navigate(`${calendarId}/schedule/`);
-        }).catch((error) => {
+        })
+        .catch((error) => {
             if (error.response && error.response.status === 401) {
                 navigate('/unauthorized');
             }
@@ -151,9 +145,6 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
                             </ul>
                         </div>
                     </div>
-                    {(canFinaliize && !isFinalized) && (
-                        <button onClick={finalizeEvent} className="btn btn-success">Finalize</button>
-                    )}
                     {!isFinalized && (
                         <>
                         <div id="invite-contacts-block">
@@ -172,6 +163,9 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
                             </div>
                         </div>
                         </>
+                    )}
+                    {(canSchedule && !isFinalized) && (
+                        <button onClick={scheduleEvent} className="btn btn-success">Schedule</button>
                     )}
                 </div>
             </div>
