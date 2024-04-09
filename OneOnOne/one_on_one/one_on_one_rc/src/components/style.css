@@ -317,6 +317,8 @@ p.dropdown-item {
 
 .search-results {
     width: 100%;
+    max-height: 50vh;
+    overflow: scroll;
     margin: 1rem;
 }
 
