@@ -107,7 +107,7 @@ function FinalizeSchedule() {
 
     const finalizeSchedule = async () => {
         if (schedule.length === 0) {
-            console.error('No schedule to finalize');
+            alert('No schedule to finalize');
             return;
         } else {
             try {
