@@ -8,6 +8,8 @@ import CalendarTable from "./ScheduleTable";
 import "components/Calendars/calendar.css";
 import { calculateWeekRanges } from "components/Calendars/HelperFunctions";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 
 function FinalizeSchedule() {
@@ -27,6 +29,8 @@ function FinalizeSchedule() {
     const navigate = useNavigate();
     const { calendar_id } = useParams();
     const emailSentRef = useRef(false);
+    const [isSendingEmail, setIsSendingEmail] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         setIsLoading(true);
@@ -46,9 +50,9 @@ function FinalizeSchedule() {
             setCalendarDetails(calendarResponse.data);
             setSchedule(scheduleResponse.data);
             setIsFinalized(calendarResponse.data.finalized);
-
             if (scheduleResponse.data.length === 0 && !emailSentRef.current) {
                 emailSentRef.current = true;
+                setIsSendingEmail(true);
                 try {
                     const response = await axios.post(`${CALENDARS_API_URL}/${calendar_id}/email/`, {}, {
                         headers: {
@@ -59,8 +63,8 @@ function FinalizeSchedule() {
                 catch (error) {
                     console.error("Error fetching schedule:", error.response.data);
                 }
-                alert("No schedule found. An email has been sent to all participants.");
-                navigate('/calendars');
+                setIsSendingEmail(false);
+                setErrorMessage("No schedule found. An email has been sent to all participants.");
             } else {
                 // New Map to accumulate meeting times
                 const newMeetersAndTimes = new Map();
@@ -142,25 +146,49 @@ function FinalizeSchedule() {
     };
 
     return (
-        <section className="jumbotron calendar-table-list">
-            <h1 className="display-4 text-center">{meetingName}</h1>
+        <>
+            {(isSendingEmail || errorMessage) &&
+                <div>
+                    <div id="overlay">
+                        <div className="loading-indicator">
+                            {isSendingEmail &&
+                                <>
+                                    <div className="spinner"></div>
+                                    <p>We are calculating your final meeting time.</p>
+                                </>
+                            }
+                            {errorMessage &&
+                                <>
+                                    <button onClick={()=>{setErrorMessage('')}} className="btn close-button">
+                                        <FontAwesomeIcon icon={faXmark}></FontAwesomeIcon>
+                                    </button>
+                                    <p>{errorMessage}</p>
+                                </>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            <section className="jumbotron calendar-table-list">
+                <h1 className="display-4 text-center">{meetingName}</h1>
 
-            <div className="calendar-form-drop-down">
-                <label htmlFor="dateRanges">Select date:</label>
-                <select id="date" name="date" value={selectedDateIndex} onChange={handleDateRangeChange}>
-                    {dateRanges.map((range, index) => (
-                        <option key={index} value={index}>{formatDate(range)}
-                        </option>
-                    ))}
-                </select>
-            </div>
+                <div className="calendar-form-drop-down">
+                    <label htmlFor="dateRanges">Select date:</label>
+                    <select id="date" name="date" value={selectedDateIndex} onChange={handleDateRangeChange}>
+                        {dateRanges.map((range, index) => (
+                            <option key={index} value={index}>{formatDate(range)}
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
-            <CalendarTable weekStartDate={selectedDate[0]} actualStartDate={new Date(actualStartDate)} actualEndDate={new Date(actualEndDate)} meetersAndTimes={meetersAndTimes} />
+                <CalendarTable weekStartDate={selectedDate[0]} actualStartDate={new Date(actualStartDate)} actualEndDate={new Date(actualEndDate)} meetersAndTimes={meetersAndTimes} />
 
-            <button onClick={handleButtonClick} className="btn btn-primary">
-                {isFinalized ? 'Return' : 'Finalize'}
-            </button>
-        </section>
+                <button onClick={handleButtonClick} className="btn btn-primary">
+                    {isFinalized ? 'Return' : 'Finalize'}
+                </button>
+            </section>
+        </>
     );
 }
 
