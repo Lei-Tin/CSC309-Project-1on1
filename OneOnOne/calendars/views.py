@@ -641,6 +641,9 @@ def calculate_meetings(calendar):
     invitee_availabilities = Availability.objects.filter(calendar=calendar).exclude(user=calendar.owner)
     meetings_to_schedule = []
 
+    # Schedule only one meeting for each invitee
+    invitees_scheduled = set()
+
     for owner_availability in owner_availabilities:
         # Find overlapping availabilities with invitees for this owner availability
         overlapping_availabilities = invitee_availabilities.filter(
@@ -649,7 +652,7 @@ def calculate_meetings(calendar):
         ).order_by('-preference', 'user_id')
 
         # If there are overlaps, take the one with the highest preference (or lowest user ID in case of a tie)
-        if overlapping_availabilities.exists():
+        if overlapping_availabilities.exists() and overlapping_availabilities.first().user not in invitees_scheduled:
             chosen_availability = overlapping_availabilities.first()
             meetings_to_schedule.append({
                 'calendar': calendar,
@@ -657,6 +660,7 @@ def calculate_meetings(calendar):
                 'start_period': max(owner_availability.start_period, chosen_availability.start_period),
                 'end_period': min(owner_availability.end_period, chosen_availability.end_period),
             })
+            invitees_scheduled.add(chosen_availability.user)
 
     return meetings_to_schedule
 
