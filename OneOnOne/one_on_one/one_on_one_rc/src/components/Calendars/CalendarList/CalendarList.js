@@ -67,27 +67,10 @@ const CalendarList = () => {
         }
     };
 
-    
-
     useEffect(() => {
         fetchCalendars();
         fetchInvitedCalendars();
     }, []);
-
-    const handleCreateCalendar = (calendarData) => {
-        console.log('Creating calendar:', calendarData);
-        console.log(CALENDARS_API_URL)
-        axios.post(`${CALENDARS_API_URL}/`, calendarData, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-        })
-        .then(() => {
-            setModalOpen(false); // Close the modal on success
-            fetchCalendars(); // Refresh the list of calendars
-        })
-        .catch(error => console.error('Error creating calendar', error));
-    };
 
     const handleInviteButtonClick = (calendarId) => {
         setSelectedCalendarId(calendarId);
@@ -138,6 +121,10 @@ const CalendarList = () => {
         setIsDeleteOpen(!isDeleteOpen);
     }
 
+    const toggleCreateModal = () => {
+        setModalOpen(!isModalOpen);
+    }
+
 
     function formatDate(dateString) {
         const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
@@ -150,7 +137,9 @@ const CalendarList = () => {
                 <h1 className="display-4">My Calendars</h1>
                 <button onClick={handleModalOpen} className="btn btn-primary btn-lg">Create a new calendar</button>
                 {/* Create popup modal for create a calendar */}
-                <CreateModal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleCreateCalendar} />
+                { isModalOpen &&
+                    <CreateModal toggleModal={toggleCreateModal} fetchCalendars= {fetchCalendars}/>
+                }
 
                 <div className="btn-group me-2 tab-container">
                     <button onClick={() => setTabSelected('owned')} className={`btn btn-outline-secondary tab ${tabSelected === 'owned' ? 'active' : ''}`}>Owned</button>
@@ -180,7 +169,16 @@ const CalendarList = () => {
                                         )}
                                 </div>
                                 <div className="calendar-btn">
-                                    <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Calendar</button>
+                                    <button 
+                                        onClick={() => {
+                                            const path = calendar.finalized 
+                                            ? `/calendars/${calendar.id}/schedule` 
+                                            : `/calendars/${calendar.id}/availabilities`;
+                                            navigate(path);
+                                        }} 
+                                        className="btn btn-success">
+                                        Enter Calendar
+                                    </button>           
                                 </div>
                                 <button onClick={() => {toggleSettings(calendar.id)}} className="btn setting-button">
                                     {showSettings[calendar.id] ? <FontAwesomeIcon icon={faGears} /> : <FontAwesomeIcon icon={faCog} />}
@@ -205,7 +203,16 @@ const CalendarList = () => {
                                     <h6>{formatDate(calendar.start_date)} - {formatDate(calendar.end_date)}</h6>
                                 </div>
                                 <div className="calendar-btn">
-                                    <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Availability</button>
+                                <button 
+                                        onClick={() => {
+                                            const path = calendar.finalized 
+                                            ? `/calendars/${calendar.id}/schedule` 
+                                            : `/calendars/${calendar.id}/availabilities`;
+                                            navigate(path);
+                                        }} 
+                                        className="btn btn-success">
+                                        Enter Availability
+                                    </button>   
                                 </div>
                             </div>
                         ))

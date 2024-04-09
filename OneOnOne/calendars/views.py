@@ -606,7 +606,11 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         calendar_id = self.kwargs.get('calendar_id')
         calendar = get_object_or_404(Calendar, pk=calendar_id)
-        return self.queryset.filter(calendar=calendar)
+
+        if self.request.user == calendar.owner:
+            return self.queryset.filter(calendar=calendar)
+        else:
+            return self.queryset.filter(calendar=calendar, meeter=self.request.user)
 
     def perform_create(self, serializer):
         calendar_id = self.kwargs.get('calendar_id')
