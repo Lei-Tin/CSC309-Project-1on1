@@ -214,7 +214,16 @@ const CalendarList = () => {
                                     <h6>{formatDate(calendar.start_date)} - {formatDate(calendar.end_date)}</h6>
                                 </div>
                                 <div className="calendar-btn">
-                                    <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Availability</button>
+                                <button 
+                                        onClick={() => {
+                                            const path = calendar.finalized 
+                                            ? `/calendars/${calendar.id}/schedule` 
+                                            : `/calendars/${calendar.id}/availabilities`;
+                                            navigate(path);
+                                        }} 
+                                        className="btn btn-success">
+                                        Enter Availability
+                                    </button>   
                                 </div>
                             </div>
                         ))
