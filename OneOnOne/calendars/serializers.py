@@ -6,9 +6,6 @@ from datetime import datetime
 
 from contacts.models import *
 
-import pytz
-
-
 class CalendarSerializer(serializers.ModelSerializer):
     name = serializers.CharField(help_text="A name for the calendar")
     start_date = serializers.CharField(help_text="The starting date for the calendar")
@@ -56,8 +53,8 @@ class CalendarSerializer(serializers.ModelSerializer):
 
 
 class AvailabilitySerializer(serializers.ModelSerializer):
-    start_period = serializers.DateTimeField(help_text="The start time for the availability", default_timezone=pytz.timezone("America/New_York"))
-    end_period = serializers.DateTimeField(help_text="The ending time for the availability", default_timezone=pytz.timezone("America/New_York"))
+    start_period = serializers.DateTimeField(help_text="The start time for the availability")
+    end_period = serializers.DateTimeField(help_text="The ending time for the availability")
     preference = serializers.CharField(help_text="The preference level for this availability")
 
     class Meta:
