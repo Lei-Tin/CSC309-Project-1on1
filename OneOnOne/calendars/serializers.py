@@ -34,8 +34,8 @@ class CalendarSerializer(serializers.ModelSerializer):
 
 
 class AvailabilitySerializer(serializers.ModelSerializer):
-    start_period = serializers.CharField(help_text="The start time for the availability")
-    end_period = serializers.CharField(help_text="The ending time for the availability")
+    start_period = serializers.DateTimeField(help_text="The start time for the availability", default_timezone=pytz.timezone("America/New_York"))
+    end_period = serializers.DateTimeField(help_text="The ending time for the availability", default_timezone=pytz.timezone("America/New_York"))
     preference = serializers.CharField(help_text="The preference level for this availability")
 
     class Meta:
