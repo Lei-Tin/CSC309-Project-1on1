@@ -156,6 +156,12 @@ class CalendarViewSet(viewsets.ModelViewSet):
         queryset = Calendar.objects.filter(owner=request.user)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'], url_path='owned/unfinalized')
+    def owned_calendars_unfinalized(self, request):
+        queryset = Calendar.objects.filter(owner=request.user, finalized=False)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     @action(detail=False, methods=['get'], url_path='invited')
     def invited_calendars(self, request):

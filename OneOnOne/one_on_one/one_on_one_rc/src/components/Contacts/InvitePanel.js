@@ -37,7 +37,7 @@ const PopupModal = ({ toggleModal, username, userId }) => {
     }
 
     useEffect(() => {
-        axios.get(`${CALENDARS_API_URL}/owned`, {
+        axios.get(`${CALENDARS_API_URL}/owned/unfinalized`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -92,7 +92,7 @@ const PopupModal = ({ toggleModal, username, userId }) => {
                             </div>
                         </div>
                     ) : (
-                        <p>You are not owner for any existing meeting. Create one first.</p>
+                        <p>You are not owner for any existing and unfinalized meeting. Create one first.</p>
                     )}
                 </div>
             </div>
