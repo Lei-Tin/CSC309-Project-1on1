@@ -182,8 +182,15 @@ class CalendarViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user, finalized=False)
 
     def update(self, request, *args, **kwargs):
-        # TODO: change the success response to be the calendar details (currently only the name change is seen)
-        return super().update(request, *args, **kwargs)
+        # Update calendar info
+        calendar = self.get_object()
+
+        serializer = self.get_serializer(calendar, data=request.data, partial=True)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
 
     @action(detail=True, methods=['put'])
     def finalize(self, request, pk=None):

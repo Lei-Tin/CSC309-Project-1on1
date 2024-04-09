@@ -84,7 +84,7 @@ const CalendarList = () => {
             // If currently in edit mode and "Save" is clicked
             if (editedName.trim() !== "") {
                 // If name is not empty, update the name
-                updateCalendarName(calendar.id, editedName);
+                updateCalendarName(calendar, editedName.trim());
             } else {
                 // If name is empty, revert to the original name and potentially notify the user
                 setEditedName(calendar.name); // Reset editedName to original name
@@ -102,8 +102,14 @@ const CalendarList = () => {
         setEditedName(event.target.innerText);
     };
 
-    const updateCalendarName = (id, name) => {
-        axios.put(`${CALENDARS_API_URL}/${id}`, { name }, {
+    const updateCalendarName = (calendar, name) => {
+        var payload = {
+            name: name,
+            start_date: calendar.start_date,
+            end_date: calendar.end_date,
+        };
+
+        axios.put(`${CALENDARS_API_URL}/${calendar.id}`, payload, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
@@ -185,7 +191,8 @@ const CalendarList = () => {
                                 </button>
                                 {showSettings[calendar.id] && (
                                     <div className="setting-panel">
-                                        <button 
+                                        <button
+                                            disabled={calendar.finalized} 
                                             className="dropdown-item" 
                                             onClick={(e) => handleEditClick(calendar, e)}>
                                                 {editCalendarId === calendar.id ? 'Save' : 'Edit'}
