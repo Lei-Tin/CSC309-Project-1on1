@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -7,6 +7,7 @@ import { ACCOUNTS_API_URL } from "constants";
 import CalendarTable from "./ScheduleTable";
 import "components/Calendars/calendar.css";
 import { calculateWeekRanges } from "components/Calendars/HelperFunctions";
+
 
 
 function FinalizeSchedule() {
@@ -25,6 +26,7 @@ function FinalizeSchedule() {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const { calendar_id } = useParams();
+    const emailSentRef = useRef(false);
 
     useEffect(() => {
         setIsLoading(true);
@@ -45,28 +47,41 @@ function FinalizeSchedule() {
             setSchedule(scheduleResponse.data);
             setIsFinalized(calendarResponse.data.finalized);
 
-            // New Map to accumulate meeting times
-            const newMeetersAndTimes = new Map();
-
-            // Fetch each meeter's profile in sequence
-            for (const { meeter, start_period } of scheduleResponse.data) {
+            if (scheduleResponse.data.length === 0 && !emailSentRef.current) {
+                emailSentRef.current = true;
                 try {
-                    const response = await axios.get(`${ACCOUNTS_API_URL}/profile/id/${meeter}/`, {
+                    const response = await axios.post(`${CALENDARS_API_URL}/${calendar_id}/email/`, {}, {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('token')}`
                         }
                     });
-
-                    const meeterName = response.data.user.username;
-                    // Set the start time as the key and the user name as the value
-                    newMeetersAndTimes.set(start_period, meeterName);
-                } catch (error) {
-                    console.error("Error fetching meeter profile:", error);
                 }
+                catch (error) {
+                    console.error("Error fetching schedule:", error.response.data);
+                }
+                alert("No schedule found. An email has been sent to all participants.");
+                navigate('/calendars');
+            } else {
+                // New Map to accumulate meeting times
+                const newMeetersAndTimes = new Map();
+                // Fetch each meeter's profile in sequence
+                for (const { meeter, start_period } of scheduleResponse.data) {
+                    try {
+                        const response = await axios.get(`${ACCOUNTS_API_URL}/profile/id/${meeter}/`, {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem('token')}`
+                            }
+                        });
+                        const meeterName = response.data.user.username;
+                        // Set the start time as the key and the user name as the value
+                        newMeetersAndTimes.set(start_period, meeterName);
+                    } catch (error) {
+                        console.error("Error fetching meeter profile:", error);
+                    }
+                }
+                setMeetersAndTimes(newMeetersAndTimes);
+                setIsLoading(false);
             }
-
-            setMeetersAndTimes(newMeetersAndTimes);
-            setIsLoading(false);
         }).catch((error) => {
             setIsLoading(false);
             console.log('Error loading calendar or schedule:', error);
@@ -74,6 +89,7 @@ function FinalizeSchedule() {
                 navigate('/unauthorized');
             }
         });
+
     }, [calendar_id, navigate]);
 
     if (isLoading) {
