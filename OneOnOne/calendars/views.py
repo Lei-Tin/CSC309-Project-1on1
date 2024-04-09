@@ -672,8 +672,11 @@ def calculate_meetings(calendar):
             })
             invitees_scheduled.add(chosen_availability.user)
 
+    # Obtain all possible unique invitees
+    invitees = set(invitee_availabilities.values_list('user', flat=True))
+
     # Only return a schedule if all invitees have been scheduled
-    if len(invitees_scheduled) < invitee_availabilities.count():
+    if len(invitees_scheduled) < len(invitees):
         return []
 
     return meetings_to_schedule
