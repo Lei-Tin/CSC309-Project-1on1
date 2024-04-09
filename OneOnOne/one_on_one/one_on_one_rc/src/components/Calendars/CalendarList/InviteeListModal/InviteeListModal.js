@@ -160,9 +160,7 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
                         </div>
                         </>
                     )}
-                    {(canSchedule && !isFinalized) && (
-                        <button onClick={scheduleEvent} className="btn btn-success">Schedule</button>
-                    )}
+                    <button disabled={!canSchedule || isFinalized} onClick={scheduleEvent} className="btn btn-success">Schedule</button>
                 </div>
             </div>
         </div>
