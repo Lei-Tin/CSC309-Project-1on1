@@ -18,7 +18,7 @@ setup:
 	# Remove superuser if exists
 	# Otherwise do nothing
 	echo "Removing superuser..."
-	python3 OneOnOne/manage.py shell -c "from django.contrib.auth.models import User; 
+	python3 ./OneOnOne/manage.py shell -c "from django.contrib.auth.models import User; 
 	User.objects.filter(username='test').delete()"
 
 	# Create superuser
@@ -26,7 +26,7 @@ setup:
 	DJANGO_SUPERUSER_USERNAME=test \
 	DJANGO_SUPERUSER_PASSWORD=123 \
 	DJANGO_SUPERUSER_EMAIL="test@example.com" \
-	python3 OneOnOne/manage.py createsuperuser --noinput
+	python3 ./OneOnOne/manage.py createsuperuser --noinput
 
 	# Install Nodejs
 	echo "Installing Nodejs..."
@@ -40,7 +40,7 @@ setup:
 	echo "Installing necessary dependencies..."
 
 	# Change directory into frontend
-	cd OneOnOne/one_on_one/one_on_one_rc
+	cd ./OneOnOne/one_on_one/one_on_one_rc
 
 	# Install necessary dependencies
 	npm install
