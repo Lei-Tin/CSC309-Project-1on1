@@ -53,6 +53,7 @@ function FinalizeSchedule() {
             if (scheduleResponse.data.length === 0 && !emailSentRef.current) {
                 emailSentRef.current = true;
                 setIsSendingEmail(true);
+                console.log(isSendingEmail)
                 try {
                     const response = await axios.post(`${CALENDARS_API_URL}/${calendar_id}/email/`, {}, {
                         headers: {
@@ -66,24 +67,29 @@ function FinalizeSchedule() {
                 setIsSendingEmail(false);
                 setErrorMessage("No schedule found. An email has been sent to all participants.");
             } else {
+                const payload = scheduleResponse.data
                 // New Map to accumulate meeting times
                 const newMeetersAndTimes = new Map();
-                // Fetch each meeter's profile in sequence
-                for (const { meeter, start_period } of scheduleResponse.data) {
+                if (!emailSentRef.current) {
+                    setIsSendingEmail(true);
+                    emailSentRef.current = true;
                     try {
-                        const response = await axios.get(`${ACCOUNTS_API_URL}/profile/id/${meeter}/`, {
+                        const response = await axios.post(`${CALENDARS_API_URL}/${calendar_id}/email/finalize`, payload, {
                             headers: {
                                 Authorization: `Bearer ${localStorage.getItem('token')}`
                             }
                         });
-                        const meeterName = response.data.user.username;
-                        // Set the start time as the key and the user name as the value
-                        newMeetersAndTimes.set(start_period, meeterName);
-                    } catch (error) {
-                        console.error("Error fetching meeter profile:", error);
+                        for (const [meeter, times] of Object.entries(response.data)) {
+                            newMeetersAndTimes.set(meeter, times);
+                        }
+                        
+                    }
+                    catch (error) {
+                        console.error("Error fetching schedule:", error.response.data);
                     }
                 }
                 setMeetersAndTimes(newMeetersAndTimes);
+                setIsSendingEmail(false);
                 setIsLoading(false);
             }
         }).catch((error) => {
@@ -159,7 +165,7 @@ function FinalizeSchedule() {
                             }
                             {errorMessage &&
                                 <>
-                                    <button onClick={()=>{setErrorMessage('')}} className="btn close-button">
+                                    <button onClick={() => { setErrorMessage('') }} className="btn close-button">
                                         <FontAwesomeIcon icon={faXmark}></FontAwesomeIcon>
                                     </button>
                                     <p>{errorMessage}</p>

@@ -12,6 +12,7 @@ from .permissions import *
 from .serializers import *
 from accounts.serializers import UserSerializer
 from contacts.models import Contacts
+from accounts.models import Profile
 
 # Including email features
 from django.core.mail import EmailMessage, get_connection
@@ -277,6 +278,54 @@ Please log in to your OneOnOne account to view the calendar and provide your ava
                     EmailMessage(subject, message, email_from, recipient_list, connection=connection).send()
 
         return Response({'detail': 'Email sent successfully.'}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['post'], url_path='send_finalize_emails_update')
+    def send_finalize_emails_update(self, request, pk=None):
+        calendar_id = pk
+        calendar = get_object_or_404(Calendar, pk=calendar_id)
+        owner = calendar.owner
+        responses = {}
+        for info in request.data:
+            meeter_id = info['meeter']
+            meeter_username = User.objects.filter(id=meeter_id).first().username
+            start_time = info['start_period']
+            responses[start_time] = meeter_username
+            with get_connection(
+                    host=settings.EMAIL_HOST, 
+                    port=settings.EMAIL_PORT,  
+                    username=settings.EMAIL_HOST_USER, 
+                    password=settings.EMAIL_HOST_PASSWORD, 
+                    use_tls=settings.EMAIL_USE_TLS  
+                ) as connection:  
+                    subject = f'OneOnOne Calendar Finalized'
+                    email_from = settings.EMAIL_HOST_USER
+                    meeter_email = User.objects.filter(id=meeter_id).first().email
+                    print(meeter_email)
+                    recipient_list = [meeter_email]
+                    message = f'''
+                    You meet with {owner.username} in event {calendar.name} has been finalized.
+                    The meeting will be held on {start_time} with duration 1hr.
+                    '''
+                    EmailMessage(subject, message, email_from, recipient_list, connection=connection).send()
+
+        # Send email to owner about all information of the finalized meeting
+        owner = calendar.owner
+        message = f'Your calendar named "{calendar.name}" has been finalized. The following meetings have been scheduled: \n'
+        for key, value in responses.items():
+            message += f'\t Meeting with {value} on {key} for 1hr.\n'
+        with get_connection(
+                host=settings.EMAIL_HOST, 
+                port=settings.EMAIL_PORT,  
+                username=settings.EMAIL_HOST_USER, 
+                password=settings.EMAIL_HOST_PASSWORD, 
+                use_tls=settings.EMAIL_USE_TLS  
+            ) as connection:  
+                subject = f'OneOnOne Calendar Finalized'
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [owner.email]
+                EmailMessage(subject, message, email_from, recipient_list, connection=connection).send()
+        
+        return Response(responses, status=status.HTTP_200_OK)
 
 class InviteeViewSet(viewsets.ModelViewSet):
     """
@@ -696,8 +745,6 @@ def calculate_meetings(calendar):
     # Schedule only one meeting for each invitee
     invitees_scheduled = set()
 
-    print(owner_availabilities)
-    print(invitee_availabilities)
 
     for owner_availability in owner_availabilities:
         # Find overlapping availabilities with invitees for this owner availability
