@@ -43,6 +43,7 @@ function FinalizeSchedule() {
         ]).then(async ([calendarResponse, scheduleResponse]) => {
             setCalendarDetails(calendarResponse.data);
             setSchedule(scheduleResponse.data);
+            setIsFinalized(calendarResponse.data.finalized);
 
             // New Map to accumulate meeting times
             const newMeetersAndTimes = new Map();
@@ -116,6 +117,7 @@ function FinalizeSchedule() {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
                 });
+                alert('Schedule has been finalized');
                 setIsFinalized(true);
             } catch (error) {
                 console.error('Error finalizing schedule:', error);
