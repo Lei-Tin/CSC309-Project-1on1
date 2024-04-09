@@ -32,6 +32,26 @@ class CalendarSerializer(serializers.ModelSerializer):
             for field_name in existing - allowed:
                 self.fields.pop(field_name)
 
+    def validate(self, data):
+        start_date = data.get('start_date', None)
+        end_date = data.get('end_date', None)
+
+        if not start_date or not end_date:
+            raise serializers.ValidationError("Start date and end date must be provided")
+
+        if start_date and end_date:
+            start_date = datetime.strptime(start_date, '%Y-%m-%d')
+            end_date = datetime.strptime(end_date, '%Y-%m-%d')
+            if start_date > end_date:
+                raise serializers.ValidationError("End date must be greater than start date")
+            
+        # Check if name empty
+        name = data.get('name', None)
+        if not name:
+            raise serializers.ValidationError("Name of calendar cannot be empty")
+
+        return data
+
 
 class AvailabilitySerializer(serializers.ModelSerializer):
     start_period = serializers.DateTimeField(help_text="The start time for the availability", default_timezone=pytz.timezone("America/New_York"))
