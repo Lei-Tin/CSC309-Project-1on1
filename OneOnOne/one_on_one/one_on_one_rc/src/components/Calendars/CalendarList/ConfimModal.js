@@ -30,7 +30,7 @@ export default function ConfirmModal({ toggleModal, calendarId }) {
                 </button>
                 <div className="popup-modal">
                     <div className="heading">
-                        <h2>Confirmation</h2>
+                        <h2>Are you sure?</h2>
                     </div>
                     <div>
                         <p>Are you sure you want to delete this calendar? </p>

@@ -180,7 +180,16 @@ const CalendarList = () => {
                                         )}
                                 </div>
                                 <div className="calendar-btn">
-                                    <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Calendar</button>
+                                    <button 
+                                        onClick={() => {
+                                            const path = calendar.finalized 
+                                            ? `/calendars/${calendar.id}/schedule` 
+                                            : `/calendars/${calendar.id}/availabilities`;
+                                            navigate(path);
+                                        }} 
+                                        className="btn btn-success">
+                                        Enter Calendar
+                                    </button>           
                                 </div>
                                 <button onClick={() => {toggleSettings(calendar.id)}} className="btn setting-button">
                                     {showSettings[calendar.id] ? <FontAwesomeIcon icon={faGears} /> : <FontAwesomeIcon icon={faCog} />}
