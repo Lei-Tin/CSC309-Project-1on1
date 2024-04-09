@@ -28,7 +28,6 @@ const PopupModal = ({ toggleModal, username, userId }) => {
         )
             .then((response) => {
                 toggleModal();
-                console.log(response.data);
             })
             .catch((error) => {
                 setErrorMessage(error.response.data);

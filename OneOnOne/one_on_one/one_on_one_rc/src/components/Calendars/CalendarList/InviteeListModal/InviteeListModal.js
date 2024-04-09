@@ -69,7 +69,6 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
     const handleInvite = async (contactId) => {
         try {
             // Implement logic to invite the contact using the contactId
-            console.log(`Inviting contact ${contactId}`);
             // Example: Redirect to sending an email to the contact
             axios.post(`${CALENDARS_API_URL}/${calendarId}/invitee/`, { invitee: contactId },{
                 headers: {
@@ -87,9 +86,7 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
 
     const sendEmail = async (calendarId, inviteeId) => {
         try {
-            // Implement logic to send an email to the invitee using the inviteeId
-            console.log(`Sending email to invitee ${inviteeId}`);
-        
+            // Implement logic to send an email to the invitee using the inviteeId        
             alert('Email sent to invitee!');
 
             // Example: Redirect to sending an email to the invitee
@@ -110,7 +107,6 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
             }
         })
         .then((response) => {
-            console.log(response);
             navigate(`${calendarId}/schedule/`);
         })
         .catch((error) => {

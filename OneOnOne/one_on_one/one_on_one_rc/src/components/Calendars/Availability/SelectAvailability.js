@@ -67,7 +67,6 @@ function SelectAvailability() {
                 }
             })
                 .then((response) => {
-                    console.log(response);
                     for (let [availability, preference] of selectedSlots) {
                         const startDate = new Date(availability);
                         const endDate = new Date(startDate);
@@ -78,8 +77,6 @@ function SelectAvailability() {
                             end_period: endDate,
                             preference: parseInt(preference),
                         };
-
-                        console.log(payload)
         
                         axios.post(`${CALENDARS_API_URL}/${calendar_id}/availabilities/`, payload, {
                             headers: {
@@ -87,7 +84,6 @@ function SelectAvailability() {
                             }
                         })
                             .then((response) => {
-                                console.log(response);
                                 navigate('/calendars');
                             })
                             .catch((error) => {
