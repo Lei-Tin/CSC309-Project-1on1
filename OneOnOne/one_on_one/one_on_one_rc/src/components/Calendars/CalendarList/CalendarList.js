@@ -67,27 +67,10 @@ const CalendarList = () => {
         }
     };
 
-    
-
     useEffect(() => {
         fetchCalendars();
         fetchInvitedCalendars();
     }, []);
-
-    const handleCreateCalendar = (calendarData) => {
-        console.log('Creating calendar:', calendarData);
-        console.log(CALENDARS_API_URL)
-        axios.post(`${CALENDARS_API_URL}/`, calendarData, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-        })
-        .then(() => {
-            setModalOpen(false); // Close the modal on success
-            fetchCalendars(); // Refresh the list of calendars
-        })
-        .catch(error => console.error('Error creating calendar', error));
-    };
 
     const handleInviteButtonClick = (calendarId) => {
         setSelectedCalendarId(calendarId);
@@ -138,6 +121,10 @@ const CalendarList = () => {
         setIsDeleteOpen(!isDeleteOpen);
     }
 
+    const toggleCreateModal = () => {
+        setModalOpen(!isModalOpen);
+    }
+
 
     function formatDate(dateString) {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -150,7 +137,9 @@ const CalendarList = () => {
                 <h1 className="display-4">My Calendars</h1>
                 <button onClick={handleModalOpen} className="btn btn-primary btn-lg">Create a new calendar</button>
                 {/* Create popup modal for create a calendar */}
-                <CreateModal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleCreateCalendar} />
+                { isModalOpen &&
+                    <CreateModal toggleModal={toggleCreateModal} fetchCalendars= {fetchCalendars}/>
+                }
 
                 <div className="btn-group me-2 tab-container">
                     <button onClick={() => setTabSelected('owned')} className={`btn btn-outline-secondary tab ${tabSelected === 'owned' ? 'active' : ''}`}>Owned</button>

@@ -6,6 +6,8 @@ from datetime import datetime
 
 from contacts.models import *
 
+import pytz
+
 
 class CalendarSerializer(serializers.ModelSerializer):
     name = serializers.CharField(help_text="A name for the calendar")
