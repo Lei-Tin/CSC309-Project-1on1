@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -7,6 +7,9 @@ import { ACCOUNTS_API_URL } from "constants";
 import CalendarTable from "./ScheduleTable";
 import "components/Calendars/calendar.css";
 import { calculateWeekRanges } from "components/Calendars/HelperFunctions";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 
 function FinalizeSchedule() {
@@ -25,6 +28,9 @@ function FinalizeSchedule() {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const { calendar_id } = useParams();
+    const emailSentRef = useRef(false);
+    const [isSendingEmail, setIsSendingEmail] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         setIsLoading(true);
@@ -44,29 +50,42 @@ function FinalizeSchedule() {
             setCalendarDetails(calendarResponse.data);
             setSchedule(scheduleResponse.data);
             setIsFinalized(calendarResponse.data.finalized);
-
-            // New Map to accumulate meeting times
-            const newMeetersAndTimes = new Map();
-
-            // Fetch each meeter's profile in sequence
-            for (const { meeter, start_period } of scheduleResponse.data) {
+            if (scheduleResponse.data.length === 0 && !emailSentRef.current) {
+                emailSentRef.current = true;
+                setIsSendingEmail(true);
                 try {
-                    const response = await axios.get(`${ACCOUNTS_API_URL}/profile/id/${meeter}/`, {
+                    const response = await axios.post(`${CALENDARS_API_URL}/${calendar_id}/email/`, {}, {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('token')}`
                         }
                     });
-
-                    const meeterName = response.data.user.username;
-                    // Set the start time as the key and the user name as the value
-                    newMeetersAndTimes.set(start_period, meeterName);
-                } catch (error) {
-                    console.error("Error fetching meeter profile:", error);
                 }
+                catch (error) {
+                    console.error("Error fetching schedule:", error.response.data);
+                }
+                setIsSendingEmail(false);
+                setErrorMessage("No schedule found. An email has been sent to all participants.");
+            } else {
+                // New Map to accumulate meeting times
+                const newMeetersAndTimes = new Map();
+                // Fetch each meeter's profile in sequence
+                for (const { meeter, start_period } of scheduleResponse.data) {
+                    try {
+                        const response = await axios.get(`${ACCOUNTS_API_URL}/profile/id/${meeter}/`, {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem('token')}`
+                            }
+                        });
+                        const meeterName = response.data.user.username;
+                        // Set the start time as the key and the user name as the value
+                        newMeetersAndTimes.set(start_period, meeterName);
+                    } catch (error) {
+                        console.error("Error fetching meeter profile:", error);
+                    }
+                }
+                setMeetersAndTimes(newMeetersAndTimes);
+                setIsLoading(false);
             }
-
-            setMeetersAndTimes(newMeetersAndTimes);
-            setIsLoading(false);
         }).catch((error) => {
             setIsLoading(false);
             console.log('Error loading calendar or schedule:', error);
@@ -74,6 +93,7 @@ function FinalizeSchedule() {
                 navigate('/unauthorized');
             }
         });
+
     }, [calendar_id, navigate]);
 
     if (isLoading) {
@@ -126,25 +146,49 @@ function FinalizeSchedule() {
     };
 
     return (
-        <section className="jumbotron calendar-table-list">
-            <h1 className="display-4 text-center">{meetingName}</h1>
+        <>
+            {(isSendingEmail || errorMessage) &&
+                <div>
+                    <div id="overlay">
+                        <div className="loading-indicator">
+                            {isSendingEmail &&
+                                <>
+                                    <div className="spinner"></div>
+                                    <p>We are calculating your final meeting time.</p>
+                                </>
+                            }
+                            {errorMessage &&
+                                <>
+                                    <button onClick={()=>{setErrorMessage('')}} className="btn close-button">
+                                        <FontAwesomeIcon icon={faXmark}></FontAwesomeIcon>
+                                    </button>
+                                    <p>{errorMessage}</p>
+                                </>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            <section className="jumbotron calendar-table-list">
+                <h1 className="display-4 text-center">{meetingName}</h1>
 
-            <div className="calendar-form-drop-down">
-                <label htmlFor="dateRanges">Select date:</label>
-                <select id="date" name="date" value={selectedDateIndex} onChange={handleDateRangeChange}>
-                    {dateRanges.map((range, index) => (
-                        <option key={index} value={index}>{formatDate(range)}
-                        </option>
-                    ))}
-                </select>
-            </div>
+                <div className="calendar-form-drop-down">
+                    <label htmlFor="dateRanges">Select date:</label>
+                    <select id="date" name="date" value={selectedDateIndex} onChange={handleDateRangeChange}>
+                        {dateRanges.map((range, index) => (
+                            <option key={index} value={index}>{formatDate(range)}
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
-            <CalendarTable weekStartDate={selectedDate[0]} actualStartDate={new Date(actualStartDate)} actualEndDate={new Date(actualEndDate)} meetersAndTimes={meetersAndTimes} />
+                <CalendarTable weekStartDate={selectedDate[0]} actualStartDate={new Date(actualStartDate)} actualEndDate={new Date(actualEndDate)} meetersAndTimes={meetersAndTimes} />
 
-            <button onClick={handleButtonClick} className="btn btn-primary">
-                {isFinalized ? 'Return' : 'Finalize'}
-            </button>
-        </section>
+                <button onClick={handleButtonClick} className="btn btn-primary">
+                    {isFinalized ? 'Return' : 'Finalize'}
+                </button>
+            </section>
+        </>
     );
 }
 

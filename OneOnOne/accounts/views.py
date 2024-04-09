@@ -302,7 +302,7 @@ class ProfileSearchWithPartialView(APIView):
     @staticmethod
     def get(request, username):
         users = User.objects.filter(username__icontains=username)
-        if users == []:
+        if users.count() == 0:
             return Response({'user': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         profiles = []
         for user in users:

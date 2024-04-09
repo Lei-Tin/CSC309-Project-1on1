@@ -236,6 +236,41 @@ Please log in to your OneOnOne account to view the calendar and provide your ava
         return Response({'detail': 'Email sent successfully.'}, status=status.HTTP_200_OK)
 
 
+    @action(detail=True, methods=['post'], url_path='send_non_schedule_email')
+    def send_non_schedule_email(self, request, pk=None):
+        calendar_id = pk
+        # Obtain calendar details
+        calendar = get_object_or_404(Calendar, pk=calendar_id)
+        # Look up owner of calendar and details about the owner
+        owner = calendar.owner
+        invitees = Invitee.objects.filter(calendar=calendar)
+        emails = [owner.email]
+        for invitee in invitees:
+            email_addr = invitee.invitee.email
+            emails.append(email_addr)
+
+        for email in emails:
+            with get_connection(
+                    host=settings.EMAIL_HOST, 
+                    port=settings.EMAIL_PORT,  
+                    username=settings.EMAIL_HOST_USER, 
+                    password=settings.EMAIL_HOST_PASSWORD, 
+                    use_tls=settings.EMAIL_USE_TLS  
+                ) as connection:  
+                    subject = f'OneOnOne Calendar Availability Request to "{calendar.name}"'
+
+                    email_from = settings.EMAIL_HOST_USER
+
+                    recipient_list = [email]
+                    message = f'''
+    We are unable to create a schedule for the calendar named "{calendar.name}" by "{owner.first_name} {owner.last_name} ({owner.username})" based on the availabilities provided.
+    Please login to your OneOnOne account to provide more availabilities if possible. 
+                    '''
+
+                    EmailMessage(subject, message, email_from, recipient_list, connection=connection).send()
+
+        return Response({'detail': 'Email sent successfully.'}, status=status.HTTP_200_OK)
+
 class InviteeViewSet(viewsets.ModelViewSet):
     """
     list:
