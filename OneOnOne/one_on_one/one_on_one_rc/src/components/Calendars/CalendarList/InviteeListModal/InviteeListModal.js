@@ -26,6 +26,14 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
             const calendarDetail = calendarDetailResponse.data;
             setIsFinalized(calendarDetail.finalized);
 
+            // Fetch owner data
+            const ownerResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/availabilities`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            const ownerData = ownerResponse.data;
+
             // Fetch invitees data
             const inviteesResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/invitee`, {
                 headers: {
@@ -34,7 +42,9 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
             });
             const inviteesData = inviteesResponse.data;
             setInvitees(inviteesData);
-            setCanFinalize(inviteesData.length > 0 && inviteesData.every(invitee => invitee.has_availability));
+
+            // Check if the event can be finalized
+            setCanFinalize(inviteesData.length > 0 && inviteesData.every(invitee => invitee.has_availability) && ownerData.length > 0);
 
             // Fetch uninvited contacts
             if (!calendarDetailResponse.data.finalized) {
