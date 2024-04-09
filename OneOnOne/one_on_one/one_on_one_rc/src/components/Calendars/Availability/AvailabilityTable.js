@@ -18,6 +18,7 @@ const AvailabilityTable = ({ selectedSlots, setSelectedSlots, weekStartDate, act
 
     // Helper function to toggle a slot's selection
     const toggleSlotSelection = (slotKey) => {
+        console.log(slotKey);
         setSelectedSlots((prevSelectedSlots) => {
             const newSelectedSlots = new Map(prevSelectedSlots);
 

@@ -3,17 +3,16 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { CALENDARS_API_URL } from 'constants';
+import { ACCOUNTS_API_URL } from "constants";
 import CalendarTable from "./ScheduleTable";
 import "components/Calendars/calendar.css";
 import { calculateWeekRanges } from "components/Calendars/HelperFunctions";
 
+
 function FinalizeSchedule() {
     // Initialize the useState hooks
     const [selectedDateIndex, setSelectedDateIndex] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
-    const navigate = useNavigate();
-
-    let { calendar_id } = useParams();
+    const [meetersAndTimes, setMeetersAndTimes] = useState(new Map());
     const [calendarDetails, setCalendarDetails] = useState({
         owner: '',
         name: '',
@@ -21,15 +20,9 @@ function FinalizeSchedule() {
         end_date: '',
         finalized: false,
     });
-
-    const [schedule, setSchedule] = useState([
-        {
-            calendar: '',
-            user: '',
-            start_period: '',
-            end_period: ''
-        }
-    ]);
+    const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
+    const { calendar_id } = useParams();
 
     useEffect(() => {
         setIsLoading(true);
@@ -45,12 +38,34 @@ function FinalizeSchedule() {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             })
-        ]).then(([calendarResponse, scheduleResponse]) => {
+        ]).then(async ([calendarResponse, scheduleResponse]) => {
             setCalendarDetails(calendarResponse.data);
-            setSchedule(scheduleResponse.data);
-            setIsLoading(false); // Data from both requests is loaded
+            
+            // New Map to accumulate meeting times
+            const newMeetersAndTimes = new Map();
+
+            // Fetch each meeter's profile in sequence
+            for (const { meeter, start_period } of scheduleResponse.data) {
+                try {
+                    const response = await axios.get(`${ACCOUNTS_API_URL}/profile/id/${meeter}/`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`
+                        }
+                    });
+
+                    const meeterName = response.data.user.username;
+                    // Set the start time as the key and the user name as the value
+                    newMeetersAndTimes.set(start_period, meeterName);
+                } catch (error) {
+                    console.error("Error fetching meeter profile:", error);
+                }
+            }
+
+            setMeetersAndTimes(newMeetersAndTimes);
+            setIsLoading(false);
         }).catch((error) => {
             setIsLoading(false);
+            console.log('Error loading calendar or schedule:', error);
             if (error.response && error.response.status === 401) {
                 navigate('/unauthorized');
             }
@@ -66,7 +81,6 @@ function FinalizeSchedule() {
     const actualStartDate = `${calendarDetails.start_date}T00:00:00`;
     const actualEndDate = `${calendarDetails.end_date}T23:00:00`; // Set it to 11 clock to avoid comparison issues
 
-    console.log(schedule)
     // Calculate the date ranges for the weeks between the start and end dates
     const dateRanges = calculateWeekRanges(actualStartDate, actualEndDate);
 
@@ -93,9 +107,8 @@ function FinalizeSchedule() {
                     ))}
                 </select>
             </div>
-            
-            console.log(selectedDate)
-            <CalendarTable weekStartDate={selectedDate[0]} actualStartDate={actualStartDate} actualEndDate={actualEndDate}/>
+
+            <CalendarTable weekStartDate={selectedDate[0]} actualStartDate={actualStartDate} actualEndDate={actualEndDate} meetersAndTimes={meetersAndTimes} />
 
             <button className="btn btn-primary">Return</button>
         </section>
