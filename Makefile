@@ -1,4 +1,4 @@
-.PHONY: setup django react clean load dump
+.PHONY: setup django react clean load dump migrate
 
 setup:
 	# Add setup commands here
@@ -16,6 +16,10 @@ clean:
 	# Add clean commands here
 	# Removed the __pycache__ and migrations files
 	rm -rf OneOnOne/*/__pycache__/ OneOnOne/*/*/__pycache__ OneOnOne/*/migrations/0*.py OneOnOne/db.sqlite3
+
+migrate: 
+	python3 ./OneOnOne/manage.py makemigrations
+	python3 ./OneOnOne/manage.py migrate
 
 load: clean
 	# Add load commands here
