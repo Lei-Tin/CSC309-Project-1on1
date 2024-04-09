@@ -597,7 +597,7 @@ class ScheduleViewSet(viewsets.ModelViewSet):
         Instantiates and returns the list of permissions that this view requires.
         """
         if self.action in ['list', 'retrieve']:
-            permission_classes = [IsAuthenticated, IsOwner]
+            permission_classes = [IsAuthenticated, IsOwnerOrInvitee]
         else:
             permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
 

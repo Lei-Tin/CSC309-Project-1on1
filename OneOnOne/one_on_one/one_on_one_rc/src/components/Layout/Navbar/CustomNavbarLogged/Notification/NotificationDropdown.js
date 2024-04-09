@@ -78,7 +78,7 @@ const NotificationDropdown = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [navigate]);
 
 
   return (
