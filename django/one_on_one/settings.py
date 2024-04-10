@@ -103,13 +103,10 @@ ROOT_URLCONF = 'one_on_one.urls'
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
-# Change the project path back up to the root directory
-PROJECT_PATH = os.path.abspath(os.path.join(PROJECT_PATH, os.pardir))
+# MEDIA_ROOT = os.path.join(PROJECT_PATH, 'react/build/media')
 
-# And one more directory up to get to the root directory
-PROJECT_PATH = os.path.abspath(os.path.join(PROJECT_PATH, os.pardir))
-
-MEDIA_ROOT = os.path.join(PROJECT_PATH, 'react/build/media')
+# Set the media root to be /var/www/uploads/
+MEDIA_ROOT = os.path.join('/var/www/uploads/')
 
 TEMPLATE_DIRS = [
     os.path.join(PROJECT_PATH, 'templates'),
