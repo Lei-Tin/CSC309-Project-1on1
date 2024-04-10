@@ -70,7 +70,7 @@ const CalendarList = () => {
     useEffect(() => {
         fetchCalendars();
         fetchInvitedCalendars();
-    }, []);
+    }, [navigate]);
 
     const handleInviteButtonClick = (calendarId) => {
         setSelectedCalendarId(calendarId);

@@ -6,7 +6,7 @@ import { faBell } from '@fortawesome/free-regular-svg-icons';
 import axios from 'axios';
 import { CONTACTS_API_URL, CALENDARS_API_URL } from 'constants';
 import { FriendNotificationItem, InviteNotificationItem } from './NotificationItem';
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const NotificationDropdown = () => {
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ const NotificationDropdown = () => {
       // if the user is on the availability page, redirect to the calendar page
       if (location.pathname === `/calendars/${calendarId}/availabilities`) {
         navigate('/calendars');
-      }      
+      }
       axios.delete(`${CALENDARS_API_URL}/${calendarId}/invitee/remove-invitation`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -39,6 +39,10 @@ const NotificationDropdown = () => {
         .catch((error) => {
           console.log(error);
         });
+      if (location.pathname === `/calendars`) {
+        // Simple bug fix to refresh the page when the user declines an invitation
+        navigate('/');
+      }
     }
     toggleNotificationDropdown();
   };
