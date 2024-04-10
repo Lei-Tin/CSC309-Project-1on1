@@ -1,4 +1,4 @@
-.PHONY: setup django react clean load dump migrate
+.PHONY: setup django react clean load dump migrate gunicorn
 
 setup:
 	# Add setup commands here
@@ -69,3 +69,6 @@ load: clean
 
 dump:
 	python3 django/manage.py dumpdata > data.json
+
+gunicorn: 
+	cd django && gunicorn --bind 0.0.0.0:8000 one_on_one.wsgi
