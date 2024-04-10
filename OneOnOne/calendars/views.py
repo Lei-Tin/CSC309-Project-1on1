@@ -271,8 +271,8 @@ Please log in to your OneOnOne account to view the calendar and provide your ava
 
                     recipient_list = [email]
                     message = f'''
-    We are unable to create a schedule for the calendar named "{calendar.name}" by "{owner.first_name} {owner.last_name} ({owner.username})" based on the availabilities provided.
-    Please login to your OneOnOne account to provide more availabilities if possible. 
+We are unable to find a schedule for the calendar named "{calendar.name}" by "{owner.first_name} {owner.last_name} ({owner.username})" based on the availabilities provided.
+Please login to your OneOnOne account to provide more availabilities if possible. 
                     '''
 
                     EmailMessage(subject, message, email_from, recipient_list, connection=connection).send()
@@ -302,8 +302,8 @@ Please log in to your OneOnOne account to view the calendar and provide your ava
                     meeter_email = User.objects.filter(id=meeter_id).first().email
                     recipient_list = [meeter_email]
                     message = f'''
-                    You meet with {owner.username} in event {calendar.name} has been finalized.
-                    The meeting will be held on {start_time} with duration 1hr.
+Your meeting with "{owner.username}" for the calendar "{calendar.name}" has been finalized.
+The meeting will be held on "{start_time}" with a duration of 1 hour.
                     '''
                     EmailMessage(subject, message, email_from, recipient_list, connection=connection).send()
 
