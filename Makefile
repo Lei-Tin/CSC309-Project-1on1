@@ -18,7 +18,7 @@ setup:
 	# Remove superuser if exists
 	# Otherwise do nothing
 	echo "Removing superuser..."
-	python3 django/manage.py shell -c "from django.contrib.auth.models import User; 
+	python3 django/manage.py shell -c "from django.contrib.auth.models import User; \
 	User.objects.filter(username='test').delete()"
 
 	# Create superuser
