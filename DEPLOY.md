@@ -13,4 +13,5 @@ Steps:
 7. `git clone ${REPOSITORY LINK}`, this assumes you have logged in with `gh auth login`
 8. `make setup`, get the setup for Python and NPM ready, press `enter` for any install prompts
 9. `make build`, to make build for React
-10. 
+10. `make update_conf`, to update nginx config files
+11. 
