@@ -1,4 +1,4 @@
-.PHONY: setup django react clean load dump migrate gunicorn
+.PHONY: setup django react clean load dump migrate gunicorn update_gunicorn
 
 setup:
 	# Add setup commands here
@@ -81,5 +81,10 @@ update_conf:
 	cp one_on_one.conf /etc/nginx/sites-available/
 	rm -f /etc/nginx/sites-enabled/one_on_one.conf
 	ln -s /etc/nginx/sites-available/one_on_one.conf /etc/nginx/sites-enabled/
-	
+
 	systemctl restart nginx
+
+update_gunicorn:
+	cp gunicorn.service /etc/systemd/system/gunicorn.service
+	systemctl daemon-reload
+	service gunicorn restart

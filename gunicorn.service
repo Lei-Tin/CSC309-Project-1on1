@@ -1,0 +1,11 @@
+[Unit]
+Description=gunicorn wsgi daemon
+After=network.target
+
+[Service]
+User=www-data
+WorkingDirectory=/var/www/CSC309-Project-1on1/django
+ExecStart=gunicorn --bind 0.0.0.0:8000 one_on_one.wsgi
+
+[Install]
+WantedBy=multi-user.target
