@@ -13,6 +13,10 @@ from .serializers import *
 from accounts.serializers import UserSerializer
 from contacts.models import Contacts
 
+# Including email features
+from django.core.mail import EmailMessage, get_connection
+from django.conf import settings
+
 
 # Create your views here.
 class CalendarViewSet(viewsets.ModelViewSet):
@@ -160,6 +164,13 @@ class CalendarViewSet(viewsets.ModelViewSet):
         # queryset = Calendar.objects.filter(id__in=calendar_id)
         serializer = self.get_serializer(calendar_id, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'], url_path='status')
+    def status(self, request):
+        invitees = Invitee.objects.filter(invitee=request.user)
+        calendar_id = [invitee.calendar for invitee in invitees if not Availability.objects.filter(calendar=invitee.calendar, user=invitee.invitee).exists()]
+        serializer = self.get_serializer(calendar_id, many=True)
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user, finalized=False)
@@ -181,6 +192,42 @@ class CalendarViewSet(viewsets.ModelViewSet):
             calendar.save()
 
         return Response({'detail': 'Calendar has been successfully finalized.'}, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['post'], url_path='send-email')
+    def send_email(self, request, pk=None, username=None):
+        calendar_id = pk
+        user = get_object_or_404(User, username=username)
+
+        # Obtain calendar details
+        calendar = get_object_or_404(Calendar, pk=calendar_id)
+
+        # Look up owner of calendar and details about the owner
+        owner = calendar.owner
+
+        email_addr = user.email
+
+        # TODO: Send email
+        with get_connection(
+                host=settings.EMAIL_HOST, 
+                port=settings.EMAIL_PORT,  
+                username=settings.EMAIL_HOST_USER, 
+                password=settings.EMAIL_HOST_PASSWORD, 
+                use_tls=settings.EMAIL_USE_TLS  
+            ) as connection:  
+                subject = f'OneOnOne Calendar Availability Request to "{calendar.name}"'
+
+                email_from = settings.EMAIL_HOST_USER
+
+                recipient_list = [email_addr]
+                message = f'''
+You have been requested to fill in your availabilities to the calendar named "{calendar.name}" by "{owner.first_name} {owner.last_name} ({owner.username})".
+
+Please log in to your OneOnOne account to view the calendar and provide your availabilities. 
+                '''
+
+                EmailMessage(subject, message, email_from, recipient_list, connection=connection).send()
+
+        return Response({'detail': 'Email sent successfully.'}, status=status.HTTP_200_OK)
 
 
 class InviteeViewSet(viewsets.ModelViewSet):
@@ -283,7 +330,19 @@ class InviteeViewSet(viewsets.ModelViewSet):
     """
     queryset = Invitee.objects.all()
     serializer_class = InviteeSerializer
-    permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
+    
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action == 'remove_invitation':
+            permission_classes = [IsAuthenticated, IsOwnerOrInvitee, IsNotFinalized]
+        elif self.action in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated, IsOwner]
+        else:
+            permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
+
+        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         calendar_id = self.kwargs.get('calendar_id')
@@ -329,6 +388,13 @@ class InviteeViewSet(viewsets.ModelViewSet):
             # If an IntegrityError is caught, raise a ValidationError
             # DRF will handle this exception and return a 400 Bad Request response
             raise ValidationError("An invitee with these details already exists.")
+    
+    @action(detail=False, methods=['delete'], url_path='remove-invitation')
+    def remove_invitation(self, request, calendar_id=None):
+        calendar = get_object_or_404(Calendar, pk=calendar_id)
+        invitee = request.user
+        Invitee.objects.filter(calendar=calendar, invitee=invitee).delete()
+        return Response(status=status.HTTP_200_OK)
 
 
 class AvailabilityViewSet(viewsets.ModelViewSet):
@@ -450,7 +516,17 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
     """
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrInvitee, IsNotFinalized]
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated, IsOwnerOrInvitee]
+        else:
+            permission_classes = [IsAuthenticated, IsOwnerOrInvitee, IsNotFinalized]
+
+        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         calendar_id = self.kwargs.get('calendar_id')
@@ -517,7 +593,16 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     """
     queryset = Meets.objects.all()
     serializer_class = ScheduleSerializer
-    permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated, IsOwner]
+        else:
+            permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
+
+        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         calendar_id = self.kwargs.get('calendar_id')

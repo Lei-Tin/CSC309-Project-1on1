@@ -55,7 +55,7 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 .dropdown-menu {
-    width: 500px;
+    width: 40vw;
     z-index: 1;
 }
 
@@ -119,46 +119,59 @@ p, h1, h2, h3, h4, h5, h6 {
     margin-right: 0; /* Removes margin from the last icon */
 }
 
+p.dropdown-item {
+    margin: 0;
+}
+
 .dropdown-item {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: start;
+    align-items: center;
+    padding: 0.5rem;
 }
 
 .dropdown-item:focus {
     outline: 0 !important;
 }
 
+.dropdown-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
 .dropdown-item-content {
-    width: 80%; /* content takes 80% of the width */
+    margin-right: auto;
     overflow-wrap: break-word; /* newer word wrap */
     word-wrap: break-word; /* wasted 30 minutes just to realize this is deprecated  */
     white-space: normal; 
 }
 
 .dropdown-item-actions {
-    width: 20%; /* This prevents the actions from growing and bases its size on 20% of the container's size */
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: end;
+    margin-left: auto;
 }
 
-.dropdown-item-actions a {
+.dropdown-item-actions button {
     margin: 0 5px; /* Adds some spacing between the icons */
 }
 
-.dropdown-item-actions a.accept {
+.dropdown-item-actions button.accept {
     color: green; /* Color for the accept action */
 }
 
-.dropdown-item-actions a.decline {
+.dropdown-item-actions button.decline {
     color: red; /* Color for the decline action */
 }
 
-.dropdown-item-actions a.accept, a.decline {
+.dropdown-item-actions button.accept, button.decline {
     display: inline-flex; /* Use flexbox for alignment */
     justify-content: center; /* Center the icon horizontally */
     align-items: center; /* Center the icon vertically */
@@ -166,22 +179,9 @@ p, h1, h2, h3, h4, h5, h6 {
     height: 30px; /* Set the height of the circle */
     border-radius: 50%; /* Make it round */
     border: 2px solid #ccc; 
-    padding: 5px; /* Adjust padding to scale the circle size */
+    padding: 4px; /* Adjust padding to scale the circle size */
     text-decoration: none; /* Remove underline from link */
-}
-
-/* Additional styling for the icons themselves, if needed */
-.dropdown-item-actions a.accept i, a.decline i {
-    font-size: x-small;
-}
-
-
-.dropdown-item-actions a.dismiss {
-    color: lightgray; /* Color for the decline action */
-}
-
-.dropdown-item-actions a.dismiss i {
-    font-size: x-small !important;
+    background-color: transparent;
 }
 
 .icon-container i {
@@ -359,7 +359,7 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 .participants-list {
-    width: 50%;
+    width: 75%;
     margin: 1rem;
 }
 

@@ -37,17 +37,25 @@ owned_calendars = CalendarViewSet.as_view({
 invited_calendars = CalendarViewSet.as_view({
     'get': 'invited_calendars'
 })
+status = CalendarViewSet.as_view({
+    'get': 'status'
+})
+send_email = CalendarViewSet.as_view({
+    'post': 'send_email'
+})
 
 invitee_list = InviteeViewSet.as_view({
     'get': 'list',
-    'post': 'create'
+    'post': 'create',
 })
 invitee_detail = InviteeViewSet.as_view({
     'get': 'retrieve',
-    'delete': 'destroy'
 })
 invitee_not = InviteeViewSet.as_view({
     'get': 'uninvited'
+})
+remove_invitation = InviteeViewSet.as_view({
+    'delete': 'remove_invitation'
 })
 
 availability_list = AvailabilityViewSet.as_view({
@@ -80,9 +88,12 @@ urlpatterns = [
     path('', calendar_list, name='calendar-list'),
     path('<int:pk>', calendar_detail, name='calendar-detail'),
     path('<int:pk>/finalize/', calendar_finalize, name='finalize'),
+    path('<int:pk>/email/<str:username>/', send_email, name='send-email'),
     path('owned', owned_calendars, name='owned-calendars'),
     path('invited', invited_calendars, name='invited-calendars'),
+    path('status', status, name='status'),
     path('<int:calendar_id>/invitee/', invitee_list, name='invitee-list'),
+    path('<int:calendar_id>/invitee/remove-invitation', remove_invitation, name='remove-invitation'),
     path('<int:calendar_id>/invitee/uninvited', invitee_not, name='uninvited'),
     path('<int:calendar_id>/invitee/<int:pk>', invitee_detail, name='invitee-detail'),
     path('<int:calendar_id>/availabilities/', availability_list, name='availability-list'),

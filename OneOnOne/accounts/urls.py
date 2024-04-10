@@ -26,6 +26,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('profile/', ProfileView.as_view(), name='profile'),
     path('profile/<str:username>/', ProfileSearchView.as_view(), name='profile-search'),
+    path('profile/id/<int:user_id>/', ProfileSearchView.as_view(), name='profile-search-id'),
     path('profile/partial/<str:username>/', ProfileSearchWithPartialView.as_view(), name='profile-search-partial')
 
     # The following are API Calls

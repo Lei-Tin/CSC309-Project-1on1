@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import CreateModal from 'components/Calendars/CalendarList/CreateModal';
 import InviteeListModal from 'components/Calendars/CalendarList/InviteeListModal';
+import DeletePanel from 'components/Calendars/CalendarList/ConfimModal';
 
 import { CALENDARS_API_URL } from 'constants';
 
@@ -16,17 +17,23 @@ import { faGears } from '@fortawesome/free-solid-svg-icons';
 const CalendarList = () => {
     const navigate = useNavigate();
     const [isModalOpen, setModalOpen] = useState(false);
-    const [isInviteOpen, setInviteOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [isParticipantsListOpen, setParticipantsListOpen] = useState(false);
     const [calendars, setCalendars] = useState([]);
     const [invitedCalendars, setInvitedCalendars] = useState([]);
     const [selectedCalendarId, setSelectedCalendarId] = useState(null);
     const [showSettings, setShowSettings] = useState({});
+    const [editCalendarId, setEditCalendarId] = useState(null);
+    const [editedName, setEditedName] = useState("");
+    const [calendarId, setSelectCalendarId] = useState('');
     const [tabSelected, setTabSelected] = useState('owned');
+    const [keyForReRender, setKeyForReRender] = useState(0);
+
 
 
     const handleModalOpen = () => setModalOpen(true);
     const handleModalClose = () => setModalOpen(false);
-    const handleInviteClose = () => setInviteOpen(false);
+    const handleParticipantsListClose = () => setParticipantsListOpen(false);
 
     const toggleSettings = (id) => {
         setShowSettings(prev => ({ ...prev, [id]: !prev[id] }));
@@ -60,64 +67,64 @@ const CalendarList = () => {
         }
     };
 
-    
-
     useEffect(() => {
         fetchCalendars();
         fetchInvitedCalendars();
     }, []);
 
-    const handleCreateCalendar = (calendarData) => {
-        console.log('Creating calendar:', calendarData);
-        console.log(CALENDARS_API_URL)
-        axios.post(`${CALENDARS_API_URL}/`, calendarData, {
+    const handleInviteButtonClick = (calendarId) => {
+        setSelectedCalendarId(calendarId);
+        setParticipantsListOpen(true);
+    };
+
+    const handleEditClick = (calendar, event) => {
+        event.stopPropagation(); // Prevent event propagation
+
+        if (editCalendarId === calendar.id) {
+            // If currently in edit mode and "Save" is clicked
+            if (editedName.trim() !== "") {
+                // If name is not empty, update the name
+                updateCalendarName(calendar.id, editedName);
+            } else {
+                // If name is empty, revert to the original name and potentially notify the user
+                setEditedName(calendar.name); // Reset editedName to original name
+                setKeyForReRender(prevKey => prevKey + 1);
+            }
+            setEditCalendarId(null);
+        } else {
+            // If "Edit" is clicked
+            setEditCalendarId(calendar.id);
+            setEditedName(calendar.name);
+        }
+    };
+
+    const handleNameChange = (event) => {
+        setEditedName(event.target.innerText);
+    };
+
+    const updateCalendarName = (id, name) => {
+        axios.put(`${CALENDARS_API_URL}/${id}`, { name }, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
         })
-        .then(() => {
-            setModalOpen(false); // Close the modal on success
-            fetchCalendars(); // Refresh the list of calendars
-        })
-        .catch(error => console.error('Error creating calendar', error));
-    };
-
-    const handleInviteButtonClick = (calendarId) => {
-        console.log("Invite button clicked for calendar", calendarId);
-        setSelectedCalendarId(calendarId);
-        setInviteOpen(true);
-    };
-
-//    const handleEdit = (calendar) => {
-//        setEditingId(calendar.id);
-//        setEditValue(calendar.name); // Pre-populate the input with the current name
-//    };
-//
-//    const handleNameChange = (e) => {
-//        setEditValue(e.target.value);
-//    };
-//
-//    const handleKeyPress = (e, calendarId) => {
-//        if (e.key === 'Enter') {
-//            e.preventDefault(); // Prevent form submission or any default action
-//            onUpdate(calendarId, editValue); // Assuming onUpdate is a prop method to update the calendar
-//            setEditingId(null); // Exit editing mode
-//        }
-//    };
+        .then(() => fetchCalendars()) // Refresh the list of calendars
+        .catch(error => console.error('Error updating calendar name', error));
+    };  
 
     const handleDelete = (calendarId) => {
-        if (window.confirm('Are you sure you want to delete this calendar?')) {
-            console.log('Delete calendar', calendarId);
-            // Make a DELETE request to your endpoint
-            axios.delete(`${CALENDARS_API_URL}/${calendarId}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            })
-            .then(() => fetchCalendars()) // Refresh the list of calendars
-            .catch(error => console.error('Error deleting calendar', error));
-        }
-    };
+        setSelectCalendarId(calendarId);
+        toggleDelete();
+    }
+
+    const toggleDelete = () => {
+        setIsDeleteOpen(!isDeleteOpen);
+    }
+
+    const toggleCreateModal = () => {
+        setModalOpen(!isModalOpen);
+    }
+
 
     function formatDate(dateString) {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -130,7 +137,9 @@ const CalendarList = () => {
                 <h1 className="display-4">My Calendars</h1>
                 <button onClick={handleModalOpen} className="btn btn-primary btn-lg">Create a new calendar</button>
                 {/* Create popup modal for create a calendar */}
-                <CreateModal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleCreateCalendar} />
+                { isModalOpen &&
+                    <CreateModal toggleModal={toggleCreateModal} fetchCalendars= {fetchCalendars}/>
+                }
 
                 <div className="btn-group me-2 tab-container">
                     <button onClick={() => setTabSelected('owned')} className={`btn btn-outline-secondary tab ${tabSelected === 'owned' ? 'active' : ''}`}>Owned</button>
@@ -141,26 +150,47 @@ const CalendarList = () => {
                     {tabSelected === 'owned'
                         ?
                         calendars.map((calendar) => (
-                            <div key={calendar.id} className="calendar-brief rounded">
+                            <div className="calendar-brief rounded">
                                 <div className="calendar-meeting-details">
-                                    <h4>{calendar.name}</h4>
+                                <h4
+                                    contentEditable={editCalendarId === calendar.id}
+                                    onInput={handleNameChange}
+                                    suppressContentEditableWarning={true}
+                                    className={editCalendarId === calendar.id ? 'editable' : ''}
+                                    key={keyForReRender}
+                                >
+                                    {calendar.name}
+                                </h4>
                                     <h6>{formatDate(calendar.start_date)} - {formatDate(calendar.end_date)}</h6>
                                     <button className="btn btn-info" onClick={() => handleInviteButtonClick(calendar.id)}>View Participants</button>
                                         {/* Invited users popup */}
-                                        {isInviteOpen && selectedCalendarId === calendar.id && (
-                                            <InviteeListModal calendarId={selectedCalendarId} isOpen={isInviteOpen} onClose={handleInviteClose} />
+                                        {isParticipantsListOpen && selectedCalendarId === calendar.id && (
+                                            <InviteeListModal calendarId={selectedCalendarId} isOpen={isParticipantsListOpen} onClose={handleParticipantsListClose} />
                                         )}
                                 </div>
                                 <div className="calendar-btn">
-                                    <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Calendar</button>
+                                    <button 
+                                        onClick={() => {
+                                            const path = calendar.finalized 
+                                            ? `/calendars/${calendar.id}/schedule` 
+                                            : `/calendars/${calendar.id}/availabilities`;
+                                            navigate(path);
+                                        }} 
+                                        className="btn btn-success">
+                                        Enter Calendar
+                                    </button>           
                                 </div>
                                 <button onClick={() => {toggleSettings(calendar.id)}} className="btn setting-button">
                                     {showSettings[calendar.id] ? <FontAwesomeIcon icon={faGears} /> : <FontAwesomeIcon icon={faCog} />}
                                 </button>
                                 {showSettings[calendar.id] && (
                                     <div className="setting-panel">
-                                        <button className="dropdown-item">Edit</button>
-                                        <button onClick={() => handleDelete(calendar.id)} className="dropdown-item text-danger">Delete</button>
+                                        <button 
+                                            className="dropdown-item" 
+                                            onClick={(e) => handleEditClick(calendar, e)}>
+                                                {editCalendarId === calendar.id ? 'Save' : 'Edit'}
+                                        </button>
+                                        <button className="dropdown-item text-danger" onClick={()=>handleDelete(calendar.id)}>Delete</button>
                                     </div>
                                 )}
                             </div>
@@ -173,14 +203,21 @@ const CalendarList = () => {
                                     <h6>{formatDate(calendar.start_date)} - {formatDate(calendar.end_date)}</h6>
                                 </div>
                                 <div className="calendar-btn">
-                                    <button onClick={() => navigate(`/calendars/${calendar.id}/availabilities`)} className="btn btn-success">Enter Availability</button>
-                                </div>
-                                <button onClick={() => toggleSettings(calendar.id)} className="btn settings-button">
-                                    <FontAwesomeIcon icon={faCog} />
+                                <button 
+                                    onClick={() => {
+                                        const path = calendar.finalized 
+                                        ? `/calendars/${calendar.id}/schedule` 
+                                        : `/calendars/${calendar.id}/availabilities`;
+                                        navigate(path);
+                                    }} 
+                                    className="btn btn-success">
+                                    {calendar.finalized ? 'View Schedule' : 'Enter Availability'} 
                                 </button>
+                                </div>
                             </div>
                         ))
                     }
+                    {isDeleteOpen && <DeletePanel toggleModal={toggleDelete} calendarId={calendarId} />}
                 </div>
             </div>
         </main>

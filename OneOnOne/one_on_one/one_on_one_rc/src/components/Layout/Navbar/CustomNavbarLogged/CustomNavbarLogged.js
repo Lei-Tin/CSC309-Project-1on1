@@ -49,7 +49,6 @@ export default function NavBar() {
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        {/* TODO: Redirect to the calendars page */}
         <Link className="navbar-brand" to="/">1on1</Link>
         <div className="icon-container">
           <Link to="/calendars" title="Calendar">

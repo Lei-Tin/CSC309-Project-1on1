@@ -12,7 +12,7 @@ function HomePage() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/calendars');
+      navigate('/calendars/');
     } else {
       localStorage.removeItem('token'); 
     }
