@@ -300,7 +300,6 @@ Please log in to your OneOnOne account to view the calendar and provide your ava
                     subject = f'OneOnOne Calendar Finalized'
                     email_from = settings.EMAIL_HOST_USER
                     meeter_email = User.objects.filter(id=meeter_id).first().email
-                    print(meeter_email)
                     recipient_list = [meeter_email]
                     message = f'''
                     You meet with {owner.username} in event {calendar.name} has been finalized.

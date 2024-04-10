@@ -29,8 +29,33 @@ function FinalizeSchedule() {
     const navigate = useNavigate();
     const { calendar_id } = useParams();
     const emailSentRef = useRef(false);
-    const [isSendingEmail, setIsSendingEmail] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [isNonSchedule, setIsNonSchedule] = useState(false);
+
+    const handleCantFinalizedSchedule = () => {
+        alert("An email has been sent to all participants. It may take a minute to arrive");
+        axios.post(`${CALENDARS_API_URL}/${calendar_id}/email/`, {}, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        .catch((error) => {
+            console.error("Error sending email:", error.response.data);
+        });
+    }
+
+    const handleSendFinalizedSchedule = () => {
+        const payload = schedule
+        alert("An email with meeting info has been sent to all participants. It may take a minute to arrive.");
+        axios.post(`${CALENDARS_API_URL}/${calendar_id}/email/finalize`, payload, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        .catch((error) => {
+            console.error("Error sending email:", error.response.data);
+        });
+    }
+
 
     useEffect(() => {
         setIsLoading(true);
@@ -50,46 +75,27 @@ function FinalizeSchedule() {
             setCalendarDetails(calendarResponse.data);
             setSchedule(scheduleResponse.data);
             setIsFinalized(calendarResponse.data.finalized);
-            if (scheduleResponse.data.length === 0 && !emailSentRef.current) {
-                emailSentRef.current = true;
-                setIsSendingEmail(true);
-                console.log(isSendingEmail)
-                try {
-                    const response = await axios.post(`${CALENDARS_API_URL}/${calendar_id}/email/`, {}, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('token')}`
-                        }
-                    });
-                }
-                catch (error) {
-                    console.error("Error fetching schedule:", error.response.data);
-                }
-                setIsSendingEmail(false);
-                setErrorMessage("No schedule found. An email has been sent to all participants.");
+            if (scheduleResponse.data.length === 0) {
+                setIsNonSchedule(true);
+                setIsLoading(false);
             } else {
-                const payload = scheduleResponse.data
-                // New Map to accumulate meeting times
                 const newMeetersAndTimes = new Map();
-                if (!emailSentRef.current) {
-                    setIsSendingEmail(true);
-                    emailSentRef.current = true;
+                // Fetch each meeter's profile in sequence
+                for (const { meeter, start_period } of scheduleResponse.data) {
                     try {
-                        const response = await axios.post(`${CALENDARS_API_URL}/${calendar_id}/email/finalize`, payload, {
+                        const response = await axios.get(`${ACCOUNTS_API_URL}/profile/id/${meeter}/`, {
                             headers: {
                                 Authorization: `Bearer ${localStorage.getItem('token')}`
                             }
                         });
-                        for (const [meeter, times] of Object.entries(response.data)) {
-                            newMeetersAndTimes.set(meeter, times);
-                        }
-                        
-                    }
-                    catch (error) {
-                        console.error("Error fetching schedule:", error.response.data);
+                        const meeterName = response.data.user.username;
+                        // Set the start time as the key and the user name as the value
+                        newMeetersAndTimes.set(start_period, meeterName);
+                    } catch (error) {
+                        console.error("Error fetching meeter profile:", error);
                     }
                 }
                 setMeetersAndTimes(newMeetersAndTimes);
-                setIsSendingEmail(false);
                 setIsLoading(false);
             }
         }).catch((error) => {
@@ -153,31 +159,27 @@ function FinalizeSchedule() {
 
     return (
         <>
-            {(isSendingEmail || errorMessage) &&
-                <div>
-                    <div id="overlay">
-                        <div className="loading-indicator">
-                            {isSendingEmail &&
-                                <>
-                                    <div className="spinner"></div>
-                                    <p>We are calculating your final meeting time.</p>
-                                </>
-                            }
-                            {errorMessage &&
-                                <>
-                                    <button onClick={() => { setErrorMessage('') }} className="btn close-button">
-                                        <FontAwesomeIcon icon={faXmark}></FontAwesomeIcon>
-                                    </button>
-                                    <p>{errorMessage}</p>
-                                </>
-                            }
+            {(isNonSchedule) &&
+                <div id="overlay">
+                    <div className="loading-indicator">
+                        <div className="heading">
+                            <h2 className="error">Warning</h2>
                         </div>
+                        <button onClick={() => { navigate('/calendars')}} className="btn close-button">
+                            <FontAwesomeIcon icon={faXmark} />
+                        </button>
+                        <p>Failed to generate any possible schedule given the availabilities provided!</p>
+                        <p>Click the button below to send and email to prompt everyone to provide more availabilities.</p>
+                        <button onClick={handleCantFinalizedSchedule} className="btn btn-primary">
+                            Send emails
+                        </button>
                     </div>
                 </div>
             }
+
             <section className="jumbotron calendar-table-list">
                 <h1 className="display-4 text-center">{meetingName}</h1>
-
+                <button onClick={handleSendFinalizedSchedule} className="btn btn-success"> Send email to notify invitees</button>   
                 <div className="calendar-form-drop-down">
                     <label htmlFor="dateRanges">Select date:</label>
                     <select id="date" name="date" value={selectedDateIndex} onChange={handleDateRangeChange}>

@@ -138,8 +138,10 @@ th, td {
     background: white;
     border-radius: 10px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+    text-align: center;
     z-index: 1000;
 }
 
