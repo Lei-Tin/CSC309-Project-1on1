@@ -80,6 +80,8 @@ gunicorn:
 update_conf:
 	cp django.conf /etc/nginx/sites-available/
 	cp react.conf /etc/nginx/sites-available/
+	rm /etc/nginx/sites-enabled/django.conf
+	rm /etc/nginx/sites-enabled/react.conf
 	ln -s /etc/nginx/sites-available/django.conf /etc/nginx/sites-enabled/
 	ln -s /etc/nginx/sites-available/react.conf /etc/nginx/sites-enabled/
 	systemctl restart nginx
