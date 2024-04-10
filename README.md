@@ -44,3 +44,15 @@ sh run.sh
 The documentations for our API calls can be found at `127.0.0.1:8000/docs` once the server is running (after `sh run.sh`). 
 
 A brief documentation of our model layout and API documentations can be found in `docs.pdf`. 
+
+### Project Phase 3 Update and instructions
+
+The setup is still the same as previous, install all dependencies with `make setup`
+
+Then, run `make react` to start the react server, and run `make django` to start the django server. You need to do this in two different terminals.
+
+You can run `make load` to load the pre-generated data that we have provided. Other make commands exist, please take a look at `Makefile` to understand more about it. More details on the pre-generated data can be found in the `data.pdf` file. 
+
+Then, have fun using our project in the development server! 
+
+The deployed server is available at [http://34.229.224.62/](http://34.229.224.62/). 
