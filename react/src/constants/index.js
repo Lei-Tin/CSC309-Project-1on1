@@ -1,4 +1,4 @@
-const PREFIX = 'http://localhost'
+const PREFIX = 'http://localhost:8000'
 
 export const ACCOUNTS_API_URL = `${PREFIX}/accounts`
 export const CALENDARS_API_URL = `${PREFIX}/calendars`
