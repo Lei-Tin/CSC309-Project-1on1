@@ -76,3 +76,10 @@ dump:
 
 gunicorn: 
 	cd django && gunicorn --bind 0.0.0.0:8000 one_on_one.wsgi
+
+update_conf:
+	cp django.conf /etc/nginx/sites-available/
+	cp react.conf /etc/nginx/sites-available/
+	ln -s /etc/nginx/sites-available/django.conf /etc/nginx/sites-enabled/
+	ln -s /etc/nginx/sites-available/react.conf /etc/nginx/sites-enabled/
+	systemctl restart nginx
