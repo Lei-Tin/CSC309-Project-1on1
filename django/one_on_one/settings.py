@@ -25,7 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-j6tdv$rckm%o!6=6hv!$ev_uwivoq4!3dtd*@exkystby)t^9i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Deploy update, change to False
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -108,7 +109,7 @@ PROJECT_PATH = os.path.abspath(os.path.join(PROJECT_PATH, os.pardir))
 # And one more directory up to get to the root directory
 PROJECT_PATH = os.path.abspath(os.path.join(PROJECT_PATH, os.pardir))
 
-MEDIA_ROOT = os.path.join(PROJECT_PATH, 'react/public/media')
+MEDIA_ROOT = os.path.join(PROJECT_PATH, 'react/build/media')
 
 TEMPLATE_DIRS = [
     os.path.join(PROJECT_PATH, 'templates'),
