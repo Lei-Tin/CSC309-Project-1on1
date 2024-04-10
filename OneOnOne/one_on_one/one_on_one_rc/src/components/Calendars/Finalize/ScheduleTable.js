@@ -1,18 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
+import { generateWeekDays } from "components/Calendars/HelperFunctions";
 import "components/Calendars/calendar.css";
 
-// Helper function that generates dates for a week given a start date
-const generateWeekDays = (weekStartDate) => {
-    const dates = [];
-    for (let i = 0; i < 7; i++) {
-        const date = new Date(weekStartDate);
-        date.setDate(weekStartDate.getDate() + i);
-        dates.push(date);
-    }
-    return dates;
-};
-
-const CalendarTable = ({ selectedSlots, setSelectedSlots, weekStartDate, actualStartDate, actualEndDate, preference }) => {
+const CalendarTable = ({ weekStartDate, actualStartDate, actualEndDate, meetersAndTimes }) => {
     const weekDays = generateWeekDays(weekStartDate);
 
     // Helper function to determine if a date should be greyed out
@@ -21,34 +11,19 @@ const CalendarTable = ({ selectedSlots, setSelectedSlots, weekStartDate, actualS
     };
 
     // Helper function to format a slot's key
-    const formatSlotKey = (date, hour) => `${date.toLocaleDateString()}-${hour}`
+    function formatSlotKey(date, hour) {
+        date.setHours(hour);
+        return date.toISOString();
+    }
 
-    // Helper function to toggle a slot's selection
-    const toggleSlotSelection = (slotKey) => {
-        setSelectedSlots((prevSelectedSlots) => {
-            const newSelectedSlots = new Map(prevSelectedSlots);
-
-            if (newSelectedSlots.has(slotKey)) {
-                newSelectedSlots.delete(slotKey);
-            } else {
-                newSelectedSlots.set(slotKey, preference);
-            }
-            return newSelectedSlots;
-        });
-    };
-
-    // Helper function to determine slot's class based on preference
-    const getSlotClass = (slotKey, isOutsideRange) => {
-        if (isOutsideRange) {
-            return 'calendar-day-not-available';
-        } else if (selectedSlots.get(slotKey) === 'high') {
-            return 'calendar-high-preference';
-        } else if (selectedSlots.get(slotKey) === 'medium') {
-            return 'calendar-medium-preference';
-        } else if (selectedSlots.get(slotKey) === 'low') {
-            return 'calendar-low-preference';
+    // Helper function to determine if a cell should be colored for a meeting
+    const isMeetingSlot = (slotKey) => {
+        const formatedSlotKey = slotKey.replace(/\.\d{3}/, "");
+        if (meetersAndTimes.has(formatedSlotKey)) {
+            return { isMeeting: true, name: meetersAndTimes.get(formatedSlotKey)};
+        } else {
+            return { isMeeting: false, name: ''};
         }
-        return '';
     };
 
     return (
@@ -87,14 +62,16 @@ const CalendarTable = ({ selectedSlots, setSelectedSlots, weekStartDate, actualS
                             <td>{`${hour <= 12 ? hour : hour - 12}:00 ${hour < 12 ? 'AM' : 'PM'}`}</td>
                             {weekDays.map((date, index) => {
                                 const slotKey = formatSlotKey(date, hour);
+                                const { isMeeting, name } = isMeetingSlot(slotKey);
                                 const isOutsideRange = isDateOutOfRange(date);
                                 return (
                                     <td
                                         key={index}
-                                        className={getSlotClass(slotKey, isOutsideRange)}
+                                        className={`${isOutsideRange ? 'calendar-day-not-available' : ''} ${isMeeting ? 'calendar-high-preference' : ''}`}
                                         style={{ cursor: isOutsideRange ? 'not-allowed' : 'pointer' }}
-                                        onClick={() => !isOutsideRange && toggleSlotSelection(slotKey)}
-                                    ></td>
+                                    >
+                                        {isMeeting ? name : ''}
+                                    </td>
                                 );
                             })}
                         </tr>

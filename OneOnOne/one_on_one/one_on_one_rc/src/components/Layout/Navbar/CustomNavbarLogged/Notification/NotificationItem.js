@@ -7,7 +7,7 @@ export const FriendNotificationItem = ({ username, onAccept, onDecline }) => {
     <div className="dropdown-item">
       <div className="dropdown-container">
         <div className="dropdown-item-content">
-          <p>{username} has added you to their contacts</p>
+          <p>{username} has sent you a friend request.</p>
         </div>
         <div className="dropdown-item-actions">
           <button className="accept" onClick={() => onAccept(username, true)}>

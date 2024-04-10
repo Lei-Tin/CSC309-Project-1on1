@@ -255,14 +255,17 @@ class ProfileSearchView(APIView):
             return Response(serializer.data)
         return Response({'user': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
     
+
+class ProfileSearchWithIDView(APIView):
     @staticmethod
-    def get_id(request, user_id):
+    def get(request, user_id):
         user = User.objects.filter(id=user_id).first()
         if user:
             profile, created = Profile.objects.get_or_create(user=user)
             serializer = ProfileSerializer(profile)
             return Response(serializer.data)
         return Response({'user': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
 
 
@@ -299,7 +302,7 @@ class ProfileSearchWithPartialView(APIView):
     @staticmethod
     def get(request, username):
         users = User.objects.filter(username__icontains=username)
-        if users == []:
+        if users.count() == 0:
             return Response({'user': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         profiles = []
         for user in users:

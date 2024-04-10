@@ -12,6 +12,7 @@ from .permissions import *
 from .serializers import *
 from accounts.serializers import UserSerializer
 from contacts.models import Contacts
+from accounts.models import Profile
 
 # Including email features
 from django.core.mail import EmailMessage, get_connection
@@ -156,6 +157,12 @@ class CalendarViewSet(viewsets.ModelViewSet):
         queryset = Calendar.objects.filter(owner=request.user)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'], url_path='owned/unfinalized')
+    def owned_calendars_unfinalized(self, request):
+        queryset = Calendar.objects.filter(owner=request.user, finalized=False)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     @action(detail=False, methods=['get'], url_path='invited')
     def invited_calendars(self, request):
@@ -176,8 +183,15 @@ class CalendarViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user, finalized=False)
 
     def update(self, request, *args, **kwargs):
-        # TODO: change the success response to be the calendar details (currently only the name change is seen)
-        return super().update(request, *args, **kwargs)
+        # Update calendar info
+        calendar = self.get_object()
+
+        serializer = self.get_serializer(calendar, data=request.data, partial=True)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
 
     @action(detail=True, methods=['put'])
     def finalize(self, request, pk=None):
@@ -229,6 +243,88 @@ Please log in to your OneOnOne account to view the calendar and provide your ava
 
         return Response({'detail': 'Email sent successfully.'}, status=status.HTTP_200_OK)
 
+
+    @action(detail=True, methods=['post'], url_path='send_non_schedule_email')
+    def send_non_schedule_email(self, request, pk=None):
+        calendar_id = pk
+        # Obtain calendar details
+        calendar = get_object_or_404(Calendar, pk=calendar_id)
+        # Look up owner of calendar and details about the owner
+        owner = calendar.owner
+        invitees = Invitee.objects.filter(calendar=calendar)
+        emails = [owner.email]
+        for invitee in invitees:
+            email_addr = invitee.invitee.email
+            emails.append(email_addr)
+
+        for email in emails:
+            with get_connection(
+                    host=settings.EMAIL_HOST, 
+                    port=settings.EMAIL_PORT,  
+                    username=settings.EMAIL_HOST_USER, 
+                    password=settings.EMAIL_HOST_PASSWORD, 
+                    use_tls=settings.EMAIL_USE_TLS  
+                ) as connection:  
+                    subject = f'OneOnOne Calendar Availability Request to "{calendar.name}"'
+
+                    email_from = settings.EMAIL_HOST_USER
+
+                    recipient_list = [email]
+                    message = f'''
+We are unable to find a schedule for the calendar named "{calendar.name}" by "{owner.first_name} {owner.last_name} ({owner.username})" based on the availabilities provided.
+Please login to your OneOnOne account to provide more availabilities if possible. 
+                    '''
+
+                    EmailMessage(subject, message, email_from, recipient_list, connection=connection).send()
+
+        return Response({'detail': 'Email sent successfully.'}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['post'], url_path='send_finalize_emails_update')
+    def send_finalize_emails_update(self, request, pk=None):
+        calendar_id = pk
+        calendar = get_object_or_404(Calendar, pk=calendar_id)
+        owner = calendar.owner
+        responses = {}
+        for info in request.data:
+            meeter_id = info['meeter']
+            meeter_username = User.objects.filter(id=meeter_id).first().username
+            start_time = info['start_period']
+            responses[start_time] = meeter_username
+            with get_connection(
+                    host=settings.EMAIL_HOST, 
+                    port=settings.EMAIL_PORT,  
+                    username=settings.EMAIL_HOST_USER, 
+                    password=settings.EMAIL_HOST_PASSWORD, 
+                    use_tls=settings.EMAIL_USE_TLS  
+                ) as connection:  
+                    subject = f'OneOnOne Calendar Finalized'
+                    email_from = settings.EMAIL_HOST_USER
+                    meeter_email = User.objects.filter(id=meeter_id).first().email
+                    recipient_list = [meeter_email]
+                    message = f'''
+Your meeting with "{owner.username}" for the calendar "{calendar.name}" has been finalized.
+The meeting will be held on "{start_time}" with a duration of 1 hour.
+                    '''
+                    EmailMessage(subject, message, email_from, recipient_list, connection=connection).send()
+
+        # Send email to owner about all information of the finalized meeting
+        owner = calendar.owner
+        message = f'Your calendar named "{calendar.name}" has been finalized. The following meetings have been scheduled: \n'
+        for key, value in responses.items():
+            message += f'\t Meeting with {value} on {key} for 1hr.\n'
+        with get_connection(
+                host=settings.EMAIL_HOST, 
+                port=settings.EMAIL_PORT,  
+                username=settings.EMAIL_HOST_USER, 
+                password=settings.EMAIL_HOST_PASSWORD, 
+                use_tls=settings.EMAIL_USE_TLS  
+            ) as connection:  
+                subject = f'OneOnOne Calendar Finalized'
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [owner.email]
+                EmailMessage(subject, message, email_from, recipient_list, connection=connection).send()
+        
+        return Response(responses, status=status.HTTP_200_OK)
 
 class InviteeViewSet(viewsets.ModelViewSet):
     """
@@ -341,7 +437,6 @@ class InviteeViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAuthenticated, IsOwner]
         else:
             permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
-
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -598,7 +693,7 @@ class ScheduleViewSet(viewsets.ModelViewSet):
         Instantiates and returns the list of permissions that this view requires.
         """
         if self.action in ['list', 'retrieve']:
-            permission_classes = [IsAuthenticated, IsOwner]
+            permission_classes = [IsAuthenticated, IsOwnerOrInvitee]
         else:
             permission_classes = [IsAuthenticated, IsOwner, IsNotFinalized]
 
@@ -607,7 +702,11 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         calendar_id = self.kwargs.get('calendar_id')
         calendar = get_object_or_404(Calendar, pk=calendar_id)
-        return self.queryset.filter(calendar=calendar)
+
+        if self.request.user == calendar.owner:
+            return self.queryset.filter(calendar=calendar)
+        else:
+            return self.queryset.filter(calendar=calendar, meeter=self.request.user)
 
     def perform_create(self, serializer):
         calendar_id = self.kwargs.get('calendar_id')
@@ -642,15 +741,19 @@ def calculate_meetings(calendar):
     invitee_availabilities = Availability.objects.filter(calendar=calendar).exclude(user=calendar.owner)
     meetings_to_schedule = []
 
+    # Schedule only one meeting for each invitee
+    invitees_scheduled = set()
+
+
     for owner_availability in owner_availabilities:
         # Find overlapping availabilities with invitees for this owner availability
         overlapping_availabilities = invitee_availabilities.filter(
-            start_period__lt=owner_availability.end_period,
-            end_period__gt=owner_availability.start_period
-        ).order_by('-preference', 'user_id')
+            start_period__lte=owner_availability.end_period,
+            end_period__gte=owner_availability.start_period
+        ).exclude(user__in=invitees_scheduled).order_by('-preference', 'user_id')
 
         # If there are overlaps, take the one with the highest preference (or lowest user ID in case of a tie)
-        if overlapping_availabilities.exists():
+        if overlapping_availabilities.exists() and overlapping_availabilities.first().user not in invitees_scheduled:
             chosen_availability = overlapping_availabilities.first()
             meetings_to_schedule.append({
                 'calendar': calendar,
@@ -658,6 +761,16 @@ def calculate_meetings(calendar):
                 'start_period': max(owner_availability.start_period, chosen_availability.start_period),
                 'end_period': min(owner_availability.end_period, chosen_availability.end_period),
             })
+            invitees_scheduled.add(chosen_availability.user)
+
+    print(meetings_to_schedule)
+
+    # Obtain all possible unique invitees
+    invitees = set(invitee_availabilities.values_list('user', flat=True))
+
+    # Only return a schedule if all invitees have been scheduled
+    if len(invitees_scheduled) < len(invitees):
+        return []
 
     return meetings_to_schedule
 

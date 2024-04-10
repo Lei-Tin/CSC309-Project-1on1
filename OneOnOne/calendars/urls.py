@@ -34,6 +34,9 @@ calendar_finalize = CalendarViewSet.as_view({
 owned_calendars = CalendarViewSet.as_view({
     'get': 'owned_calendars'
 })
+owned_calendars_unfinalized = CalendarViewSet.as_view({
+    'get': 'owned_calendars_unfinalized'
+})
 invited_calendars = CalendarViewSet.as_view({
     'get': 'invited_calendars'
 })
@@ -43,7 +46,12 @@ status = CalendarViewSet.as_view({
 send_email = CalendarViewSet.as_view({
     'post': 'send_email'
 })
-
+send_non_schedule_email = CalendarViewSet.as_view({
+    'post': 'send_non_schedule_email'
+})
+send_finalize_emails_update = CalendarViewSet.as_view({
+    'post': 'send_finalize_emails_update'
+})
 invitee_list = InviteeViewSet.as_view({
     'get': 'list',
     'post': 'create',
@@ -89,7 +97,10 @@ urlpatterns = [
     path('<int:pk>', calendar_detail, name='calendar-detail'),
     path('<int:pk>/finalize/', calendar_finalize, name='finalize'),
     path('<int:pk>/email/<str:username>/', send_email, name='send-email'),
+    path('<int:pk>/email/', send_non_schedule_email, name='send-email'),
+    path('<int:pk>/email/finalize', send_finalize_emails_update, name='send-email'),
     path('owned', owned_calendars, name='owned-calendars'),
+    path('owned/unfinalized', owned_calendars_unfinalized, name='unfinalized-calendars'),
     path('invited', invited_calendars, name='invited-calendars'),
     path('status', status, name='status'),
     path('<int:calendar_id>/invitee/', invitee_list, name='invitee-list'),

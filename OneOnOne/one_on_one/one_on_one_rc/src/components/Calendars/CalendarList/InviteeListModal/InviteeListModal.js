@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CALENDARS_API_URL } from 'constants';
 
@@ -9,10 +10,30 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 function InviteeListModal({ calendarId, isOpen, onClose }) {
     const [invitees, setInvitees] = useState([]);
     const [uninvited, setUninvited] = useState([]);
+    const [canSchedule, setCanSchedule] = useState(false);
+    const [isFinalized, setIsFinalized] = useState(false);
+    const navigate = useNavigate();
 
     const fetchInviteeData = useCallback(async () => {
         if (!isOpen) return; // Only fetch data if the popup is open
         try {
+            // Fetch calendar details
+            const calendarDetailResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            const calendarDetail = calendarDetailResponse.data;
+            setIsFinalized(calendarDetail.finalized);
+
+            // Fetch owner data
+            const ownerResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/availabilities`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            const ownerData = ownerResponse.data;
+
             // Fetch invitees data
             const inviteesResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/invitee`, {
                 headers: {
@@ -22,15 +43,22 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
             const inviteesData = inviteesResponse.data;
             setInvitees(inviteesData);
 
-            const uninvitedResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/invitee/uninvited`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-            const uninvitedData = uninvitedResponse.data;
-            setUninvited(uninvitedData);
+            // Check if the event can be finalized
+            setCanSchedule(inviteesData.length > 0 && inviteesData.every(invitee => invitee.has_availability) && ownerData.length > 0);
+
+            // Fetch uninvited contacts
+            if (!calendarDetailResponse.data.finalized) {
+                const uninvitedResponse = await axios.get(`${CALENDARS_API_URL}/${calendarId}/invitee/uninvited`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+                const uninvitedData = uninvitedResponse.data;
+                setUninvited(uninvitedData);
+            }
+
         } catch (error) {
-            console.error("Error fetching data:", error);
+            console.error("Error fetching data:", error.response.data);
         }
     }, [calendarId, isOpen]);
     
@@ -41,7 +69,6 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
     const handleInvite = async (contactId) => {
         try {
             // Implement logic to invite the contact using the contactId
-            console.log(`Inviting contact ${contactId}`);
             // Example: Redirect to sending an email to the contact
             axios.post(`${CALENDARS_API_URL}/${calendarId}/invitee/`, { invitee: contactId },{
                 headers: {
@@ -59,9 +86,7 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
 
     const sendEmail = async (calendarId, inviteeId) => {
         try {
-            // Implement logic to send an email to the invitee using the inviteeId
-            console.log(`Sending email to invitee ${inviteeId}`);
-        
+            // Implement logic to send an email to the invitee using the inviteeId        
             alert('Email sent to invitee!');
 
             // Example: Redirect to sending an email to the invitee
@@ -74,6 +99,22 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
             console.error("Error sending email to invitee:", error);
         }
     }
+
+    const scheduleEvent = () => {
+        axios.post(`${CALENDARS_API_URL}/${calendarId}/schedule/`, {}, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        .then((response) => {
+            navigate(`${calendarId}/schedule/`);
+        })
+        .catch((error) => {
+            if (error.response && error.response.status === 401) {
+                navigate('/unauthorized');
+            }
+        });
+    };
 
     return (
         <div id="overlay">
@@ -100,21 +141,26 @@ function InviteeListModal({ calendarId, isOpen, onClose }) {
                             </ul>
                         </div>
                     </div>
-                    <div id="invite-contacts-block">
-                        <h3>Invite more participants below?</h3>
-                    </div>
-                    <div className="card uninvited-list">
-                        <div className="participants-list">
-                            <ul>
-                                {uninvited.length === 0 ? <li>No uninvited contacts available</li> : uninvited.map(contact => (
-                                    <li key={contact.id}>
-                                        <span>{contact.username}</span>
-                                        <button onClick={() => handleInvite(contact.id)} className="btn btn-primary">Invite</button>
-                                    </li>
-                                ))}
-                            </ul>
+                    {!isFinalized && (
+                        <>
+                        <div id="invite-contacts-block">
+                            <h3>Invite more participants below?</h3>
                         </div>
-                    </div>
+                        <div className="card uninvited-list">
+                            <div className="participants-list">
+                                <ul>
+                                    {uninvited.length === 0 ? <li>No uninvited contacts available</li> : uninvited.map(contact => (
+                                        <li key={contact.id}>
+                                            <span>{contact.username}</span>
+                                            <button onClick={() => handleInvite(contact.id)} className="btn btn-primary">Invite</button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                        </>
+                    )}
+                    <button disabled={!canSchedule || isFinalized} onClick={scheduleEvent} className="btn btn-success">Schedule</button>
                 </div>
             </div>
         </div>

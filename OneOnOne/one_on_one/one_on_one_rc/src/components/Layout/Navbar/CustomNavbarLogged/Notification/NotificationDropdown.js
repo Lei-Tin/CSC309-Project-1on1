@@ -6,6 +6,7 @@ import { faBell } from '@fortawesome/free-regular-svg-icons';
 import axios from 'axios';
 import { CONTACTS_API_URL, CALENDARS_API_URL } from 'constants';
 import { FriendNotificationItem, InviteNotificationItem } from './NotificationItem';
+import { useLocation } from 'react-router-dom';
 
 const NotificationDropdown = () => {
   const navigate = useNavigate();
@@ -13,15 +14,20 @@ const NotificationDropdown = () => {
   const [requesterUsernames, setRequesterUsernames] = useState([]);
   const [invitations, setInvitations] = useState([]);
   const [isMoreFriendReq, setIsMoreFriendReq] = useState(false);
+  const location = useLocation();
 
   const toggleNotificationDropdown = () => {
     setIsNotifOpen(!isNotifOpen);
   };
-
+  
   const handleInvite = (calendarId, action) => {
     if (action) {
       navigate(`/calendars/${calendarId}/availabilities`);
     } else {
+      // if the user is on the availability page, redirect to the calendar page
+      if (location.pathname === `/calendars/${calendarId}/availabilities`) {
+        navigate('/calendars');
+      }
       axios.delete(`${CALENDARS_API_URL}/${calendarId}/invitee/remove-invitation`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -33,7 +39,12 @@ const NotificationDropdown = () => {
         .catch((error) => {
           console.log(error);
         });
+      if (location.pathname === `/calendars`) {
+        // Simple bug fix to refresh the page when the user declines an invitation
+        navigate('/');
+      }
     }
+    toggleNotificationDropdown();
   };
 
   const handleFriendSubmit = (username, action) => {
@@ -46,7 +57,8 @@ const NotificationDropdown = () => {
       })
       .then(() => {
         setRequesterUsernames(requesterUsernames.filter((requester) => requester !== username));
-        setIsMoreFriendReq(requesterUsernames.length > 0);
+        setIsMoreFriendReq(requesterUsernames.filter((requester) => requester !== username).length > 0);
+        toggleNotificationDropdown();
       })
   };
 
@@ -78,9 +90,9 @@ const NotificationDropdown = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [navigate]);
 
-
+  
   return (
     <div className="dropdown">
       <button className="dropdown-toggle"
@@ -116,7 +128,7 @@ const NotificationDropdown = () => {
           ))
         ) : <></>}
 
-        {invitations.length === 0 && !isMoreFriendReq ? <p className="dropdown-item">No new notifications</p> : <></>}
+        {(invitations.length === 0 && !isMoreFriendReq) ? <p className="dropdown-item">No new notifications</p> : null}
       </div>
     </div>
   );
