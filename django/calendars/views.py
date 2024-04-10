@@ -763,8 +763,6 @@ def calculate_meetings(calendar):
             })
             invitees_scheduled.add(chosen_availability.user)
 
-    print(meetings_to_schedule)
-
     # Obtain all possible unique invitees
     invitees = set(invitee_availabilities.values_list('user', flat=True))
 
