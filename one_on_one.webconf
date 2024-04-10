@@ -1,7 +1,7 @@
 server {
     listen 80;
     server_name mysite.com www.mysite.com
-    root /home/ubuntu/CSC309-Project-1on1/react/build;
+    root /home/ubuntu/CSC309-Project-1on1/react/build;  # Change this path to the location of your build files
     location / {
         try_files $uri /index.html;
     }
