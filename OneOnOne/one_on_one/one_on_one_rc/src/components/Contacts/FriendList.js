@@ -32,6 +32,12 @@ export default function FriendList({ friendList }) {
     const handleDelete = (username) => {
         setSelectUsername(username);
         toggleDelete();
+        
+        // Remove the friend from the friendList
+        // Find the index of the friend to be deleted
+        const index = friendList.findIndex(friend => friend.username === username);
+        // Remove the friend from the friendList
+        friendList.splice(index, 1);
     }
 
     const toggleDelete = () => {
