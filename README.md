@@ -35,6 +35,8 @@ sudo adduser $USER vboxsf
 
 (Restart VM)
 
+(Copy files from the repository in)
+
 ```
 su
 sh startup.sh
