@@ -53,7 +53,7 @@ const NotificationDropdown = () => {
       })
       .then(() => {
         setRequesterUsernames(requesterUsernames.filter((requester) => requester !== username));
-        setIsMoreFriendReq(requesterUsernames.length > 0);
+        setIsMoreFriendReq(requesterUsernames.filter((requester) => requester !== username).length > 0);
         toggleNotificationDropdown();
       })
   };
@@ -88,7 +88,7 @@ const NotificationDropdown = () => {
       });
   }, [navigate]);
 
-
+  
   return (
     <div className="dropdown">
       <button className="dropdown-toggle"
@@ -124,7 +124,7 @@ const NotificationDropdown = () => {
           ))
         ) : <></>}
 
-        {invitations.length === 0 && !isMoreFriendReq ? <p className="dropdown-item">No new notifications</p> : <></>}
+        {(invitations.length === 0 && !isMoreFriendReq) ? <p className="dropdown-item">No new notifications</p> : null}
       </div>
     </div>
   );
