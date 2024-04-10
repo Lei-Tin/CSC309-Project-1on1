@@ -11,8 +11,6 @@ Steps:
 5. `apt install nginx -y`, install nginx first
 6. `cd /var/www/`, cd to our root
 7. `git clone ${REPOSITORY LINK}`, this assumes you have logged in with `gh auth login`
-8. `make setup`, get the setup for Python and NPM ready, press `enter` for any installs
-
-Optional test: `python3 django runserver 0.0.0.0:80` and see if you can access the webpage at `PUBLIC_IP`. 
-
-7. 
+8. `make setup`, get the setup for Python and NPM ready, press `enter` for any install prompts
+9. `make build`, to make build for React
+10. 
