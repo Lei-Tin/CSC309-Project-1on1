@@ -211,15 +211,15 @@ const CalendarList = () => {
                                 </div>
                                 <div className="calendar-btn">
                                 <button 
-                                        onClick={() => {
-                                            const path = calendar.finalized 
-                                            ? `/calendars/${calendar.id}/schedule` 
-                                            : `/calendars/${calendar.id}/availabilities`;
-                                            navigate(path);
-                                        }} 
-                                        className="btn btn-success">
-                                        Enter Availability
-                                    </button>   
+                                    onClick={() => {
+                                        const path = calendar.finalized 
+                                        ? `/calendars/${calendar.id}/schedule` 
+                                        : `/calendars/${calendar.id}/availabilities`;
+                                        navigate(path);
+                                    }} 
+                                    className="btn btn-success">
+                                    {calendar.finalized ? 'View Schedule' : 'Enter Availability'} 
+                                </button>
                                 </div>
                             </div>
                         ))
