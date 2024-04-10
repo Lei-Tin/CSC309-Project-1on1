@@ -41,9 +41,6 @@ setup:
 	# Install necessary dependencies
 	npm install --prefix react
 
-	# Install nginx
-	apt install nginx -y
-
 django:
 	# Add Django start command here
 	python3 django/manage.py runserver
