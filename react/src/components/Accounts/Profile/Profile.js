@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 import { ACCOUNTS_API_URL, DEFAULT_PROFILE_PIC } from "constants";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 import "./profile.css";
 

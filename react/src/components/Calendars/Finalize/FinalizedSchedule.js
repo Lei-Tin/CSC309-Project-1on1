@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -28,7 +28,6 @@ function FinalizeSchedule() {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const { calendar_id } = useParams();
-    const emailSentRef = useRef(false);
     const [isNonSchedule, setIsNonSchedule] = useState(false);
 
     const handleCantFinalizedSchedule = () => {

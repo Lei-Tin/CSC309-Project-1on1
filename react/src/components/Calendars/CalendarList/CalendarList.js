@@ -32,7 +32,6 @@ const CalendarList = () => {
 
 
     const handleModalOpen = () => setModalOpen(true);
-    const handleModalClose = () => setModalOpen(false);
     const handleParticipantsListClose = () => setParticipantsListOpen(false);
 
     const toggleSettings = (id) => {

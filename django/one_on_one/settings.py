@@ -102,7 +102,13 @@ ROOT_URLCONF = 'one_on_one.urls'
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
-MEDIA_ROOT = os.path.join(PROJECT_PATH, 'one_on_one_rc/public/media/')
+# Change the project path back up to the root directory
+PROJECT_PATH = os.path.abspath(os.path.join(PROJECT_PATH, os.pardir))
+
+# And one more directory up to get to the root directory
+PROJECT_PATH = os.path.abspath(os.path.join(PROJECT_PATH, os.pardir))
+
+MEDIA_ROOT = os.path.join(PROJECT_PATH, 'react/public/media')
 
 TEMPLATE_DIRS = [
     os.path.join(PROJECT_PATH, 'templates'),
