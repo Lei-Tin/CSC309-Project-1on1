@@ -1,4 +1,4 @@
-const PREFIX = 'http://54.174.104.92:8000'
+const PREFIX = 'http://34.229.224.62:8000'
 
 export const ACCOUNTS_API_URL = `${PREFIX}/accounts`
 export const CALENDARS_API_URL = `${PREFIX}/calendars`
