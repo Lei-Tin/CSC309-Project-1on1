@@ -38,11 +38,8 @@ setup:
 	# Install necessary dependencies
 	echo "Installing necessary dependencies..."
 
-	# Change directory into frontend
-	cd react
-
 	# Install necessary dependencies
-	npm install
+	npm install --prefix react
 
 django:
 	# Add Django start command here
