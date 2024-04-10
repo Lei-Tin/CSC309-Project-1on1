@@ -164,7 +164,7 @@ const CalendarList = () => {
                                     className={editCalendarId === calendar.id ? 'editable' : ''}
                                     key={keyForReRender}
                                 >
-                                    {calendar.name}
+                                    {calendar.name}{calendar.finalized ? ' (Finalized)' : ''}
                                 </h4>
                                     <h6>{formatDate(calendar.start_date)} - {formatDate(calendar.end_date)}</h6>
                                     <button className="btn btn-info" onClick={() => handleInviteButtonClick(calendar.id)}>View Participants</button>
